@@ -1,23 +1,33 @@
 ---
 name: agent-simulation
 description: >
-  Simulates how an AI agent behaves given a system prompt and a task.
-  Runs a step-by-step agent loop and provides a debrief with prompt improvement suggestions.
+  Creates and runs agent simulation tasks via the TPC CLI.
+  Checks for existing tasks to avoid overlap, collects product context,
+  drafts a task.json, confirms with the user, then creates and queues the run.
 
-  Trigger when users say: "simulate agent", "run agent loop", "test agent", or "test this prompt".
+  Trigger when users say: "simulate agent", "run agent loop", "test agent",
+  "create a simulation task", or "test this prompt".
 ---
 
 # Agent Simulation
 
 ## Overview
 
-Simulate an agent loop step-by-step and debrief what worked, what failed, and how to improve the prompt.
+Create and queue an agent simulation task using the `tpc` CLI — check for overlaps, collect product context, draft the task, confirm, then create and run it.
 
 ## Prerequisites
 
-- A product name, URL, or description to understand what is being simulated
-- A system prompt (paste or describe)
-- A user message or task to simulate against
+- `tpc` CLI installed (`tpc --version`)
+- Authenticated: `tpc auth whoami`
+- Active product set: `tpc product list` → `tpc product switch <product-slug>`
+
+If any prerequisite is missing, resolve it before continuing:
+
+```bash
+tpc auth login                        # authenticate
+tpc org switch <org-slug>             # set active org
+tpc product switch <product-slug>     # set active product (required for sim commands)
+```
 
 ## Required Workflow
 
@@ -25,15 +35,16 @@ Simulate an agent loop step-by-step and debrief what worked, what failed, and ho
 
 ---
 
-### Step 1 — Check for existing simulations
+### Step 1 — Check for existing simulation tasks
 
-Before creating anything, use the CLI to list existing simulation tasks and avoid overlap:
+Before creating anything, search for tasks that may already cover the same scenario:
 
 ```bash
-claude task list --type simulation
+tpc sim task list
+tpc sim task list --search "<keyword from product or scenario>"
 ```
 
-- If a simulation already exists for the same product or prompt, show it to the user and ask whether to extend it or create a new one.
+- If a matching task exists, show it to the user with `tpc sim task get <task-id>` and ask: "There's already a task for this — do you want to extend it, run it again, or create a new one?"
 - If none exist, proceed to Step 2.
 
 ---
@@ -42,91 +53,96 @@ claude task list --type simulation
 
 Collect context on what the product is solving for. Ask the user:
 
-- **What does the product do?** — core problem it solves and who it's for
-- **What is the agent's role?** — what job is the agent being asked to do inside this product?
+- **What does the product do?** — core problem it solves and for whom
+- **What should the agent accomplish?** — the specific job being tested
 - **What does success look like?** — what should the agent reliably produce or decide?
-- **Who are the end users?** — their technical level and expectations
+- **What category fits best?** — `coding`, `research`, `documentation`, or `analysis`
 
 If a URL is provided, use web search to fill in gaps before proceeding.
 
-Document a one-paragraph **Product Context** summary before moving to Step 3.
+Use this to write a sharp, specific simulation prompt in Step 3 — not a generic description.
 
 ---
 
-### Step 3 — Gather simulation inputs
+### Step 3 — Draft task.json
 
-Ask the user for:
+Write a `task.json` using the product context from Step 2:
 
-- **System prompt** — the agent's instructions (paste or describe)
-- **User message / task** — what the user would send to the agent
-- **Tools available** (optional) — list any tools the agent can call (web search, code execution, etc.)
-- **Stop condition** (optional) — when should the simulation end? Default: first terminal response
+```json
+{
+  "name": "<short scenario name>",
+  "description": "<one sentence: what this task validates>",
+  "category": "<coding | research | documentation | analysis>",
+  "prompt": "<the instruction the agent will receive — specific, actionable, grounded in real user behaviour>",
+  "taskType": "cli_execution",
+  "timeLimitMs": 3600000,
+  "goals": [
+    {
+      "name": "<goal name>",
+      "description": "<what a passing run looks like>",
+      "passingThreshold": 70
+    }
+  ]
+}
+```
+
+**Prompt writing rules:**
+- Write in second-person imperative: "Open the app, add an item to cart, and complete checkout."
+- Be specific — include realistic detail (promo codes, item names, expected state)
+- One prompt = one scenario. Do not combine multiple test cases.
+- Goals should be observable outcomes, not internal states.
+
+Show the draft to the user before proceeding.
 
 ---
 
-### Step 4 — Run the simulation loop
+### Step 4 — Confirm
 
-For each iteration, show:
+Ask:
+> "Does this task.json look right? Should I go ahead and create it?"
 
-```
---- Turn N ---
-[Reasoning] What the agent is thinking
-[Action]    Tool call or response decision
-[Output]    The agent's message or tool result
-```
-
-Continue until:
-- The agent produces a final answer
-- A tool returns an error that cannot be recovered
-- The user says to stop
-- 10 turns have elapsed (safety cap — ask to continue if reached)
+Wait for confirmation. Adjust the prompt or goals if the user requests changes.
 
 ---
 
-### Step 5 — Debrief
+### Step 5 — Create the task
 
-After the loop ends, provide:
-
-1. **What worked** — steps the agent handled well
-2. **Failure points** — where the agent got confused or went off-track
-3. **Prompt suggestions** — specific edits to the system prompt that would improve behavior
-4. **Edge cases to test** — 2-3 follow-up scenarios worth simulating next
-
----
-
-### Step 6 — Confirm and create the simulation task
-
-Summarise what will be saved:
-
-```
-Product:        [product name]
-Agent role:     [one line]
-System prompt:  [first 100 chars…]
-Scenario:       [user message / task]
-Result:         [pass / fail / partial]
-Suggested fix:  [top prompt suggestion]
-```
-
-Ask the user:
-> "Shall I save this simulation to the platform?"
-
-If confirmed, create the task via the CLI:
+Write `task.json` to disk and create the task:
 
 ```bash
-claude task create \
-  --type simulation \
-  --product "[product name]" \
-  --title "[scenario title]" \
-  --result "[pass|fail|partial]" \
-  --notes "[top debrief finding]"
+tpc sim task create --file task.json
 ```
 
-Confirm back with: "Simulation saved: `[title]`"
+Note the returned task ID (e.g., `task_123`). The CLI will also print suggested next commands.
 
 ---
 
-## Tips
+### Step 6 — Attach to an environment
 
-- If the system prompt is vague, flag it before starting — a bad prompt makes the simulation less useful
-- Simulate tool results realistically; don't always return success
-- If the agent loops or hallucinates, call it out explicitly rather than papering over it
+List available environments and attach the new task:
+
+```bash
+tpc sim env list
+tpc sim env task attach <env-id> <task-id>
+```
+
+If the user knows which environment to use, skip the list step. If no environments exist yet, tell the user they need to create one before the task can run.
+
+---
+
+### Step 7 — Queue the run
+
+```bash
+tpc sim task run <task-id>
+```
+
+Confirm back with:
+> "Simulation queued. Check results with: `tpc sim run list --task-id <task-id>`"
+
+To inspect logs once the run completes:
+
+```bash
+tpc sim run list --task-id <task-id>
+tpc sim run logs <run-id>
+tpc sim analysis get --task-id <task-id>
+```
