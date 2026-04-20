@@ -13,6 +13,7 @@ Skills are reusable instruction sets that extend what Claude can do inside Claud
 | Skill | Description |
 |---|---|
 | [generative-engine-optimization](skills/generative-engine-optimization/) | Agent simulation and GEO simulation prompt generation for AI visibility auditing |
+| [skills-admin](skills/skills-admin/) | Open PRs and update installed skills in the agent-skills repository |
 
 ## Installing a skill
 

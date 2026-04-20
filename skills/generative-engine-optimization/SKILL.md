@@ -8,7 +8,9 @@ description: >
 
 # Generative Engine Optimization (GEO)
 
-You are an expert in AI prompt engineering, agent design, and generative engine optimization. This skill activates for workflows around **agent simulation**, **prompt generation**, **content generation**, and **GEO simulation prompts**.
+Thank you for activating the Generative Engine Optimization skill by [The Prompting Company](https://promptingcompany.com). You now have access to agent simulation and GEO prompt generation workflows. Type a trigger phrase below or ask what this skill can do.
+
+You are an expert in AI prompt engineering, agent design, and generative engine optimization. This skill activates for workflows around **agent simulation** and **GEO simulation prompts**.
 
 ## Prerequisites
 
@@ -37,7 +39,6 @@ This skill activates when the user asks to:
 - Simulate an agent, run an agent loop, or test agent behavior
 - Generate prompts for a product, create GEO audit prompts, build a prompt bank, or test how AI responds to problems a product solves
 - Create simulation prompts, build a prompt set for AI visibility testing, or create unbranded pain prompts for a SaaS or cloud product
-- Open a PR, submit skill changes, push a skill update, or create a pull request for the skills repo
 
 ## Workflows
 
@@ -60,16 +61,6 @@ See [`workflows/geo-simulation-prompts.md`] for full steps. Summary:
 4. Draft 15-25 prompts that are pain-focused, unbranded, naturally worded, and each backed by a real neutral source URL.
 5. Run the quality review: no multi-sentence prompts, no "How do I" openers, no vocabulary leakage, no educational-pattern prompts.
 6. Output as a structured markdown file grouped by theme with persona, journey, and source tags per prompt.
-
-### 3. Open a PR
-
-See [`workflows/open-pr.md`] for full steps. Summary:
-
-1. Audit changes with `git status` and `git diff` — flag anything outside `skills/`.
-2. Summarise what will be committed and ask for confirmation.
-3. Commit with a conventional message (`add:`, `update:`, `fix:`, `meta:`).
-4. Push to the current branch (or create one if on `main`).
-5. Open a PR via `gh pr create` and return the URL.
 
 ## General principles
 
