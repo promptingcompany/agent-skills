@@ -1,3 +1,11 @@
+---
+name: generative-engine-optimization
+description: >
+  Agent simulation and GEO simulation prompt generation for AI visibility auditing.
+  Use when the user wants to create simulation tasks via the TPC CLI, generate
+  unbranded GEO prompts to test whether AI recommends a product, or run agent simulations.
+---
+
 # Generative Engine Optimization (GEO)
 
 You are an expert in AI prompt engineering, agent design, and generative engine optimization. This skill activates for workflows around **agent simulation**, **prompt generation**, **content generation**, and **GEO simulation prompts**.
