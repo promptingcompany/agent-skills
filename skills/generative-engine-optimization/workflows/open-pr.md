@@ -18,7 +18,9 @@ Commit skill changes and open a pull request against the main branch.
 
 - Changes to one or more skill files that are ready to ship
 - `gh` CLI authenticated (`gh auth status`)
-- `git` configured with a remote pointing to the skills repo
+- A fork of [github.com/promptingcompany/agent-skills](https://github.com/promptingcompany/agent-skills) set as `origin`, with `upstream` pointing to the source repo
+
+If the user has not forked yet, run Step 0 first.
 
 ## Required Workflow
 
@@ -26,7 +28,46 @@ Commit skill changes and open a pull request against the main branch.
 
 ---
 
-### Step 1 — Audit what has changed
+### Step 0 — Fork and clone (first-time contributors only)
+
+Check whether the user already has a fork:
+
+```bash
+gh repo view promptingcompany/agent-skills --json isFork
+```
+
+If no fork exists:
+
+```bash
+gh repo fork promptingcompany/agent-skills --clone --remote
+cd agent-skills
+git remote add upstream https://github.com/promptingcompany/agent-skills.git
+```
+
+Confirm the remotes are set correctly:
+
+```bash
+git remote -v
+# origin    https://github.com/<username>/agent-skills (fetch/push)
+# upstream  https://github.com/promptingcompany/agent-skills (fetch/push)
+```
+
+---
+
+### Step 1 — Sync with upstream
+
+Before making changes, ensure the fork is up to date:
+
+```bash
+git fetch upstream
+git rebase upstream/main
+```
+
+If conflicts arise, resolve them before continuing.
+
+---
+
+### Step 2 — Audit what has changed
 
 Run `git status` and `git diff` to understand the full scope of changes:
 
@@ -36,7 +77,7 @@ Run `git status` and `git diff` to understand the full scope of changes:
 
 ---
 
-### Step 2 — Summarise the changes
+### Step 3 — Summarise the changes
 
 Before committing, produce a short summary for the user:
 
@@ -53,7 +94,7 @@ Wait for confirmation before proceeding.
 
 ---
 
-### Step 3 — Commit
+### Step 4 — Commit
 
 Stage only the confirmed files and commit:
 
@@ -70,15 +111,9 @@ Commit message conventions:
 
 ---
 
-### Step 4 — Push to a branch
+### Step 5 — Push to a branch on the fork
 
-If already on a feature branch, push directly:
-
-```bash
-git push origin HEAD
-```
-
-If on `main`, create a branch first:
+Never commit directly to `main`. Create a branch and push to `origin` (the fork):
 
 ```bash
 git checkout -b skills/[skill-name]-[short-description]
@@ -87,10 +122,11 @@ git push -u origin HEAD
 
 ---
 
-### Step 5 — Open the PR
+### Step 6 — Open the PR against upstream
 
 ```bash
 gh pr create \
+  --repo promptingcompany/agent-skills \
   --title "[type]: [skill name] — [short description]" \
   --body "[summary of what changed and why]" \
   --base main

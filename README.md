@@ -1,5 +1,7 @@
 # agent-skills
 
+**[github.com/promptingcompany/agent-skills](https://github.com/promptingcompany/agent-skills)**
+
 Community skill packages for Claude Code and AI agents — maintained by Prompting Company.
 
 ## What are skills?
@@ -10,21 +12,27 @@ Skills are reusable instruction sets that extend what Claude can do inside Claud
 
 | Skill | Description |
 |---|---|
-| [generative-engine-optimization](skills/generative-engine-optimization/) | Agent simulation, prompt generation, and content generation workflows |
+| [generative-engine-optimization](skills/generative-engine-optimization/) | Agent simulation and GEO simulation prompt generation for AI visibility auditing |
 
 ## Installing a skill
 
-Each skill includes an `INSTALL.md` with instructions for Claude Code CLI, claude.ai, and MCP server setup. Quick start:
-
 ```bash
-# Claude Code CLI
 cp -r skills/generative-engine-optimization ~/.claude/skills/
 ```
 
-For MCP server configuration and claude.ai setup, see the skill's [`INSTALL.md`](skills/generative-engine-optimization/INSTALL.md).
+See the skill's [`INSTALL.md`](skills/generative-engine-optimization/INSTALL.md) for claude.ai and MCP server setup.
 
 ## Contributing
 
-1. Create a folder under `skills/<your-skill-name>/`
-2. Add `SKILL.md`, `README.md`, and `metadata.json`
-3. Open a PR — see `AGENTS.md` for structural guidelines
+We welcome new skills and improvements to existing ones. See [CONTRIBUTING.md](CONTRIBUTING.md) for full guidelines.
+
+Quick path:
+
+1. [Fork the repo](https://github.com/promptingcompany/agent-skills/fork)
+2. Create a branch: `git checkout -b skills/your-skill-name`
+3. Add your skill under `skills/<your-skill-name>/` following the structure in [AGENTS.md](AGENTS.md)
+4. Open a pull request against `main`
+
+## License
+
+[MIT](LICENSE)
