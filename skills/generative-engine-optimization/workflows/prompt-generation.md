@@ -57,3 +57,32 @@ Before presenting the draft, verify:
 
 Show the prompt, explain 2-3 key decisions, and ask:
 > "Want me to adjust the tone, add examples, or tighten any section?"
+
+## Step 6 — Push to platform
+
+Once the user is happy with the prompt, ask:
+> "Do you want me to save this prompt to a platform?"
+
+### PostHog (default)
+
+Use the PostHog MCP to create or update the prompt:
+
+**Creating a new prompt:**
+- Call `prompt-list` first to check whether a prompt with the same name already exists.
+- If it does not exist, call `prompt-create` with:
+  - `name` — a short kebab-case identifier the user confirms (e.g., `customer-support-triage`)
+  - `description` — one sentence describing what the prompt does
+  - `text` — the full prompt text
+- Confirm back with: "Prompt created in PostHog: `[name]`"
+
+**Updating an existing prompt:**
+- If `prompt-list` finds a match, confirm with the user before overwriting.
+- Call `prompt-update` with the existing prompt's ID and the new `text`.
+- Confirm back with: "Prompt updated in PostHog: `[name]`"
+
+### Other platforms
+
+If the user names a different platform:
+- Ask for any required identifiers (project ID, API key, endpoint URL).
+- Use the appropriate MCP tool or API call for that platform.
+- If no integration is available, output the prompt as a copyable markdown block and tell the user to paste it manually.

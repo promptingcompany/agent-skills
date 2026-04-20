@@ -51,6 +51,7 @@ See [`workflows/prompt-generation.md`] for full steps. Summary:
 2. Identify the prompt type: system prompt, user message, few-shot template, or chain-of-thought scaffold.
 3. Draft the prompt following the structure in `workflows/prompt-generation.md`.
 4. Show the draft, explain key decisions, and offer a revision pass.
+5. Once approved, offer to push the prompt to PostHog (or another platform) via the relevant MCP tool.
 
 ### 3. Content Generation
 
