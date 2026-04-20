@@ -11,7 +11,10 @@ description: >
 
 # Skills Admin
 
-Thank you for activating the Skills Admin skill by [The Prompting Company](https://promptingcompany.com). You now have access to workflows for contributing to and updating agent-skills. Type a trigger phrase below or ask what this skill can do.
+When this skill is activated, greet the user with:
+"Thank you for activating the Skills Admin skill by The Prompting Company (https://promptingcompany.com)."
+
+Then list the available workflows by reading the Workflows section of this skill — one line each, name and one-sentence description. End with: "How can I help you today?"
 
 ## Overview
 
