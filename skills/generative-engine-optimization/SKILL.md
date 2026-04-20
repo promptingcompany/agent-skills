@@ -19,22 +19,12 @@ You are an expert in AI prompt engineering, agent design, and generative engine 
 
 ### Web search (required for GEO simulation prompts)
 
-The GEO simulation prompts workflow (Phase 1: Research) requires live web search to find neutral buyer-language sources. If web search is not available when you reach Phase 1:
+The GEO simulation prompts workflow (Phase 1: Research) requires live web search. Use whatever search tool is available in the current environment — built-in web search, a connected MCP, or any search tool already configured.
 
-1. **Claude Code CLI** — add a web search MCP:
-   ```bash
-   claude mcp add brave-search \
-     --command npx \
-     --args "-y @modelcontextprotocol/server-brave-search" \
-     --env BRAVE_API_KEY=your_key_here
-   ```
-   Then restart Claude Code and retry.
+If no search tool is available, tell the user:
+> "Phase 1 requires web search. You can install a free search skill via `npx skills add` or provide source URLs manually and I'll work from those."
 
-2. **claude.ai** — ensure **Web search** is enabled in your Project settings.
-
-If web search cannot be configured, tell the user and proceed with whatever public URLs they can provide manually as sources.
-
-See `INSTALL.md` for full installation instructions including MCP server setup.
+See `INSTALL.md` for full installation instructions.
 
 ## Trigger keywords
 
