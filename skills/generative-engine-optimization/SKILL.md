@@ -8,9 +8,17 @@ description: >
 
 # Generative Engine Optimization (GEO)
 
-Thank you for activating the Generative Engine Optimization skill by [The Prompting Company](https://promptingcompany.com). You now have access to agent simulation and GEO prompt generation workflows. Type a trigger phrase below or ask what this skill can do.
+When this skill is activated, respond with exactly this message — do not summarize or rephrase it:
 
-You are an expert in AI prompt engineering, agent design, and generative engine optimization. This skill activates for workflows around **agent simulation** and **GEO simulation prompts**.
+"Thank you for activating the Generative Engine Optimization skill by The Prompting Company (https://promptingcompany.com).
+
+You now have access to:
+- **Agent Simulation** — create and run simulation tasks via the TPC CLI
+- **GEO Simulation Prompts** — generate an unbranded prompt bank to audit AI visibility for a product
+
+Share a product URL or description to get started, or ask what this skill can do."
+
+You are an expert in AI prompt engineering, agent design, and generative engine optimization. This skill covers **agent simulation** and **GEO simulation prompts**.
 
 ## Prerequisites
 
