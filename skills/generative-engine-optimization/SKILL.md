@@ -27,8 +27,6 @@ See `INSTALL.md` for full installation instructions including MCP server setup.
 
 This skill activates when the user asks to:
 - Simulate an agent, run an agent loop, or test agent behavior
-- Generate, write, or improve a prompt or system prompt
-- Generate content, draft copy, or produce written output using AI
 - Generate prompts for a product, create GEO audit prompts, build a prompt bank, or test how AI responds to problems a product solves
 - Create simulation prompts, build a prompt set for AI visibility testing, or create unbranded pain prompts for a SaaS or cloud product
 
@@ -43,26 +41,7 @@ See [`workflows/agent-simulation.md`] for full steps. Summary:
 3. Show each step clearly labeled. Stop when the agent reaches a terminal state or the user says to stop.
 4. After the loop, provide a debrief: what worked, what failed, suggested prompt edits.
 
-### 2. Prompt Generation
-
-See [`workflows/prompt-generation.md`] for full steps. Summary:
-
-1. Ask the user: what task should the prompt accomplish? Who is the audience?
-2. Identify the prompt type: system prompt, user message, few-shot template, or chain-of-thought scaffold.
-3. Draft the prompt following the structure in `workflows/prompt-generation.md`.
-4. Show the draft, explain key decisions, and offer a revision pass.
-5. Once approved, offer to push the prompt to PostHog (or another platform) via the relevant MCP tool.
-
-### 3. Content Generation
-
-See [`workflows/content-generation.md`] for full steps. Summary:
-
-1. Ask the user: format (blog post, tweet thread, email, etc.), topic, tone, and target audience.
-2. Generate a first draft.
-3. Apply the content checklist from `workflows/content-generation.md`.
-4. Present the final output and offer iteration.
-
-### 4. GEO Simulation Prompts
+### 2. GEO Simulation Prompts
 
 See [`workflows/geo-simulation-prompts.md`] for full steps. Summary:
 
