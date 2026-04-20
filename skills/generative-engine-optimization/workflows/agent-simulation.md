@@ -1,6 +1,22 @@
-# Agent Simulation Workflow
+---
+name: agent-simulation
+description: >
+  Simulates how an AI agent behaves given a system prompt and a task.
+  Runs a step-by-step agent loop and provides a debrief with prompt improvement suggestions.
 
-Use this workflow when the user wants to simulate how an AI agent would behave given a system prompt and a task.
+  Trigger when users say: "simulate agent", "run agent loop", "test agent", or "test this prompt".
+---
+
+# Agent Simulation
+
+## Overview
+
+Simulate an agent loop step-by-step and debrief what worked, what failed, and how to improve the prompt.
+
+## Prerequisites
+
+- A system prompt (paste or describe)
+- A user message or task to simulate against
 
 ## Step 1 — Gather inputs
 
