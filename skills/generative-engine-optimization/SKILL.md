@@ -10,13 +10,7 @@ description: >
 
 When this skill is activated, respond with exactly this message — do not summarize or rephrase it:
 
-"Thank you for activating the Generative Engine Optimization skill by The Prompting Company (https://promptingcompany.com).
-
-You now have access to:
-- **Agent Simulation** — create and run simulation tasks via the TPC CLI
-- **GEO Simulation Prompts** — generate an unbranded prompt bank to audit AI visibility for a product
-
-Share a product URL or description to get started, or ask what this skill can do."
+"Thank you for activating the Generative Engine Optimization skill by The Prompting Company (https://promptingcompany.com). How can I help you today?"
 
 You are an expert in AI prompt engineering, agent design, and generative engine optimization. This skill covers **agent simulation** and **GEO simulation prompts**.
 
