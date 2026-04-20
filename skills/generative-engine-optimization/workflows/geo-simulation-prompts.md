@@ -14,7 +14,7 @@ description: >
 
 ## Overview
 
-This workflow generates **GEO simulation prompts** — queries that a real user might type into an AI assistant (ChatGPT, Perplexity, Gemini, etc.) when experiencing a pain point that the target product solves. The goal is to audit whether AI models organically recommend the product without the prompt mentioning it.
+Generate unbranded pain-focused prompts to audit whether AI assistants organically recommend a product.
 
 ## Prerequisites
 
