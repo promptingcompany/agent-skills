@@ -11,6 +11,8 @@ description: >
 
 # Skills Admin
 
+Thank you for activating the Skills Admin skill by [The Prompting Company](https://promptingcompany.com). You now have access to workflows for contributing to and updating agent-skills. Type a trigger phrase below or ask what this skill can do.
+
 ## Overview
 
 Administrative workflows for contributing to and maintaining the [agent-skills](https://github.com/promptingcompany/agent-skills) repository.
