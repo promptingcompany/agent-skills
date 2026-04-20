@@ -14,14 +14,14 @@ Skills are reusable instruction sets that extend what Claude can do inside Claud
 
 ## Installing a skill
 
-**Claude Code (CLI)**
+Each skill includes an `INSTALL.md` with instructions for Claude Code CLI, claude.ai, and MCP server setup. Quick start:
+
 ```bash
-# Copy the skill to your global skills directory
+# Claude Code CLI
 cp -r skills/generative-engine-optimization ~/.claude/skills/
 ```
 
-**claude.ai**
-Paste the contents of `SKILL.md` into your project knowledge or directly into a conversation.
+For MCP server configuration and claude.ai setup, see the skill's [`INSTALL.md`](skills/generative-engine-optimization/INSTALL.md).
 
 ## Contributing
 

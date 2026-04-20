@@ -13,17 +13,20 @@ A Claude Code skill covering core GEO workflows: **agent simulation**, **prompt 
 
 ## Installation
 
+See [`INSTALL.md`](INSTALL.md) for full instructions covering Claude Code CLI, claude.ai, and MCP server setup.
+
+Quick start:
+
 ```bash
 cp -r skills/generative-engine-optimization ~/.claude/skills/
 ```
-
-Or paste `SKILL.md` into your claude.ai project knowledge.
 
 ## File layout
 
 ```
 generative-engine-optimization/
 ├── SKILL.md              ← load this into Claude
+├── INSTALL.md            ← CLI, claude.ai, and MCP server setup
 ├── README.md             ← you are here
 ├── metadata.json         ← version + abstract
 └── workflows/
