@@ -1,9 +1,31 @@
-# GEO Simulation Prompts Workflow
+---
+name: geo-simulation-prompts
+description: >
+  Generates a set of GEO (Generative Engine Optimization) simulation prompts for any product.
+  These prompts are used to test whether AI assistants organically recommend a product when users
+  describe pain points the product solves — without mentioning the product by name.
 
-You are generating a set of **GEO simulation prompts** — queries that a real user might type into
-an AI assistant (ChatGPT, Perplexity, Gemini, etc.) when they're experiencing a pain point that
-the target product solves. The goal is to audit whether AI models organically recommend the product
-without the prompt mentioning it.
+  Trigger when users say: "generate prompts for [product]", "create GEO audit prompts",
+  "build a prompt bank for [product]", "test if AI recommends [product]", or
+  "I need prompts based on [URL/docs/product info]".
+---
+
+# GEO Simulation Prompts
+
+## Overview
+
+This workflow generates **GEO simulation prompts** — queries that a real user might type into an AI assistant (ChatGPT, Perplexity, Gemini, etc.) when experiencing a pain point that the target product solves. The goal is to audit whether AI models organically recommend the product without the prompt mentioning it.
+
+## Prerequisites
+
+- A product name, landing page URL, documentation link, or description to research
+- Web search access (required for Phase 1 research — see `SKILL.md` Prerequisites if not configured)
+
+## Required Workflow
+
+**Follow all four phases in order. Do not generate prompts until Phase 2 is complete.**
+
+---
 
 ## What makes a good GEO prompt set
 
@@ -27,11 +49,7 @@ as they're accessed?" — this describes *how the product works*, not the user's
 
 ---
 
-## Process
-
-Work through all four phases in order. Do not generate prompts until Phase 2 is complete.
-
----
+## Phases
 
 ### Phase 1: Research
 
