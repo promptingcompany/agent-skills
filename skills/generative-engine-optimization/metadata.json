@@ -1,0 +1,9 @@
+{
+  "version": "0.1.0",
+  "organization": "Prompting Company",
+  "date": "April 2026",
+  "abstract": "Generative Engine Optimization (GEO) — workflows for agent simulation, prompt generation, and content generation. Helps teams design, test, and iterate on AI-driven prompts and content pipelines using structured simulation loops and generation patterns.",
+  "references": [
+    "https://promptingcompany.com"
+  ]
+}
