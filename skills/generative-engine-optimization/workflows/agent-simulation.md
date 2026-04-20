@@ -15,18 +15,56 @@ Simulate an agent loop step-by-step and debrief what worked, what failed, and ho
 
 ## Prerequisites
 
+- A product name, URL, or description to understand what is being simulated
 - A system prompt (paste or describe)
 - A user message or task to simulate against
 
-## Step 1 — Gather inputs
+## Required Workflow
+
+**Follow all steps in order.**
+
+---
+
+### Step 1 — Check for existing simulations
+
+Before creating anything, use the CLI to list existing simulation tasks and avoid overlap:
+
+```bash
+claude task list --type simulation
+```
+
+- If a simulation already exists for the same product or prompt, show it to the user and ask whether to extend it or create a new one.
+- If none exist, proceed to Step 2.
+
+---
+
+### Step 2 — Understand the product
+
+Collect context on what the product is solving for. Ask the user:
+
+- **What does the product do?** — core problem it solves and who it's for
+- **What is the agent's role?** — what job is the agent being asked to do inside this product?
+- **What does success look like?** — what should the agent reliably produce or decide?
+- **Who are the end users?** — their technical level and expectations
+
+If a URL is provided, use web search to fill in gaps before proceeding.
+
+Document a one-paragraph **Product Context** summary before moving to Step 3.
+
+---
+
+### Step 3 — Gather simulation inputs
 
 Ask the user for:
+
 - **System prompt** — the agent's instructions (paste or describe)
 - **User message / task** — what the user would send to the agent
 - **Tools available** (optional) — list any tools the agent can call (web search, code execution, etc.)
 - **Stop condition** (optional) — when should the simulation end? Default: first terminal response
 
-## Step 2 — Run the simulation loop
+---
+
+### Step 4 — Run the simulation loop
 
 For each iteration, show:
 
@@ -43,7 +81,9 @@ Continue until:
 - The user says to stop
 - 10 turns have elapsed (safety cap — ask to continue if reached)
 
-## Step 3 — Debrief
+---
+
+### Step 5 — Debrief
 
 After the loop ends, provide:
 
@@ -51,6 +91,39 @@ After the loop ends, provide:
 2. **Failure points** — where the agent got confused or went off-track
 3. **Prompt suggestions** — specific edits to the system prompt that would improve behavior
 4. **Edge cases to test** — 2-3 follow-up scenarios worth simulating next
+
+---
+
+### Step 6 — Confirm and create the simulation task
+
+Summarise what will be saved:
+
+```
+Product:        [product name]
+Agent role:     [one line]
+System prompt:  [first 100 chars…]
+Scenario:       [user message / task]
+Result:         [pass / fail / partial]
+Suggested fix:  [top prompt suggestion]
+```
+
+Ask the user:
+> "Shall I save this simulation to the platform?"
+
+If confirmed, create the task via the CLI:
+
+```bash
+claude task create \
+  --type simulation \
+  --product "[product name]" \
+  --title "[scenario title]" \
+  --result "[pass|fail|partial]" \
+  --notes "[top debrief finding]"
+```
+
+Confirm back with: "Simulation saved: `[title]`"
+
+---
 
 ## Tips
 
