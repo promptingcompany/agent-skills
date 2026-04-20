@@ -8,7 +8,6 @@ Agent simulation and GEO simulation prompt generation for AI visibility auditing
 |---|---|
 | Agent simulation | "simulate agent", "run agent loop", "test agent" |
 | GEO simulation prompts | "generate prompts for [product]", "create GEO audit prompts", "build a prompt bank" |
-| Open a PR | "open a PR", "submit my changes", "push this skill", "create a pull request" |
 
 ## Install
 
