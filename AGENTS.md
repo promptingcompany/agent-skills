@@ -34,6 +34,12 @@ skills/
 - Skill names in frontmatter: match the directory name
 - Zip packages for distribution: match the directory name exactly
 
+## Versioning
+
+- Whenever changing any files inside `skills/<skill-name>/`, also bump that skill's `metadata.json` patch version unless the user explicitly specifies a different versioning instruction.
+- Patch bumps increment the third semantic version component, for example `0.1.0` to `0.1.1`.
+- New skills should start at `0.1.0` unless the user specifies otherwise.
+
 ## Adding a new skill
 
 1. Create `skills/<name>/`.
