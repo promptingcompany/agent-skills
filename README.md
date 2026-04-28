@@ -2,26 +2,27 @@
 
 **[github.com/promptingcompany/agent-skills](https://github.com/promptingcompany/agent-skills)**
 
-Community skill packages for Claude Code and AI agents — maintained by Prompting Company.
+Community skill packages for Claude Code and AI agents, maintained by Prompting Company.
 
 ## What are skills?
 
-Skills are reusable instruction sets that extend what Claude can do inside Claude Code or claude.ai. Each skill lives in its own folder under `skills/` and ships with a `SKILL.md` (the agent prompt), a `README.md` (human docs), and a `metadata.json`.
+Skills are reusable instruction sets that extend what Claude can do inside Claude Code or claude.ai. Each skill lives in its own folder under `skills/` and ships with a `SKILL.md` agent prompt, `README.md` human docs, `INSTALL.md` setup notes, and `metadata.json`.
 
 ## Available skills
 
 | Skill | Description |
 |---|---|
 | [generative-engine-optimization](skills/generative-engine-optimization/) | Agent simulation and GEO simulation prompt generation for AI visibility auditing |
+| [prompting-company](skills/prompting-company/) | API, MCP Server, CLI, and SDK workflows for The Prompting Company |
 | [skills-admin](skills/skills-admin/) | Open PRs and update installed skills in the agent-skills repository |
 
 ## Installing a skill
 
 ```bash
-cp -r skills/generative-engine-optimization ~/.claude/skills/
+cp -r skills/prompting-company ~/.claude/skills/
 ```
 
-See the skill's [`INSTALL.md`](skills/generative-engine-optimization/INSTALL.md) for claude.ai and MCP server setup.
+See the skill's [`INSTALL.md`](skills/prompting-company/INSTALL.md) for claude.ai and MCP server setup.
 
 ## Contributing
 
