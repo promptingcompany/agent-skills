@@ -32,7 +32,7 @@ This skill activates when the user asks to:
 
 ### 1. Live Documentation Lookup
 
-See [`workflows/live-docs.md`] for source-of-truth URLs. Summary:
+See [`workflows/live-docs.md`](workflows/live-docs.md) for source-of-truth URLs. Summary:
 
 1. Start from the docs index or OpenAPI schema.
 2. Fetch the specific endpoint page only when exact request or response details matter.
@@ -41,7 +41,7 @@ See [`workflows/live-docs.md`] for source-of-truth URLs. Summary:
 
 ### 2. Entrypoint Selection
 
-See [`workflows/entrypoints.md`] for full steps. Summary:
+See [`workflows/entrypoints.md`](workflows/entrypoints.md) for full steps. Summary:
 
 1. Choose API, MCP Server, CLI, or SDK based on the user's environment and goal.
 2. Use API for language-agnostic integrations and exact route control.
