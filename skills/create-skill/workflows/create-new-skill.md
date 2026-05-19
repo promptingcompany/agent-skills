@@ -125,6 +125,31 @@ python3 -m json.tool skills/<skill-name>/metadata.json >/dev/null
 wc -l skills/<skill-name>/SKILL.md
 find skills/<skill-name> -maxdepth 2 -type f | sort
 rg -n "## Trigger keywords|workflows/" skills/<skill-name>/SKILL.md
+python3 - <<'PY'
+import json
+import re
+from pathlib import Path
+
+skill = Path("skills/<skill-name>")
+kebab = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+
+errors = []
+if not kebab.fullmatch(skill.name):
+    errors.append(f"skill directory is not kebab-case: {skill.name}")
+for workflow in sorted((skill / "workflows").glob("*.md")):
+    if not kebab.fullmatch(workflow.stem):
+        errors.append(f"workflow filename is not kebab-case: {workflow.name}")
+
+metadata = json.loads((skill / "metadata.json").read_text())
+missing = [key for key in ("version", "organization", "abstract") if not metadata.get(key)]
+if missing:
+    errors.append(f"metadata.json missing required fields: {', '.join(missing)}")
+elif not re.fullmatch(r"\d+\.\d+\.\d+", str(metadata["version"])):
+    errors.append(f"metadata.json version is not SemVer: {metadata['version']}")
+
+if errors:
+    raise SystemExit("\n".join(errors))
+PY
 ```
 
 Confirm:
@@ -133,6 +158,8 @@ Confirm:
 - `SKILL.md` has `## Trigger keywords`.
 - `SKILL.md` links every workflow file.
 - Every workflow file has `name` and `description` frontmatter.
+- The skill directory name and workflow filenames are kebab-case.
+- `metadata.json` includes `version`, `organization`, and `abstract`.
 - The root `README.md` skills table includes the new skill.
 
 ### Step 8 - Report completion
