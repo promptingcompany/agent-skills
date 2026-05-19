@@ -7,8 +7,11 @@ Guidelines for Claude Code when working in this repository.
 Skills live under `skills/<skill-name>/`. Each skill has:
 - `SKILL.md` — the agent-facing prompt loaded into conversations
 - `README.md` — human-readable docs
+- `INSTALL.md` — CLI, claude.ai, MCP setup
 - `metadata.json` — structured metadata
 - `workflows/` — detailed step-by-step workflow files
+
+Use `SPEC.md` as the canonical structural requirements and validation checklist.
 
 ## When editing skills
 

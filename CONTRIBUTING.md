@@ -17,7 +17,7 @@ Thanks for contributing. This repo is a community collection of skill packages f
 
 ## Adding a new skill
 
-Every skill lives in its own folder under `skills/`:
+Every skill lives in its own folder under `skills/`. See [SPEC.md](SPEC.md) for the canonical structural requirements.
 
 ```
 skills/your-skill-name/
