@@ -37,7 +37,7 @@ This skill activates when the user asks to:
 
 ### 1. Generate Config
 
-See [`workflows/generate-config.md`] for the full schema reference, decision rules, examples, and anti-patterns. Summary:
+See [`workflows/generate-config.md`](workflows/generate-config.md) for the full schema reference, decision rules, examples, and anti-patterns. Summary:
 
 1. Ask what the user wants to measure — what behavior, metric, or quality.
 2. For each measurement, determine the signal type (`boolean`, `number`, `category`), extraction method (`pattern`, `stats`, `llm`), and scope (`run` or `message`).
