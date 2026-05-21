@@ -1,0 +1,5 @@
+{
+  "version": "0.2.0",
+  "organization": "Prompting Company",
+  "abstract": "Generate YAML signal configs for agent simulation experiments."
+}
