@@ -8,10 +8,13 @@ Community skill packages for Claude Code and AI agents, maintained by Prompting 
 
 Skills are reusable instruction sets that extend what Claude can do inside Claude Code or claude.ai. Each skill lives in its own folder under `skills/` and ships with a `SKILL.md` agent prompt, `README.md` human docs, `INSTALL.md` setup notes, and `metadata.json`.
 
+See [SPEC.md](SPEC.md) for the canonical skill package structure and validation checklist.
+
 ## Available skills
 
 | Skill | Description |
 |---|---|
+| [create-skill](skills/create-skill/) | Create new agent-skills packages that follow the repository SPEC.md structure |
 | [generative-engine-optimization](skills/generative-engine-optimization/) | Agent simulation and GEO simulation prompt generation for AI visibility auditing |
 | [prompting-company](skills/prompting-company/) | API, MCP Server, CLI, and SDK workflows for The Prompting Company |
 | [setup-experiment](skills/setup-experiment/) | Interactive workflow to set up agent simulation experiments end-to-end |
@@ -34,7 +37,7 @@ Quick path:
 
 1. [Fork the repo](https://github.com/promptingcompany/agent-skills/fork)
 2. Create a branch: `git checkout -b skills/your-skill-name`
-3. Add your skill under `skills/<your-skill-name>/` following the structure in [AGENTS.md](AGENTS.md)
+3. Add your skill under `skills/<your-skill-name>/` following the structure in [SPEC.md](SPEC.md)
 4. Open a pull request against `main`
 
 ## License

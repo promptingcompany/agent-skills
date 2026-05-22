@@ -17,6 +17,8 @@ skills/
     workflows/      - detailed workflow files referenced by SKILL.md
 ```
 
+For the canonical structural requirements and validation checklist, read `SPEC.md`.
+
 ## SKILL.md guidelines
 
 - Open with YAML frontmatter containing `name` and `description`.
