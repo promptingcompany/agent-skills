@@ -17,7 +17,7 @@ Walk the user through creating a complete agent simulation experiment — from d
 
 ## Prerequisites
 
-- `tpc` CLI installed (`tpc --version`)
+- `tpc` CLI installed (`tpc --version`) — if missing, install with: `curl -fsSL https://cli.promptingco.com/install.sh | bash`
 - Authenticated: `tpc auth whoami`
 - Active product set: `tpc product list` → `tpc product switch <product-slug>`
 
@@ -65,6 +65,23 @@ For each new task the user wants, collect:
 - **Prompt** — the specific instruction the agent will receive
 - **Goals** — observable outcomes with passing thresholds
 
+**Task schema** (`task.json`):
+
+| Field | Required | Notes |
+|---|---|---|
+| `name` | yes | Short scenario name. |
+| `description` | yes | One sentence on what this validates. |
+| `category` | yes | `coding`, `research`, `documentation`, `analysis`. |
+| `prompt` | yes | Second-person imperative; one scenario only. |
+| `taskType` | yes | `cli_execution`. |
+| `timeLimitMs` | yes | Run timeout in ms (e.g. `3600000`). |
+| `tagIds` | no | Existing tag IDs. |
+| `goals[]` | yes | Goal objects (see below). |
+
+Goal object — `name`, `description`, `passingThreshold` (0–100), and optional `evaluationType` (`llm_judge`), `model` (e.g. `claude-sonnet-4-6`), `scoringMethod` (`weighted_average`).
+
+Do **not** include `product` — the active product is injected by the CLI.
+
 Draft a `task.json` for each task:
 
 ```json
@@ -79,11 +96,20 @@ Draft a `task.json` for each task:
     {
       "name": "<goal name>",
       "description": "<what a passing run looks like>",
-      "passingThreshold": 70
+      "evaluationType": "llm_judge",
+      "model": "claude-sonnet-4-6",
+      "passingThreshold": 70,
+      "scoringMethod": "weighted_average"
     }
   ]
 }
 ```
+
+**Prompt writing rules:**
+- Write in second-person imperative: "Open the app, add an item to cart, and complete checkout."
+- Be specific — include realistic detail (promo codes, item names, expected state).
+- One prompt = one scenario. Do not combine multiple test cases.
+- Goals must be observable outcomes, not internal states.
 
 Show the draft to the user and ask for confirmation before creating:
 
@@ -116,6 +142,37 @@ For each new environment, collect:
 - **Description** — what this configuration tests
 - **Agent config** — harness, provider, model, approval policy, sandbox resources
 
+**Environment schema** (`tpc sim env create` flags):
+
+| Flag | Required | Notes |
+|---|---|---|
+| `--name` | yes | Descriptive name. |
+| `--agent-config` | yes | JSON string or `@file.json`/`@file.toml`. |
+| `--description` | no | What this configuration tests. |
+| `--enabled` | no | Default `true`. |
+| `--schedule` | no | `7d` or `14d`. |
+| `--tag-ids` | no | Comma-separated tag IDs. |
+| `--task-ids` | no | Tasks to link at creation. |
+
+**Agent config object** — only these four keys are accepted; any other key is rejected by the API with `"Unknown agentConfig fields: ..."`.
+
+| Field | Required | Notes |
+|---|---|---|
+| `harness` | yes | `claude`, `codex`, `opencode`. |
+| `provider` | yes | e.g. `anthropic`, `openai`, `fireworks`. Must be supported by the chosen `harness`. |
+| `model` | yes | Provider-specific model ID. Must be supported by the chosen `harness`. |
+| `sandboxResources` | no | Object (see below). |
+
+`sandboxResources` (all optional, numeric — not strings):
+
+| Field | Type | Range | Default |
+|---|---|---|---|
+| `cpu` | number | 1–4 | 1 |
+| `memory` | number (GB) | 1–8 | 1 |
+| `disk` | number (GB) | 1–10 (30+ needs custom tier) | 3 |
+| `gpu` | enum | `T4`, `L4`, `A10G`, `A100`, `A100-80GB`, `H100` | unset |
+| `gpuCount` | number | 1–8 | 1 (when `gpu` is set) |
+
 Draft the agent config:
 
 ```json
@@ -123,12 +180,10 @@ Draft the agent config:
   "harness": "claude",
   "provider": "anthropic",
   "model": "claude-sonnet-4-20250514",
-  "approvalPolicy": "auto-approve-all",
-  "sandboxMode": true,
   "sandboxResources": {
-    "cpu": "2",
-    "memory": "4Gi",
-    "disk": "10Gi"
+    "cpu": 2,
+    "memory": 4,
+    "disk": 10
   }
 }
 ```
