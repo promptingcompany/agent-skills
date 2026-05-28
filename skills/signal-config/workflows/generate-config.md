@@ -17,8 +17,14 @@ Interactively create a valid `version: 1.0` YAML signal config — ask what to m
 
 ## Prerequisites
 
-- `tpc` CLI installed (`tpc --version`) — needed for validation via `tpc sim experiment validate-signal-config`
+- `tpc` CLI installed (`tpc --version`) — if missing, install with: `curl -fsSL https://cli.promptingco.com/install.sh | bash`. Needed for validation via `tpc sim experiment validate-signal-config`.
 - Authenticated: `tpc auth whoami` (only if attaching to an experiment)
+
+If the CLI is missing:
+
+```bash
+curl -fsSL https://cli.promptingco.com/install.sh | bash
+```
 
 ## Required Workflow
 

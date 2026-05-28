@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.1.1",
   "organization": "Prompting Company",
   "abstract": "Interactive workflow to set up agent simulation experiments end-to-end."
 }
