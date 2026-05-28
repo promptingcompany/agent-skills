@@ -17,13 +17,14 @@ Create and queue an agent simulation task using the `tpc` CLI — check for over
 
 ## Prerequisites
 
-- `tpc` CLI installed (`tpc --version`)
+- `tpc` CLI installed (`tpc --version`) — if missing, install with: `curl -fsSL https://cli.promptingco.com/install.sh | bash`
 - Authenticated: `tpc auth whoami`
 - Active product set: `tpc product list` → `tpc product switch <product-slug>`
 
 If any prerequisite is missing, resolve it before continuing:
 
 ```bash
+curl -fsSL https://cli.promptingco.com/install.sh | bash   # install tpc CLI if missing
 tpc auth login                        # authenticate
 tpc org switch <org-slug>             # set active org
 tpc product switch <product-slug>     # set active product (required for sim commands)

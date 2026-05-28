@@ -1,71 +1,222 @@
 ---
 name: setup-experiment
-description: >
-  End-to-end interactive workflow: ask what to experiment on, create tasks,
-  select or create environments, build the experiment, generate and attach
-  a signal config, and optionally trigger the first iteration.
-
-  Trigger when users say: "set up an experiment", "create an experiment",
-  "I want to run an experiment", "new experiment", "configure an experiment".
+description: End-to-end interactive workflow — pick a product, run existing tasks and environments OR set up new ones (with docs ingestion, task suggestions, credentials, and templates), then trigger the first iteration. Trigger when users say "set up an experiment", "create an experiment", "I want to run an experiment", "run my tasks", "new experiment", or "configure an experiment".
 ---
 
 # Setup Experiment
 
 ## Overview
 
-Walk the user through creating a complete agent simulation experiment — from defining what to test, through task and environment setup, to signal configuration and the first run.
+Two paths after product selection, depending on what the user already has:
+
+- **Path A — Run what I have**: returning user with existing tasks and environments. Pick from lists, attach, run.
+- **Path B — Set up something new**: first-time setup or fresh experiment. Capture context, suggest tasks from docs, pick a template, run.
+
+Pull what the platform already knows. Never block on missing information — fall back to web search and sensible defaults.
 
 ## Prerequisites
 
-- `tpc` CLI installed (`tpc --version`)
+- `tpc` CLI installed (`tpc --version`) — if missing, install with: `curl -fsSL https://cli.promptingco.com/install.sh | bash`
 - Authenticated: `tpc auth whoami`
-- Active product set: `tpc product list` → `tpc product switch <product-slug>`
+- Active org set: `tpc org list` → `tpc org switch <org-slug>`
+
+If any prerequisite is missing, resolve it before continuing:
+
+```bash
+curl -fsSL https://cli.promptingco.com/install.sh | bash   # install tpc CLI if missing
+tpc auth login
+tpc org switch <org-slug>
+```
 
 ## Required Workflow
 
-**Follow all steps in order. Do not skip steps or create resources without user confirmation.**
+**Follow steps in order. Do not skip steps or create resources without user confirmation.**
 
 ---
 
-### Step 1 — Understand what the user wants to experiment on
+### Step 1 — Pick the product
 
-Ask the user:
+Check the active product:
 
-> "What do you want to experiment on? For example: comparing agent performance across models, testing a new system prompt, measuring hallucination rates on specific tasks, or benchmarking different agent configurations."
+```
+tpc product current
+```
 
-You need to understand:
-- **The hypothesis or goal** — what are they trying to learn or compare?
-- **The scope** — how many tasks, how many environments, what dimensions vary?
-- **Success criteria** — what would a good result look like?
+If none is set, list and ask:
 
-If the user gives a clear, specific answer, do not ask follow-up questions — proceed.
+```
+tpc product list
+```
+
+> "Which product are you experimenting on? (pick number or slug)"
+
+Then: `tpc product switch <slug>`
+
+If a product is already active, confirm:
+
+> "Active product: [name]. Continue with this one or switch?"
+
+If the org has only one product, auto-select it silently.
 
 ---
 
-### Step 2 — Create or select tasks
+### Step 2 — Choose your path
 
-Tasks define what the agent will be asked to do in each run.
+Show inventory and route:
 
-#### 2a — Check for existing tasks
+```
+tpc sim task list
+tpc sim env list
+```
 
-```bash
+> "I see [N] tasks and [M] environments for [product].
+> What do you want to do?
+> (1) **Run what I have** — pick from existing, skip setup
+> (2) **Set up something new** — guided flow with task suggestions and templates"
+
+If nothing exists yet, skip the question and go straight to **Path B**.
+
+If only one side exists (e.g. tasks but no environments), default to **Path B** and pre-fill from existing where possible.
+
+---
+
+## Path A — Run what I have
+
+For returning users who already have tasks and environments.
+
+### Step A1 — Pick tasks
+
+```
 tpc sim task list
 ```
 
-Show the user any tasks that look relevant. Ask:
+Show as a numbered list. Ask:
 
-> "Here are your existing tasks. Do any of these fit your experiment, or should we create new ones?"
+> "Which tasks should this experiment include? (numbers, slugs, or 'all')"
 
-#### 2b — Create new tasks (if needed)
+### Step A2 — Pick environments
 
-For each new task the user wants, collect:
-- **Name** — short scenario name
-- **Description** — one sentence on what this task validates
-- **Category** — `coding`, `research`, `documentation`, or `analysis`
-- **Prompt** — the specific instruction the agent will receive
-- **Goals** — observable outcomes with passing thresholds
+```
+tpc sim env list
+```
 
-Draft a `task.json` for each task:
+> "Which environments? (numbers, slugs, or 'all')"
+
+### Step A3 — Create experiment and confirm shape
+
+```
+tpc sim experiment create --name "<name>" --description "<short hypothesis>"
+```
+
+Attach selected tasks and environments:
+
+```
+tpc sim experiment task add <experiment-id> <task-id>
+tpc sim experiment env add <experiment-id> <env-id>
+```
+
+Show the summary:
+
+> "Here's your experiment:
+> - Tasks: [N]
+> - Environments: [M]
+> - Total runs per iteration: [N × M]
+> - Signals: default (pass/fail, duration, cost) — edit?"
+
+Wait for explicit confirmation. If the user wants custom signals, delegate to the signal-config skill.
+
+### Step A4 — Run
+
+```
+tpc sim experiment run <experiment-id>
+tpc sim experiment run status <experiment-id> --watch
+```
+
+---
+
+## Path B — Set up something new
+
+For first-time setup or a fresh experiment.
+
+### Step B1 — Capture experiment context
+
+Pull what the platform already has, ask only for the rest. Never block on missing info.
+
+```
+tpc product get
+```
+
+Show what we have, pre-populated:
+
+> "Here's what I have on [product]:
+> - Name: [name]
+> - About: [one-liner]
+>
+> Edit either? (y/N)
+>
+> I still need:
+> - **Docs URL** — paste it, or say 'don't have one' and I'll find it
+> - **Agent surface** — CLI, SDK, MCP server, library, web app
+> - **Known failure modes** — optional, anything you've seen agents get wrong"
+
+**If the user doesn't have a docs URL:**
+
+1. Web-search for `<product name> docs` or `<product name> developer documentation`.
+2. Propose the top candidate:
+   > "Found: [URL]. Use this? (Y/n)"
+3. If rejected, ask the user to point you in the right direction or paste content directly.
+
+After capture, offer to persist:
+
+> "Save these to the product profile so we don't ask next time? (Y/n)"
+
+If yes:
+
+```
+tpc product update --docs-url <url> --surface <surface> --failure-modes "<notes>"
+```
+
+### Step B2 — Suggest tasks from docs
+
+> "Want me to read your docs and propose tasks, or do you have specific scenarios in mind?"
+
+If propose:
+
+1. Fetch docs from the location captured in Step B1.
+2. Extract the product's capability surface — top primitives, common API calls, the "getting started" path.
+3. Cross-reference against known agent failure modes (deprecated SDK installs, missing required fields, framework version confusion, MCP vs. CLI ambiguity, auth pattern errors).
+4. Propose 5–8 candidates. For each: name, what it tests, why an agent is likely to fail, suggested success check.
+5. If the product already has existing tasks, include them in the picker alongside the new suggestions so the user can mix.
+
+Example output:
+
+> Based on your docs, here are tasks I'd run:
+>
+> 1. **Getting Started** — agent installs the SDK and ships a hello-world. Likely failure: installing a deprecated package version.
+> 2. **Send first message** — agent uses the SDK to send one message end-to-end. Likely failure: missing required fields.
+> 3. **Set up webhook** — agent registers a delivery-event webhook. Likely failure: wrong auth header format.
+> 4. **Batch send** — agent sends to more than 10 recipients. Likely failure: hits rate limit, doesn't retry.
+> 5. **Configure custom domain** — agent adds and verifies a sending domain. Likely failure: skips DNS verification.
+>
+> Which should I turn into tasks? (e.g. "1, 3, 5" or "all")
+
+For each selected task, draft a `task.json`.
+
+**Task schema** (`task.json`):
+
+| Field | Required | Notes |
+|---|---|---|
+| `name` | yes | Short scenario name. |
+| `description` | yes | One sentence on what this validates. |
+| `category` | yes | `coding`, `research`, `documentation`, `analysis`. |
+| `prompt` | yes | Second-person imperative; one scenario only. |
+| `taskType` | yes | `cli_execution`. |
+| `timeLimitMs` | yes | Run timeout in ms (e.g. `3600000`). |
+| `successType` | no | e.g. `runs_reliably`, `implements_spec_reliably`. |
+| `tagIds` | no | Existing tag IDs. |
+| `goals[]` | yes | Goal objects: `name`, `description`, `passingThreshold` (0–100), and optional `evaluationType` (`llm_judge`), `model` (e.g. `claude-sonnet-4-6`), `scoringMethod` (`weighted_average`). |
+
+Do **not** include `product` — the active product is injected by the CLI.
 
 ```json
 {
@@ -75,196 +226,179 @@ Draft a `task.json` for each task:
   "prompt": "<specific, actionable instruction>",
   "taskType": "cli_execution",
   "timeLimitMs": 3600000,
+  "successType": "runs_reliably",
   "goals": [
     {
       "name": "<goal name>",
       "description": "<what a passing run looks like>",
-      "passingThreshold": 70
+      "evaluationType": "llm_judge",
+      "model": "claude-sonnet-4-6",
+      "passingThreshold": 70,
+      "scoringMethod": "weighted_average"
     }
   ]
 }
 ```
 
-Show the draft to the user and ask for confirmation before creating:
+Confirm before creating:
 
-```bash
+```
 tpc sim task create --file task.json
 ```
 
-Note each returned task ID. Repeat for all tasks needed.
+Note each returned task ID.
 
----
+### Step B3 — Configure credentials
 
-### Step 3 — Select or create environments
+Most tasks need to hit the customer's product. Set up credentials before creating the experiment.
 
-Environments define the agent configuration (harness, model, approval policy, sandbox resources).
+> "Tasks will need to hit [product]. How should agents authenticate?
+> - Paste an API key / token (I'll store it as a secret on the product profile)
+> - Skip — only run tasks that don't need auth
+> - Already configured"
 
-#### 3a — List existing environments
+If paste:
 
-```bash
-tpc sim env list
+```
+tpc product secret set <product-slug> <key-name> <value>
 ```
 
-Show the user the available environments. Ask:
+Confirm:
 
-> "Here are your existing environments. Which ones do you want to include in this experiment? Or should we create new ones?"
+```
+tpc product secret list <product-slug>
+```
 
-#### 3b — Create new environments (if needed)
+If skip, flag tasks that require auth and exclude them from the run.
 
-For each new environment, collect:
-- **Name** — descriptive name (e.g., "Claude Sonnet 4 - default", "GPT-4o - strict")
-- **Description** — what this configuration tests
-- **Agent config** — harness, provider, model, approval policy, sandbox resources
+### Step B4 — Pick an experiment template
 
-Draft the agent config:
+> "What shape are you running?
+> (1) **Leaderboard** — run tasks across leading models, get a ranked report
+> (2) **Docs vs. no-docs** — same model, with and without docs in context
+> (3) **A vs. B** — paired comparison on one dimension (model, harness, etc.)
+> (4) **Custom** — pick your own environments"
+
+**Leaderboard** (default for first runs and baseline reports):
+
+- Default lineup: `frontier-coding` — Claude Opus 4.7 and Codex 5.5.
+- Ask if the user wants a different lineup; otherwise proceed with the default.
+- Auto-create one environment per model in the lineup, all else equal.
+- Success framing defaults to `runs_reliably`.
+
+**Docs vs. no-docs**:
+
+- Auto-create `<product>-with-docs` and `<product>-no-docs`, identical except for docs in context.
+- Same model across both (default: Claude Opus 4.7).
+- Success framing defaults to `implements_spec_reliably`.
+
+**A vs. B**:
+
+- Ask the one dimension that varies. Create two environments.
+
+**Custom**:
+
+- Fall through to manual environment creation. For each environment, collect name, description, and agent config.
+
+**Environment schema** (`tpc sim env create` flags):
+
+| Flag | Required | Notes |
+|---|---|---|
+| `--name` | yes | Descriptive name. |
+| `--agent-config` | yes | JSON string or `@file.json`/`@file.toml`. |
+| `--description` | no | What this configuration tests. |
+| `--enabled` | no | Default `true`. |
+| `--schedule` | no | `7d` or `14d`. |
+| `--tag-ids` | no | Comma-separated tag IDs. |
+| `--task-ids` | no | Tasks to link at creation. |
+
+**Agent config object** — only these four keys are accepted; any other key is rejected by the API with `"Unknown agentConfig fields: ..."`.
+
+| Field | Required | Notes |
+|---|---|---|
+| `harness` | yes | `claude`, `codex`, `opencode`. |
+| `provider` | yes | e.g. `anthropic`, `openai`, `fireworks`. Must be supported by the chosen `harness`. |
+| `model` | yes | Provider-specific model ID. Must be supported by the chosen `harness`. |
+| `sandboxResources` | no | Object (see below). |
+
+`sandboxResources` (all optional, numeric — not strings):
+
+| Field | Type | Range | Default |
+|---|---|---|---|
+| `cpu` | number | 1–4 | 1 |
+| `memory` | number (GB) | 1–8 | 1 |
+| `disk` | number (GB) | 1–10 (30+ needs custom tier) | 3 |
+| `gpu` | enum | `T4`, `L4`, `A10G`, `A100`, `A100-80GB`, `H100` | unset |
+| `gpuCount` | number | 1–8 | 1 (when `gpu` is set) |
 
 ```json
 {
   "harness": "claude",
   "provider": "anthropic",
-  "model": "claude-sonnet-4-20250514",
-  "approvalPolicy": "auto-approve-all",
-  "sandboxMode": true,
+  "model": "claude-opus-4-7",
   "sandboxResources": {
-    "cpu": "2",
-    "memory": "4Gi",
-    "disk": "10Gi"
+    "cpu": 2,
+    "memory": 4,
+    "disk": 10
   }
 }
 ```
 
-Show the draft and confirm before creating:
+Create with:
 
-```bash
+```
 tpc sim env create --name "<name>" --agent-config '<json>' --description "<description>"
 ```
 
-Note each returned environment ID. Repeat for all environments needed.
+### Step B5 — Create experiment and confirm shape
 
----
-
-### Step 4 — Create the experiment and attach tasks and environments
-
-#### 4a — Create the experiment
-
-```bash
+```
 tpc sim experiment create --name "<experiment name>" --description "<hypothesis or goal>"
 ```
 
-Note the returned experiment ID.
+Attach tasks and environments:
 
-#### 4b — Add tasks to the experiment
-
-For each task ID collected in Step 2:
-
-```bash
-tpc sim experiment task add <experiment-id> <task-id>
 ```
-
-#### 4c — Add environments to the experiment
-
-For each environment ID collected in Step 3:
-
-```bash
+tpc sim experiment task add <experiment-id> <task-id>
 tpc sim experiment env add <experiment-id> <env-id>
 ```
 
-#### 4d — Confirm the experiment shape
+Show the summary:
 
-```bash
-tpc sim experiment get <experiment-id>
+> "Here's your experiment:
+> - Tasks: [N]
+> - Environments: [M] ([template name])
+> - Total runs per iteration: [N × M]
+> - Signals: default (pass/fail, duration, cost) — edit?"
+
+Default signals by template:
+
+| Template         | Default signals                                                          |
+| ---------------- | ------------------------------------------------------------------------ |
+| Leaderboard      | `status` (pass/fail), `duration` (stats), `cost` (stats), `token_total`  |
+| Docs vs. no-docs | Goal pass rate, fabricated API/function detection, `steps` (stats)       |
+| A vs. B          | Goal pass rate, `duration` (stats), `cost` (stats)                       |
+
+If the user wants custom signals, delegate to the signal-config skill. Otherwise apply defaults:
+
+```
+tpc sim experiment update <experiment-id> --signal-config <default-template>.yaml
 ```
 
-Show the user the experiment summary: name, description, tasks, environments.
+Wait for explicit confirmation.
 
-> "Here's your experiment. It will run **[N tasks] x [M environments] = [N*M runs]** per iteration. Does this look right?"
+### Step B6 — Run
 
-Wait for confirmation before proceeding.
-
----
-
-### Step 5 — Configure signals
-
-Signals define what to measure from each run.
-
-#### 5a — Suggest signals based on the experiment goal
-
-Based on the experiment's hypothesis from Step 1, suggest relevant signals. Common suggestions:
-
-| Experiment goal | Suggested signals |
-|---|---|
-| Compare model performance | `token_total` (stats), `duration` (stats), `cost` (stats), task pass rate |
-| Measure hallucinations | Fabricated API/function detection (pattern), LLM hallucination judge |
-| Test prompt quality | Goal pass rate, `steps` (stats), error classification (LLM category) |
-| Benchmark reliability | `status` (stats), `termination_reason` (stats), error rate |
-
-Present your suggestions:
-
-> "Based on your experiment goals, I'd suggest tracking these signals: [list]. Would you like to use these, modify them, or do you have specific signals in mind?"
-
-#### 5b — Collect user signal preferences
-
-If the user wants custom signals, ask:
-- What behavior or metric to track
-- Whether it's per-message or per-run
-- What experiment-level summary they want (rate, average, count, etc.)
-
----
-
-### Step 6 — Generate and attach the signal config
-
-**Delegate to the signal-config skill** to generate the YAML config.
-
-Use the `/signal-config` skill (or invoke the `generate-config` workflow directly) with the signal requirements gathered in Step 5. The signal-config skill will:
-
-1. Map each measurement to the correct signal type, extraction method, and scope
-2. Add fold and aggregation as needed
-3. Validate the config against all decision rules
-4. Repair any violations and re-validate until clean
-5. Write the config to a file
-
-Once the signal config file is ready, validate it locally:
-
-```bash
-tpc sim experiment validate-signal-config signal-config.yaml
 ```
-
-If validation fails, fix the issues and re-validate until it passes.
-
-Then attach it to the experiment:
-
-```bash
-tpc sim experiment update <experiment-id> --signal-config signal-config.yaml
-```
-
-Confirm:
-
-> "Signal config attached to experiment. Signals will be extracted after each iteration completes."
-
----
-
-### Step 7 — Offer to run the first iteration
-
-Ask the user:
-
-> "Your experiment is fully configured. Would you like to trigger the first iteration now? This will create **[N*M]** runs (one per task-environment pair)."
-
-If the user says yes:
-
-```bash
 tpc sim experiment run <experiment-id>
-```
-
-Then offer to watch progress:
-
-```bash
 tpc sim experiment run status <experiment-id> --watch
 ```
 
-If the user says no, provide the commands for later:
+If the user wants to run later, give them the commands:
 
-> "When you're ready, run:
-> ```bash
+> "When you're ready:
+>
+> ```
 > tpc sim experiment run <experiment-id>
 > tpc sim experiment run status <experiment-id> --watch
 > tpc sim experiment results <experiment-id>

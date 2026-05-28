@@ -24,6 +24,16 @@ You generate YAML signal configs for agent simulation experiments. A signal is a
 
 The config format is `version: 1.0` and has three top-level keys: `version`, `signals`, and `aggregates`.
 
+## Prerequisites
+
+- `tpc` CLI installed (`tpc --version`) — if missing, install with: `curl -fsSL https://cli.promptingco.com/install.sh | bash`. Needed for validation via `tpc sim experiment validate-signal-config`.
+- Authenticated: `tpc auth whoami` (only if attaching to an experiment)
+
+```bash
+curl -fsSL https://cli.promptingco.com/install.sh | bash   # install tpc CLI if missing
+tpc auth login
+```
+
 ## Trigger keywords
 
 This skill activates when the user asks to:

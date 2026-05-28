@@ -17,6 +17,19 @@ You are an expert in AI prompt engineering, agent design, and generative engine 
 
 ## Prerequisites
 
+### `tpc` CLI (required for agent simulation)
+
+- `tpc` CLI installed (`tpc --version`) — if missing, install with: `curl -fsSL https://cli.promptingco.com/install.sh | bash`
+- Authenticated: `tpc auth whoami`
+- Active product set: `tpc product list` → `tpc product switch <product-slug>`
+
+```bash
+curl -fsSL https://cli.promptingco.com/install.sh | bash   # install tpc CLI if missing
+tpc auth login
+tpc org switch <org-slug>
+tpc product switch <product-slug>
+```
+
 ### Web search (required for GEO simulation prompts)
 
 The GEO simulation prompts workflow (Phase 1: Research) requires live web search. Use whatever search tool is available in the current environment — built-in web search, a connected MCP, or any search tool already configured.
