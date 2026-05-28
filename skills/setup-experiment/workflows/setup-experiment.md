@@ -200,7 +200,7 @@ Example output:
 >
 > Which should I turn into tasks? (e.g. "1, 3, 5" or "all")
 
-For each selected task, draft a `task.json`.
+For each selected task, draft a `task.json`. When writing the `prompt` field and each goal's `description`, follow the rules and examples in [`writing-prompts.md`](writing-prompts.md).
 
 **Task schema** (`task.json`):
 

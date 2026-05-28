@@ -70,6 +70,8 @@ Goal object:
 
 Do **not** include `product` in `task.json` — the active product is injected by the CLI.
 
+When drafting the `prompt` field and each goal's `description`, follow the guidelines and examples in [`workflows/writing-prompts.md`](workflows/writing-prompts.md).
+
 ### Environment schema (`--agent-config` JSON/TOML)
 
 `tpc sim env create` flags:
