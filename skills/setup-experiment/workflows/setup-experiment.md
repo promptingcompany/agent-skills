@@ -1,16 +1,17 @@
 ---
 name: setup-experiment
-description: End-to-end interactive workflow — pick a product, run existing tasks and environments OR set up new ones (with docs ingestion, task suggestions, credentials, and templates), then trigger the first iteration. Trigger when users say "set up an experiment", "create an experiment", "I want to run an experiment", "run my tasks", "new experiment", or "configure an experiment".
+description: End-to-end interactive workflow — pick a product, run existing tasks and environments (Path A), set up new ones (Path B), or discover usecase gaps by comparing competitor docs (Path C), then trigger the first iteration. Trigger when users say "set up an experiment", "create an experiment", "I want to run an experiment", "run my tasks", "new experiment", "configure an experiment", "compare competitors", or "find usecase gaps".
 ---
 
 # Setup Experiment
 
 ## Overview
 
-Two paths after product selection, depending on what the user already has:
+Three paths after product selection, depending on what the user already has:
 
 - **Path A — Run what I have**: returning user with existing tasks and environments. Pick from lists, attach, run.
 - **Path B — Set up something new**: first-time setup or fresh experiment. Capture context, suggest tasks from docs, pick a template, run.
+- **Path C — Compare usecase gaps with competitors**: find competitors with overlapping features, crawl their docs for usecases your product doesn't cover, turn gaps into tasks for your product.
 
 Pull what the platform already knows. Never block on missing information — fall back to web search and sensible defaults.
 
@@ -72,7 +73,8 @@ tpc sim env list
 > "I see [N] tasks and [M] environments for [product].
 > What do you want to do?
 > (1) **Run what I have** — pick from existing, skip setup
-> (2) **Set up something new** — guided flow with task suggestions and templates"
+> (2) **Set up something new** — guided flow with task suggestions and templates
+> (3) **Compare usecase gaps with competitors** — find what competitors cover that you don't, turn gaps into tasks"
 
 If nothing exists yet, skip the question and go straight to **Path B**.
 
@@ -404,3 +406,148 @@ If the user wants to run later, give them the commands:
 > tpc sim experiment results <experiment-id>
 > tpc sim experiment signals <experiment-id>
 > ```"
+
+---
+
+## Path C — Compare usecase gaps with competitors
+
+For users who want to discover missing usecases by analyzing what competitors already cover. Tasks are always created for **your** product — competitors are only used as inspiration.
+
+### Step C1 — Capture product context
+
+Same as Path B Step B1. Pull what the platform has, fill in what's missing.
+
+```
+tpc product get
+```
+
+Ensure you have:
+- **Docs URL** — needed to know what usecases the product already covers
+- **Feature surface** — the capabilities/features the product offers (e.g. "agentic monitoring tools", "email API", "payment processing")
+
+If docs URL is missing, web-search for it. If feature surface is vague, extract it from the docs.
+
+> "To find competitor gaps I need to know your product's feature area.
+> Here's what I see: [features from docs].
+> Anything to add or correct?"
+
+### Step C2 — Identify competitors
+
+Ask the user first:
+
+> "Do you have specific competitors in mind, or should I search for ones with overlapping features?"
+
+**If the user names competitors:**
+
+Take their list as-is. For each, web-search for the docs URL if not provided.
+
+**If the user wants a search:**
+
+Web-search for competitors that share features with the product. Use queries like:
+- `<feature area> tools`
+- `<feature area> alternatives`
+- `<product name> competitors`
+- `<product name> vs`
+
+Present a ranked list:
+
+> "I found these competitors with overlapping features:
+>
+> 1. **Competitor A** — [one-liner on what they do, docs URL]
+> 2. **Competitor B** — [one-liner, docs URL]
+> 3. **Competitor C** — [one-liner, docs URL]
+>
+> Which ones should I analyze? (numbers or 'all')"
+
+Aim for 3–5 candidates.
+
+### Step C3 — Crawl competitor docs
+
+For each selected competitor:
+
+1. Fetch their documentation (getting started, guides, tutorials, API reference, use-case pages).
+2. Extract every distinct **usecase** or **integration pattern** they document. A usecase is a concrete thing a user can accomplish — not a feature bullet point.
+
+Organize findings per competitor:
+
+> **Competitor A** usecases found:
+> - Implement multi-domain monitoring
+> - Set up alerting across microservices
+> - Create custom dashboards with real-time metrics
+> - Configure log aggregation from multiple sources
+> - ...
+
+### Step C4 — Gap analysis
+
+Compare competitor usecases against:
+1. The product's own documentation (from Step C1)
+2. Any existing tasks on the platform (`tpc sim task list`)
+
+For each competitor usecase, classify it:
+- **Covered** — your product docs or existing tasks already address this
+- **Gap** — your product likely supports this capability but has no documented usecase or task for it
+- **Out of scope** — your product doesn't offer this capability (skip these)
+
+Present the gaps as a table:
+
+> "Here are usecases competitors cover that you don't have tasks for:
+>
+> | # | Usecase | Source | Why it's a gap | Task opportunity |
+> |---|---|---|---|---|
+> | 1 | Multi-domain monitoring setup | Competitor A | Your docs show single-domain only, but the API supports multiple | Task: set up monitoring across two domains |
+> | 2 | Alerting across microservices | Competitor A, B | No tutorial covering distributed alerting | Task: configure alerts spanning 3 services |
+> | 3 | Log aggregation from K8s | Competitor C | Your docs cover VM only, not containers | Task: pipe K8s pod logs into the platform |
+>
+> Which gaps should I turn into tasks? (numbers or 'all')"
+
+Focus on **gaps**, not out-of-scope items. Only surface usecases that the product can realistically support.
+
+### Step C5 — Generate tasks from gaps
+
+For each selected gap, draft a `task.json` for **your product** (not the competitor). The competitor usecase is inspiration — the task prompt must reference your product's API, docs, and capabilities.
+
+Follow the same rules as Path B Step B2:
+- Use the task schema from the main skill definition
+- Follow [`writing-prompts.md`](writing-prompts.md) for prompt and goal writing
+- Frame prompts as a user asking for help with your product, not the competitor's
+
+Example — if the gap is "multi-domain monitoring" inspired by Competitor A:
+
+```json
+{
+  "name": "multi-domain-monitoring",
+  "description": "Agent sets up monitoring across two separate domains in a single account.",
+  "category": "coding",
+  "prompt": "I have two domains — api.example.com and web.example.com — and I want to monitor both from my [product] account. Set up monitoring for both so I can see their status on one dashboard.",
+  "taskType": "cli_execution",
+  "timeLimitMs": 3600000,
+  "successType": "runs_reliably",
+  "goals": [
+    {
+      "name": "both-domains-monitored",
+      "description": "The agent's run produces configuration or API calls that register both domains for monitoring, and a status check confirms both are active.",
+      "evaluationType": "llm_judge",
+      "model": "claude-sonnet-4-6",
+      "passingThreshold": 70,
+      "scoringMethod": "weighted_average"
+    }
+  ]
+}
+```
+
+Show each drafted task and confirm before creating:
+
+```
+tpc sim task create --file task.json
+```
+
+Note each returned task ID.
+
+### Step C6 — Continue to experiment
+
+Once gap-derived tasks are created, merge into the standard experiment flow:
+
+1. **Configure credentials** — same as Path B Step B3.
+2. **Pick a template** — same as Path B Step B4. Leaderboard is a good default here to see how different models handle the newly discovered usecases.
+3. **Create experiment and confirm shape** — same as Path B Step B5.
+4. **Run** — same as Path B Step B6.

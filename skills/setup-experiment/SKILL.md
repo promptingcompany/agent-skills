@@ -2,13 +2,15 @@
 name: setup-experiment
 description: >
   End-to-end interactive workflow — pick a product, then either run existing
-  tasks and environments (Path A) or set up new ones from docs, suggested
-  tasks, credentials, and templates (Path B). Builds the experiment, attaches
-  signals, and optionally triggers the first iteration.
+  tasks and environments (Path A), set up new ones from docs, suggested
+  tasks, credentials, and templates (Path B), or discover usecase gaps by
+  comparing competitor docs against your own (Path C). Builds the experiment,
+  attaches signals, and optionally triggers the first iteration.
 
   Trigger when users say: "set up an experiment", "create an experiment",
   "I want to run an experiment", "run my tasks", "setup experiment",
-  "new experiment", "configure an experiment", or "experiment setup".
+  "new experiment", "configure an experiment", "experiment setup",
+  "compare competitors", or "find usecase gaps".
 ---
 
 # Setup Experiment
@@ -40,6 +42,8 @@ This skill activates when the user asks to:
 - Run an experiment or test agent behavior across environments
 - Compare agent performance across different configurations
 - Build an experiment with tasks, environments, and signals
+- Compare usecases with competitors or find usecase gaps
+- Discover what competitors cover that the product doesn't
 
 ## Schemas
 
@@ -119,6 +123,7 @@ The flow branches after product selection based on what the user already has. Al
 
 - **Path A — Run what I have**: returning user with existing tasks and environments. Pick from lists, attach, run.
 - **Path B — Set up something new**: first-time setup or fresh experiment. Capture context, suggest tasks from docs, pick a template, run.
+- **Path C — Compare usecase gaps with competitors**: find competitors with overlapping features, crawl their docs for usecases your product doesn't cover yet, and turn those gaps into tasks for your product.
 
 If nothing exists yet, go straight to Path B. If only one side exists, default to Path B and pre-fill from existing.
 
@@ -137,6 +142,15 @@ If nothing exists yet, go straight to Path B. If only one side exists, default t
 4. **Pick a template** — Leaderboard (model lineup), Docs vs. no-docs, A vs. B, or Custom. Auto-create environments per template (see Environment schema above for Custom).
 5. **Create experiment and confirm shape** — same as Path A step 3, with template-specific default signals. Delegate to the signal-config skill for custom signals.
 6. **Run** — same as Path A step 4. If running later, hand the user the run/status/results/signals commands.
+
+#### Path C — Compare usecase gaps with competitors
+
+1. **Capture product context** — same as Path B step 1. Pull `tpc product get`, ensure docs URL and feature surface are known.
+2. **Identify competitors** — ask the user to name competitors or web-search for ones with overlapping features. User picks which to analyze.
+3. **Crawl competitor docs** — fetch each selected competitor's documentation. Extract their usecases, tasks, and integration patterns for the shared feature area.
+4. **Gap analysis** — compare competitor usecases against the product's own docs and any existing tasks. Surface usecases competitors cover that the product does not. Present as a gap table: competitor usecase → why it's missing → task opportunity.
+5. **Generate tasks from gaps** — turn each confirmed gap into a task for **your** product (not the competitor). Draft `task.json` files following the same schema and prompt-writing guidelines. User picks which to create.
+6. **Continue to experiment** — once tasks are created, flow into Path B step 3 (credentials) → step 4 (template) → step 5 (create experiment) → step 6 (run).
 
 ## General principles
 
