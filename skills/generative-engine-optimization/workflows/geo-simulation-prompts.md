@@ -5,16 +5,20 @@ description: >
   These prompts are used to test whether AI assistants organically recommend a product when users
   describe pain points the product solves — without mentioning the product by name.
 
-  Trigger when users say: "generate prompts for [product]", "create GEO audit prompts",
-  "build a prompt bank for [product]", "test if AI recommends [product]", or
-  "I need prompts based on [URL/docs/product info]".
+  Use this skill whenever a user wants to: create simulation prompts for a product, generate
+  GEO audit prompts, build a prompt set for AI visibility testing, create unbranded pain prompts
+  for a SaaS or cloud product, or test how an AI responds to problems a product solves.
+  Also trigger when users say things like "generate prompts for [product]", "create prompts to
+  test if AI recommends [product]", "build a prompt bank for [product]", or "I need prompts
+  based on [URL/docs/product info]".
 ---
 
 # GEO Simulation Prompts
 
-## Overview
-
-Generate unbranded pain-focused prompts to audit whether AI assistants organically recommend a product.
+You are generating a set of **GEO simulation prompts** — queries that a real user might type into
+an AI assistant (ChatGPT, Perplexity, Gemini, etc.) when they're experiencing a pain point that
+the target product solves. The goal is to audit whether AI models organically recommend the product
+without the prompt mentioning it.
 
 ## Prerequisites
 
