@@ -29,15 +29,17 @@ This skill activates when the user asks to:
 - Summarize the runs or explain what happened in an iteration
 - Produce a friction report or rank where agents tripped
 - Compare arms or models after a completed run
+- Generate a PDF, client-ready report, or "a report like the previous pilot PDF"
 
 ## What this skill is for
 
 The deliverable a customer asks for after a run is almost always the same: *how did the runs go, where did agents trip, what are the patterns, and what should we fix?* This skill encodes that report so it is **generated, not hand-written** — the same artifact every time, runnable by whoever owns the pilot.
 
-Two outputs:
+Two outputs, plus an optional third:
 
 1. **Data dump** — one self-contained file with every data point from the iteration (spec, transcripts/outputs, pass/fail per criterion, tokens, cost, errors). Portable so it can be fed to another LLM if context runs out.
 2. **Report** — an honest markdown doc: per-task results, friction clusters grouped by root cause, model/arm differences, and a short closing on agent-readiness gaps.
+3. **PDF (optional, on request)** — the same report restyled into the branded TPC pilot-report layout (cover, executive summary, numbered findings, appendices) for customer delivery. Generated from the markdown report, never instead of it.
 
 ## Prerequisites
 
@@ -102,6 +104,10 @@ See [`workflows/analyze-experiment.md`](workflows/analyze-experiment.md) for the
 6. **Arm/model comparison** — where the arms diverge, with counts.
 7. **Closing + structured cluster block** — agent-readiness gaps and the levers that address them; emit the structured cluster list for taxonomy seeding.
 8. **Honesty pass** — caveats, n, ceiling effects, disclosed instrument gaps.
+
+### 2. Generate PDF Report (optional)
+
+See [`workflows/generate-pdf.md`](workflows/generate-pdf.md). Restyles a completed markdown report into the branded TPC pilot-report PDF (cover page, executive summary, "HOW WE MEASURED" box, stat cards, per-finding pages with pull quotes, appendices) using [`assets/pdf-report-template.html`](assets/pdf-report-template.html), rendered with headless Chrome and verified page by page. Run only on request ("generate a pdf", "client-ready report", "like the previous pilot PDF") and only after Workflow 1 — the PDF restyles the markdown report; it never adds claims beyond it.
 
 ## General principles
 

@@ -154,3 +154,5 @@ Then re-read the whole report against the honesty rules: every quantitative clai
 > Headline: [one sentence — the verdict and the tension].
 > Top friction: [cluster 1], [cluster 2], [cluster 3] (by runs-affected).
 > Open the data dump in the CLI to drill further: `tpc sim run logs <run-id>`."
+
+If the user wants a client-ready deliverable (or asks for "a PDF like the previous pilot report"), continue with [`generate-pdf.md`](generate-pdf.md) — it restyles this report into the branded TPC pilot-report PDF without adding any claims.
