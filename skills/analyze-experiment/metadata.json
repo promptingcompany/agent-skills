@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.1.1",
   "organization": "Prompting Company",
-  "abstract": "Turn a completed experiment iteration into a portable data dump and an honest, evidence-backed markdown report."
+  "abstract": "Turn a completed experiment iteration into a portable data dump, an honest evidence-backed markdown report, and optionally a branded client-ready PDF."
 }

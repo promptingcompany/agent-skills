@@ -7,6 +7,7 @@ Turn a completed experiment iteration into a portable data dump and an honest, e
 | Workflow | Triggers |
 |---|---|
 | Analyze Experiment | "analyze my experiment", "write the report", "experiment report", "analyze the results", "report gen" |
+| Generate PDF Report (optional) | "generate a pdf", "pdf report", "client-ready report", "like the previous pilot PDF" |
 
 ## Install
 
