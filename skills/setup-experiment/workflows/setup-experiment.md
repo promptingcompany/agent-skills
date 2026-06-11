@@ -360,6 +360,31 @@ Create with:
 tpc sim env create --name "<name>" --agent-config '<json>' --description "<description>"
 ```
 
+#### Provisioning the skill-ON arm (install a skill, MCP server, or extra tooling)
+
+The four `agentConfig` keys configure the **model**, not the **sandbox** — they cannot install a skill, clone a repo, or add a CLI. For the **Skill-off vs. skill-on** template, where the only difference between arms is the skill attached to the ON arm, provision the ON arm's sandbox with two `env update` flags that `env create` does **not** expose:
+
+```
+# Run setup commands in the sandbox before the agent starts (e.g. install an agent skill)
+tpc sim env update <env-id> --init-commands '[{"label":"install skill","command":"npx -y skills add https://github.com/<org>/skills --skill <name> --all -y -g","timeoutMs":300000}]'
+
+# Or clone files/skills into the sandbox (git-only)
+tpc sim env update <env-id> --init-files '[{"repoUrl":"https://github.com/<org>/skills","targetPath":"/home/agent-user/.claude/skills"}]'
+```
+
+- **Keep the OFF arm bare.** The skill-off environment is identical but carries no `--init-commands`/`--init-files`; that absence is the independent variable. If you ladder models (e.g. Haiku-on and Sonnet-on), every ON arm must carry **byte-identical** init config so the only variable is the model.
+- **Init config is write-only to `env list`.** `tpc sim env list` does not echo `initCommands`/`initFiles` back — set them explicitly and track them yourself; you can't read them back to confirm.
+
+**Secrets are per-env and write-only.** If the skill needs an API key or endpoint, set it on each env that needs it; there is no copy-between-envs, and `secret list` shows names only, never values:
+
+```
+tpc sim env secret set <env-id> --name <SECRET_NAME> --from-env <LOCAL_VAR>   # reads a local env var; value never echoed
+tpc sim env secret set <env-id> --name <SECRET_NAME> --value "<value>"        # or pass inline
+tpc sim env secret list <env-id>                                             # names only
+```
+
+> Prefer `--from-env` for credentials so the value never appears in your shell history or the transcript.
+
 ### Step B5 — Create experiment and confirm shape
 
 ```
