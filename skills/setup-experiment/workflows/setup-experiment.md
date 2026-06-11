@@ -378,10 +378,12 @@ tpc sim env update <env-id> --init-files '[{"repoUrl":"https://github.com/<org>/
 **Secrets are per-env and write-only.** If the skill needs an API key or endpoint, set it on each env that needs it; there is no copy-between-envs, and `secret list` shows names only, never values:
 
 ```
-tpc sim env secret set <env-id> --name NVIDIA_API_KEY --from-env NVIDIA_API_KEY   # reads a local env var; value never echoed
-tpc sim env secret set <env-id> --name SOME_URL --value "https://..."
-tpc sim env secret list <env-id>                                                  # names only
+tpc sim env secret set <env-id> --name <SECRET_NAME> --from-env <LOCAL_VAR>   # reads a local env var; value never echoed
+tpc sim env secret set <env-id> --name <SECRET_NAME> --value "<value>"        # or pass inline
+tpc sim env secret list <env-id>                                             # names only
 ```
+
+> Prefer `--from-env` for credentials so the value never appears in your shell history or the transcript.
 
 ### Step B5 — Create experiment and confirm shape
 
