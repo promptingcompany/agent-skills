@@ -178,6 +178,8 @@ tpc product update --docs-url <url> --surface <surface> --failure-modes "<notes>
 
 ### Step B2 — Suggest tasks from docs
 
+> **Fork on stakes.** If this experiment is a customer deliverable (an ROI proof, a roadmap input, a published benchmark), stop and switch to the [Usability Benchmark Design workflow](benchmark-design.md) — it mines the problem space tool-agnostically and measures a two-arm friction delta. The docs-based suggestion below tests the product's *feature list*, which is fast but structurally can't surface the popular task the product has no answer for. Use it for internal probes and quick comparisons only.
+
 > "Want me to read your docs and propose tasks, or do you have specific scenarios in mind?"
 
 If propose:
@@ -275,9 +277,10 @@ If skip, flag tasks that require auth and exclude them from the run.
 
 > "What shape are you running?
 > (1) **Leaderboard** — run tasks across leading models, get a ranked report
-> (2) **Docs vs. no-docs** — same model, with and without docs in context
-> (3) **A vs. B** — paired comparison on one dimension (model, harness, etc.)
-> (4) **Custom** — pick your own environments"
+> (2) **Skill-off vs. skill-on (friction delta)** — same model, with and without the skill/docs attached; measures whether the skill helps
+> (3) **Docs vs. no-docs** — same model, with and without docs in context
+> (4) **A vs. B** — paired comparison on one dimension (model, harness, etc.)
+> (5) **Custom** — pick your own environments"
 
 **Leaderboard** (default for first runs and baseline reports):
 
@@ -285,6 +288,13 @@ If skip, flag tasks that require auth and exclude them from the run.
 - Ask if the user wants a different lineup; otherwise proceed with the default.
 - Auto-create one environment per model in the lineup, all else equal.
 - Success framing defaults to `runs_reliably`.
+
+**Skill-off vs. skill-on (friction delta)** — the benchmark default:
+
+- Auto-create `<product>-skill-off` and `<product>-skill-on`, identical except the skill/docs artifact attached to the on arm.
+- **Same model across both** — hold the model fixed; add models later as separate paired arms, never mixed into the first delta.
+- The result is the per-stage **delta** between arms, not the skill-on pass rate. See [`benchmark-design.md`](benchmark-design.md).
+- Pair with the 5-stage funnel signal config and deterministic (`script_judge`) goals.
 
 **Docs vs. no-docs**:
 
@@ -373,11 +383,12 @@ Show the summary:
 
 Default signals by template:
 
-| Template         | Default signals                                                          |
-| ---------------- | ------------------------------------------------------------------------ |
-| Leaderboard      | `status` (pass/fail), `duration` (stats), `cost` (stats), `token_total`  |
-| Docs vs. no-docs | Goal pass rate, fabricated API/function detection, `steps` (stats)       |
-| A vs. B          | Goal pass rate, `duration` (stats), `cost` (stats)                       |
+| Template             | Default signals                                                                                  |
+| -------------------- | ------------------------------------------------------------------------------------------------ |
+| Leaderboard          | `status` (pass/fail), `duration` (stats), `cost` (stats), `token_total`                          |
+| Skill-off vs skill-on| 5-stage funnel (comprehension/formation/execution/recovery/efficiency), hallucinated-API rate, turns, retries — reported as the per-stage **delta** between arms |
+| Docs vs. no-docs     | Goal pass rate, fabricated API/function detection, `steps` (stats)                               |
+| A vs. B              | Goal pass rate, `duration` (stats), `cost` (stats)                                               |
 
 If the user wants custom signals, delegate to the signal-config skill. Otherwise apply defaults:
 

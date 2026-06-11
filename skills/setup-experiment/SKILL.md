@@ -4,11 +4,15 @@ description: >
   End-to-end interactive workflow — pick a product, then either run existing
   tasks and environments (Path A) or set up new ones from docs, suggested
   tasks, credentials, and templates (Path B). Builds the experiment, attaches
-  signals, and optionally triggers the first iteration.
+  signals, and optionally triggers the first iteration. For high-stakes customer
+  deliverables, the Usability Benchmark Design workflow generates a rigorous,
+  demand-ranked, two-arm friction-delta benchmark instead of quick suggestions.
 
   Trigger when users say: "set up an experiment", "create an experiment",
   "I want to run an experiment", "run my tasks", "setup experiment",
-  "new experiment", "configure an experiment", or "experiment setup".
+  "new experiment", "configure an experiment", "experiment setup",
+  "usability benchmark", "friction delta", "skill-off vs skill-on", or
+  "does the skill help".
 ---
 
 # Setup Experiment
@@ -63,10 +67,11 @@ Goal object:
 |---|---|---|---|
 | `name` | yes | string | Goal name. |
 | `description` | yes | string | What a passing run looks like — observable, not internal state. |
-| `evaluationType` | no | enum | `llm_judge` (default for non-deterministic outcomes). |
-| `model` | no | string | Judge model, e.g. `claude-sonnet-4-6`. |
+| `evaluationType` | no | enum | `llm_judge` (default), `script_judge` (deterministic, exit-0 = pass — preferred for benchmark "ran + correctly-shaped output" checks), `automatic`, `manual`. |
+| `model` | no | string | Judge model for `llm_judge`, e.g. `claude-sonnet-4-6`. |
+| `script` / `scriptFile` | cond. | string | Required when `evaluationType` is `script_judge`. Sh script run in the sandbox after the agent run. Needs the `script_judge` org feature flag. |
 | `passingThreshold` | yes | integer | 0–100 score required to pass. |
-| `scoringMethod` | no | enum | `weighted_average` (default). |
+| `scoringMethod` | no | enum | `weighted_average` (default), `binary`, `percentage`. |
 
 Do **not** include `product` in `task.json` — the active product is injected by the CLI.
 
@@ -107,6 +112,11 @@ Agent config object — only these four keys are accepted; anything else is reje
 
 ## Workflows
 
+Two workflows. Pick by stakes:
+
+- **Setup Experiment** — interactive, fast. Pick a product, run existing tasks or suggest new ones from docs, run. Right for internal probes and quick comparisons.
+- **Usability Benchmark Design** — rigorous, demand-ranked, two-arm friction delta. Right when the deliverable is a customer ROI proof, a roadmap input, or a published benchmark.
+
 ### 1. Setup Experiment
 
 See [`workflows/setup-experiment.md`](workflows/setup-experiment.md) for full steps.
@@ -138,6 +148,21 @@ If nothing exists yet, go straight to Path B. If only one side exists, default t
 5. **Create experiment and confirm shape** — same as Path A step 3, with template-specific default signals. Delegate to the signal-config skill for custom signals.
 6. **Run** — same as Path A step 4. If running later, hand the user the run/status/results/signals commands.
 
+> **Caveat for high-stakes benchmarks.** Path B Step 2 suggests tasks from the product's *own* docs — that tests the feature list, not the problem space, and structurally can't surface the popular task the product has no answer for. For a customer deliverable, use Workflow 2 instead.
+
+### 2. Usability Benchmark Design
+
+See [`workflows/benchmark-design.md`](workflows/benchmark-design.md) for the full methodology.
+
+Generates a rigorous benchmark instead of quick suggestions. Two principles drive it:
+
+1. **Measure the delta, not the pass rate.** Run every task twice — **skill-OFF** (friction floor) and **skill-ON**. The per-stage delta is the result; a skill-ON pass rate alone can't tell "the skill helped" from "the model already knew."
+2. **Test the problem space, not the feature list.** Mine the task universe **tool-agnostically** from the whole ecosystem (galleries + hard counts + discourse), prove it comprehensive by source **saturation**, then demand-rank and tier it.
+
+Score "usable" as a 5-stage funnel — **Comprehension → Formation → Execution → Recovery → Efficiency** — tagging each attempt to the first stage it fails, in agent-native units (turns, retries, hallucinated-API rate). Hold the **anti-spiral line**: Execution stops at "ran + correctly-shaped output"; never grade answer quality. Ground truth is the agent's trace + artifacts, never a self-judge; the agent never sees the bucket or answer key. The output is a **demand-vs-supply map** (served+usable / served+unusable / popular+unserved), not a leaderboard number.
+
+On the platform: arms → two environments differing only by skill/docs attachment (same model); funnel → `signal-config.yaml`; goals → deterministic `script_judge`; tiers → `tagIds`; k repeats → re-runs aggregated across runs.
+
 ## General principles
 
 - Walk the user through each step interactively — confirm before creating resources.
@@ -146,3 +171,5 @@ If nothing exists yet, go straight to Path B. If only one side exists, default t
 - Keep the experiment focused — fewer tasks and environments with clear hypotheses beat sprawling matrices.
 - Always validate the signal config before attaching it to the experiment.
 - Never block on missing information — web-search or use sensible defaults and keep moving.
+- For any "does the skill help" question, default to a **two-arm friction delta** (skill-OFF vs skill-ON, same model), never a single-arm pass rate.
+- When the deliverable leaves the building (a customer, a board, a publication), generate tasks via the Usability Benchmark Design workflow — mine the problem space tool-agnostically, don't enumerate the product's feature list.
