@@ -110,6 +110,8 @@ Agent config object — only these four keys are accepted; anything else is reje
 | `gpu` | enum | `T4`, `L4`, `A10G`, `A100`, `A100-80GB`, `H100` | unset |
 | `gpuCount` | number | 1–8 | 1 (when `gpu` is set) |
 
+`agentConfig` configures the model only. To install a skill / MCP server / CLI into the sandbox (e.g. the ON arm of a skill-off vs. skill-on benchmark), use `tpc sim env update <id> --init-commands` / `--init-files` and per-env `env secret set` — neither is exposed by `env create`, and init config is not echoed back by `env list`. See [`workflows/setup-experiment.md`](workflows/setup-experiment.md) → "Provisioning the skill-ON arm".
+
 ## Workflows
 
 Two workflows. Pick by stakes:
