@@ -20,6 +20,7 @@ The `prompt` field is the instruction the agent receives at the start of the run
 3. **Don't pin implementation details.** Avoid specific package names, function names, versions, or endpoints unless a real user would naturally include them. "I'm on Node 18" is fine; "use v3.2.1 of the SDK" is not.
 4. **One ask per task.** Single, focused goal. Compound prompts ("build X, deploy Y, and configure Z") read like specs and pollute the signal.
 5. **Write like a junior dev asking for help.** 1–3 conversational sentences, optionally with a small snippet showing where they're stuck. If it reads like internal documentation, rewrite.
+6. **Never leak the answer key.** The prompt must not name the intent cluster, the tier/bucket label, the expected subcommand, or the "right" approach. The agent has to discover the path — that *is* the measurement. Leaking the call shape turns a Comprehension/Formation test into a typing test. (Benchmark-design workflow — see [`benchmark-design.md`](benchmark-design.md).)
 
 ### Examples
 
@@ -85,6 +86,8 @@ Each goal's `description` field tells the LLM judge what a passing run looks lik
 3. **Be specific enough to be falsifiable.** "Works correctly" or "follows best practices" can't be judged. Concrete commands, expected outputs, or testable assertions can.
 4. **One condition per goal.** Compound goals ("does X AND Y AND Z") collapse into a single pass/fail and hide which part actually failed. Split them.
 5. **Stand alone alongside the task.** No references to "the system from earlier" or "the API key we discussed." Same independence rule as task prompts.
+6. **Hold the anti-spiral line.** A goal stops at **"ran + correctly-shaped output"** — non-zero rows, citations present, valid response shape. Do **not** grade whether the answer was *good*. The moment a goal judges answer quality, it changes the question from *is the skill usable* to *is the product good* — unbounded, and it blames the vendor for a model property. (Benchmark-design workflow.)
+7. **Prefer deterministic checks for benchmarks.** Where the outcome is mechanically checkable, use a `script_judge` goal (exit-0 = pass) instead of an `llm_judge` — ground truth from artifacts beats a self-judge. Reserve `llm_judge` for genuinely non-deterministic outcomes, and even then score against a transcribed valid-invocation space, not "is this answer good?"
 
 ### Examples
 
@@ -143,5 +146,8 @@ Before calling `tpc sim task create`, confirm:
 
 - [ ] Task prompt states user intent, not implementation steps
 - [ ] Task prompt is self-contained — no reference to other tasks or prior runs
+- [ ] Task prompt does not leak the intent cluster, tier, or expected call shape
 - [ ] Each goal description is observable from run artifacts (not internal agent state)
 - [ ] Each goal describes one outcome-based, falsifiable condition
+- [ ] Goals stop at "ran + correctly-shaped output" — no answer-quality grading
+- [ ] Deterministic outcomes use `script_judge`, not `llm_judge`
