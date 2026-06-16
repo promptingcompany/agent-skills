@@ -10,6 +10,15 @@ description: >
 
 Choose the smallest Prompting Company surface that matches the user's goal, then verify exact commands, setup, endpoints, or types from the live documentation.
 
+## Default priority
+
+For running operations and reading data (auth, org/product scope, analytics, simulations, site content):
+
+1. **CLI first.** Default to the `tpc` CLI for every operational and analytics task.
+2. **MCP fallback.** Use the MCP server only when the CLI cannot do the job in a reasonable number of calls (for example, an org-wide all-products SOV rollup). Never start with MCP when an equivalent CLI command exists.
+
+For building Prompting Company into an application, use the SDK (TypeScript apps) or the API (language-agnostic / exact route control) instead. The CLI-first rule above governs operational and analytics work, not application integration code.
+
 ## API
 
 Use the API when the user needs:

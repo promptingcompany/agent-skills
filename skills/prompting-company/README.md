@@ -2,12 +2,15 @@
 
 Build, debug, and plan work with The Prompting Company through its API, MCP Server, CLI, and SDK entrypoints.
 
+Operational and analytics work is **CLI-first** (the `tpc` CLI), with the MCP server as a fallback when the CLI lacks a capability.
+
 ## Workflows
 
 | Workflow | Triggers |
 |---|---|
 | Live documentation lookup | "find the docs", "what endpoint should I use", "what scopes are required" |
 | Entrypoint selection | "use the API", "set up MCP", "use the CLI", "integrate the SDK" |
+| SOAIV / Share-of-Voice summary | "run the SOAIV summary", "SOV for <org>", "share of voice", "citation rate" |
 
 ## Install
 
