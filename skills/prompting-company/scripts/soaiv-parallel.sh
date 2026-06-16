@@ -17,17 +17,28 @@
 # Citation rate = unique conversations citing the org's own sources / all unique
 # conversations = (self-category `mentions`) / (sov `runs`).
 #
+# Concurrency limit (measured): the analytics backend returns
+# "API error 500: Failed to fetch share of voice" once ~6 requests from one
+# account run at once; 3 concurrent is reliable. So CONCURRENCY defaults to 3
+# and should stay low (≤4). Failed calls are retried with backoff and, if still
+# failing, recorded as `err` — never as a silent 0.
+#
 # Usage:
 #   ORG=nvidia-com ./soaiv-parallel.sh
-#   ORG=nvidia-com CONCURRENCY=12 OUT=/tmp/nv.tsv ./soaiv-parallel.sh
+#   ORG=nvidia-com CONCURRENCY=4 OUT=/tmp/nv.tsv ./soaiv-parallel.sh
 #   ORG=nvidia-com LIMIT=20 ./soaiv-parallel.sh        # first 20 products (smoke test)
 #
+# After the parallel pass, a sequential repair phase re-resolves any rows still
+# flagged err/cit_err — one at a time, no contention, extra retries — so a
+# single invocation self-heals to complete data (or reports what truly failed).
+#
 # Env:
-#   ORG          required — organization slug
-#   CONCURRENCY  parallel workers (default 8). Keep modest to avoid backend load.
-#   OUT          output TSV path (default /tmp/soaiv_<ORG>.tsv)
-#   LIMIT        cap number of products (for testing)
-#   RETRIES      citations retries on empty/timeout (default 3)
+#   ORG             required — organization slug
+#   CONCURRENCY     parallel workers (default 3; keep ≤4 — backend 500s above that)
+#   OUT             output TSV path (default /tmp/soaiv_<ORG>.tsv)
+#   LIMIT           cap number of products (for testing)
+#   RETRIES         retries per call on empty/timeout/500 (default 4)
+#   REPAIR_RETRIES  retries per call in the sequential repair phase (default 8)
 set -uo pipefail
 
 # ---------------------------------------------------------------------------
@@ -40,7 +51,25 @@ if [ "${1:-}" = "--worker" ]; then
   cp "$LISTER" "$cfg"                                   # already org-switched
   TPC_CONFIG_PATH="$cfg" tpc product switch "$slug" >/dev/null 2>&1
 
-  sov=$(TPC_CONFIG_PATH="$cfg" tpc analytics sov --last 30d --json 2>/dev/null)
+  # IMPORTANT: a successful call always prints a non-empty JSON array (a dark
+  # product returns `[{...,"runs":0}]`; a product with no cited sources returns
+  # `[]`). An API error (e.g. the backend's "500: Failed to fetch share of
+  # voice" under concurrency) prints NOTHING to stdout. So empty stdout == real
+  # failure — never record it as a zero. Retry with linear backoff, then mark
+  # the row `err` so a degraded run can't masquerade as clean data.
+  retries="${RETRIES:-4}"
+  sov=""; n=0
+  while :; do
+    sov=$(TPC_CONFIG_PATH="$cfg" tpc analytics sov --last 30d --json 2>/dev/null)
+    [ -n "$sov" ] && break
+    n=$((n + 1)); [ "$n" -ge "$retries" ] && break
+    sleep "$n"
+  done
+  if [ -z "$sov" ]; then                                # sov unrecoverable
+    rm -f "$cfg"
+    printf '%s\t\t\t\t\t\terr\n' "$slug" > "$RESDIR/$hash"
+    exit 0
+  fi
 
   # Skip the expensive citations aggregation when the product has no
   # conversations (runs==0) — citation rate is undefined there anyway. This is
@@ -49,18 +78,20 @@ if [ "${1:-}" = "--worker" ]; then
 try:
     d = json.load(sys.stdin); print(int((d[0].get('runs',0) or 0)) if d else 0)
 except Exception: print(0)")
-  cit="[]"
+  cit="[]"; cstatus="ok"
   if [ "${runs:-0}" -gt 0 ] 2>/dev/null; then
-    n=0
-    while [ "$n" -lt "${RETRIES:-3}" ]; do             # retry empty result (the GTC timeout case)
+    cit=""; n=0
+    while :; do                                         # retry empty (= timeout/500), the GTC case
       cit=$(TPC_CONFIG_PATH="$cfg" tpc analytics citations --last 30d --by category --json 2>/dev/null)
-      [ -n "$cit" ] && [ "$cit" != "[]" ] && break
-      n=$((n+1))
+      [ -n "$cit" ] && break                            # "[]" is a valid "no citations" answer
+      n=$((n + 1)); [ "$n" -ge "$retries" ] && break
+      sleep "$n"
     done
+    [ -z "$cit" ] && { cit="[]"; cstatus="cit_err"; }   # citations unresolved: runs known, self unknown
   fi
   rm -f "$cfg"
 
-  SOV_JSON="$sov" CIT_JSON="$cit" SLUG="$slug" python3 - >"$RESDIR/$hash" <<'PY'
+  SOV_JSON="$sov" CIT_JSON="$cit" SLUG="$slug" CSTATUS="$cstatus" python3 - >"$RESDIR/$hash" <<'PY'
 import os, json
 def parse(v):
     try: return json.loads(v) if v.strip() else []
@@ -68,19 +99,22 @@ def parse(v):
 slug = os.environ['SLUG']
 sov = parse(os.environ.get('SOV_JSON', ''))
 cit = parse(os.environ.get('CIT_JSON', ''))
-if sov is None or cit is None:                          # hard parse error
+if sov is None:                                         # unparseable sov despite non-empty
     print('\t'.join([slug, '', '', '', '', '', 'err'])); raise SystemExit
 s = sov[0] if sov else {}
 runs = s.get('runs', 0) or 0
 mentions = s.get('mentions', 0) or 0
 sov_pct = s.get('sov', 0) or 0
-self_m = 0
-for r in (cit or []):
-    if r.get('key') == 'self':
-        self_m = r.get('mentions', 0) or 0
-        break
-rate = '' if not runs else round(100.0 * self_m / runs, 2)
-print('\t'.join([slug, str(sov_pct), str(mentions), str(runs), str(self_m), str(rate), 'ok']))
+status = os.environ.get('CSTATUS', 'ok')
+self_m = ''
+if status != 'cit_err':
+    self_m = 0
+    for r in (cit or []):
+        if r.get('key') == 'self':
+            self_m = r.get('mentions', 0) or 0
+            break
+rate = '' if (not runs or status == 'cit_err') else round(100.0 * self_m / runs, 2)
+print('\t'.join([slug, str(sov_pct), str(mentions), str(runs), str(self_m), str(rate), status]))
 PY
   exit 0
 fi
@@ -90,7 +124,7 @@ fi
 # ---------------------------------------------------------------------------
 ORG="${ORG:-${1:-}}"
 [ -n "$ORG" ] || { echo "ERROR: set ORG=<org-slug>"; exit 2; }
-CONC="${CONCURRENCY:-8}"
+CONC="${CONCURRENCY:-3}"
 OUT="${OUT:-/tmp/soaiv_${ORG}.tsv}"
 SECONDS=0
 
@@ -135,6 +169,24 @@ while IFS= read -r -d '' slug; do
 done < "$WORKDIR/slugs0"
 wait
 
+# Sequential repair pass: re-resolve any rows the parallel pass flagged (err /
+# cit_err) one at a time with extra patience. With no contention the transient
+# 500s clear and the heavy aggregations (e.g. GTC) get a clean shot. Slugs may
+# contain spaces, so collect newline-delimited and read with `while read`.
+flagged="$WORKDIR/flagged"; : > "$flagged"
+for fp in "$RESDIR"/*; do
+  case "$(awk -F'\t' '{print $NF}' "$fp" 2>/dev/null)" in
+    err|cit_err) awk -F'\t' 'NR==1{print $1}' "$fp" >> "$flagged" ;;
+  esac
+done
+nflag=$(grep -c . "$flagged" 2>/dev/null || echo 0)
+if [ "$nflag" -gt 0 ]; then
+  echo "repairing $nflag flagged row(s) sequentially (retries=${REPAIR_RETRIES:-8})..."
+  while IFS= read -r slug; do
+    [ -n "$slug" ] && RETRIES="${REPAIR_RETRIES:-8}" bash "$0" --worker "$slug"
+  done < "$flagged"
+fi
+
 # Assemble: join worker rows with product names, sort by SOV desc, roll up.
 OUT="$OUT" python3 - <<'PY'
 import os, json, glob, csv
@@ -151,23 +203,30 @@ def fnum(x):
     except: return 0.0
 rows.sort(key=lambda r: fnum(r[1]), reverse=True)
 with open(out, 'w', newline='') as fh:
-    w = csv.writer(fh, delimiter='\t')
+    w = csv.writer(fh, delimiter='\t', lineterminator='\n')  # LF, not csv's default \r\n
     w.writerow(['slug', 'name', 'sov', 'mentions', 'runs', 'self_mentions', 'citation_rate_pct', 'status'])
     for r in rows:
         w.writerow([r[0], names.get(r[0], ''), r[1], r[2], r[3], r[4], r[5], r[6]])
-ok = [r for r in rows if r[6] == 'ok']
 def inum(x):
     try: return int(float(x))
     except: return 0
-tot_runs = sum(inum(r[3]) for r in ok)
+by = lambda st: [r for r in rows if r[6] == st]
+ok = by('ok'); cit_err = by('cit_err'); err = by('err')
+sov_ok = ok + cit_err                                   # rows with trustworthy sov/runs
+active = [r for r in sov_ok if fnum(r[1]) > 0]
+tot_runs = sum(inum(r[3]) for r in ok)                  # rate uses only fully-ok rows
 tot_self = sum(inum(r[4]) for r in ok)
-active = [r for r in ok if fnum(r[1]) > 0]
 print('--- rollup ---')
-print('products: %d  (ok %d, with SOV>0: %d, errors: %d)'
-      % (len(rows), len(ok), len(active), len(rows) - len(ok)))
+print('products: %d  (sov ok: %d, with SOV>0: %d, citations-unresolved: %d, sov-errors: %d)'
+      % (len(rows), len(sov_ok), len(active), len(cit_err), len(err)))
 if tot_runs:
     print('ORG CITATION RATE = %.2f%%  (%d self-cite convos / %d runs)'
           % (100.0 * tot_self / tot_runs, tot_self, tot_runs))
+if err or cit_err:
+    print('WARNING: %d sov-error + %d citations-unresolved row(s) excluded from the rate:'
+          % (len(err), len(cit_err)))
+    for r in (err + cit_err)[:25]:
+        print('  ! %s [%s]' % (names.get(r[0], r[0]), r[6]))
 PY
 
 echo "done in ${SECONDS}s"

@@ -60,19 +60,19 @@ A naive sequential loop is slow for a large org (e.g. nvidia-com has 183 product
 Use [`scripts/soaiv-parallel.sh`](../scripts/soaiv-parallel.sh) instead. It keeps the run **CLI-first** and parallelizes safely:
 
 - Each worker gets its **own config copy** via `TPC_CONFIG_PATH` and switches *that* copy to its product, so concurrent workers never clobber each other's active-product. **The user's real `~/.tpc/config.json` is never touched** (no scope to restore).
-- It **skips the citations call for `runs==0` products** (the bulk of a big org), and **retries the citations call on an empty/timeout result** — the lesson from a GTC run that timed out and silently recorded `0` self-cites when the true value was ~36%.
+- It **skips the citations call for `runs==0` products** (the bulk of a big org), **retries** failed calls with backoff, and **never records a failed call as `0`** — unrecoverable rows are marked `err` (sov failed) or `cit_err` (citations failed). After the parallel pass it runs a **sequential repair phase** over those flagged rows (no contention, extra patience), so a single invocation self-heals to complete data.
 
 ```bash
-ORG=nvidia-com CONCURRENCY=8 OUT=/tmp/nvidia_soaiv.tsv \
+ORG=nvidia-com OUT=/tmp/nvidia_soaiv.tsv \
   skills/prompting-company/scripts/soaiv-parallel.sh
 # smoke test first:  ORG=nvidia-com LIMIT=20 ./scripts/soaiv-parallel.sh
 ```
 
-Output is a TSV (`slug, name, sov, mentions, runs, self_mentions, citation_rate_pct, status`) plus an org-level citation-rate rollup. Keep `CONCURRENCY` modest (8–12) to avoid backend overload; there is no documented rate limit but the aggregations are heavy.
+Output is a TSV (`slug, name, sov, mentions, runs, self_mentions, citation_rate_pct, status`) plus an org-level citation-rate rollup that **excludes any unresolved rows and prints a WARNING listing them**.
 
-**Watch for two artifacts** (verify before trusting a `0`):
-- A product with high `runs` but `0` self-cites and a slow citations call is likely a **timeout** — re-run that single product (the script's retry usually catches it).
-- A product whose `citations --by category` returns **zero category rows** has genuinely no categorized citations (seen on NVIDIA Token Cost) — a real `0`, not an error.
+**Concurrency is the critical knob (measured):** the analytics backend returns `500: Failed to fetch share of voice` once ~6 requests from one account run at once. So `CONCURRENCY` defaults to **3** and must stay **≤4** — higher just produces 500s that the retry/repair phases then have to clean up. A full ~180-product org runs in ~12 min at concurrency 3.
+
+**One genuine artifact to know:** a product whose `citations --by category` returns **zero category rows** has no categorized citations at all (seen on NVIDIA Token Cost — high SOV, empty leaderboard); the script flags it `cit_err` rather than guessing — a real `0`, not a recoverable error.
 
 ### MCP fallback
 
