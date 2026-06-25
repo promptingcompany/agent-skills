@@ -1,5 +1,5 @@
 {
-  "version": "0.1.3",
+  "version": "0.1.4",
   "organization": "Prompting Company",
   "abstract": "Interactive workflow to set up agent simulation experiments end-to-end, including rigorous demand-ranked two-arm usability benchmarks."
 }

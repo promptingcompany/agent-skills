@@ -190,6 +190,8 @@ If propose:
 4. Propose 5–8 candidates. For each: name, what it tests, why an agent is likely to fail, suggested success check.
 5. If the product already has existing tasks, include them in the picker alongside the new suggestions so the user can mix.
 
+**Keep every task independent.** Each task runs in its own isolated sandbox with no shared state — never assume one task's output, files, installed packages, or context carry over to another. Do not write a task that depends on a prior task having run first (e.g. "using the SDK you installed earlier", "continue from the previous step"). Each `prompt` must be fully self-contained: state every prerequisite the agent needs to start from a clean environment, and avoid ordering words like "then", "next", or "afterward" that imply a chain across tasks. If a scenario genuinely needs multiple stages, fold them into a single task's prompt rather than splitting them across tasks.
+
 Example output:
 
 > Based on your docs, here are tasks I'd run:
@@ -211,7 +213,7 @@ For each selected task, draft a `task.json`. When writing the `prompt` field and
 | `name` | yes | Short scenario name. |
 | `description` | yes | One sentence on what this validates. |
 | `category` | yes | `coding`, `research`, `documentation`, `analysis`. |
-| `prompt` | yes | Second-person imperative; one scenario only. |
+| `prompt` | yes | Second-person imperative; one scenario only. Self-contained — no dependency on any other task having run. |
 | `taskType` | yes | `cli_execution`. |
 | `timeLimitMs` | yes | Run timeout in ms (e.g. `3600000`). |
 | `successType` | no | e.g. `runs_reliably`, `implements_spec_reliably`. |

@@ -54,7 +54,7 @@ This skill activates when the user asks to:
 | `name` | yes | string | Short scenario name. |
 | `description` | yes | string | One sentence on what this task validates. |
 | `category` | yes | enum | `coding`, `research`, `documentation`, `analysis`. |
-| `prompt` | yes | string | Second-person imperative instruction for the agent. One scenario per prompt. |
+| `prompt` | yes | string | Second-person imperative instruction for the agent. One scenario per prompt. Must be self-contained — each task runs in its own isolated sandbox, so never assume shared state or context from another task. |
 | `taskType` | yes | enum | Currently `cli_execution`. |
 | `timeLimitMs` | yes | integer | Run timeout in ms (e.g. `3600000` = 1h). |
 | `successType` | no | enum | e.g. `runs_reliably`, `implements_spec_reliably`. |
@@ -166,6 +166,7 @@ On the platform: arms → two environments differing only by skill/docs attachme
 ## General principles
 
 - Walk the user through each step interactively — confirm before creating resources.
+- Keep every task independent — each runs in its own isolated sandbox with no shared state, so a task must never depend on another task having run first. Write each prompt to be fully self-contained.
 - Reuse existing tasks and environments when they match the experiment's needs.
 - Suggest sensible defaults for signals based on the experiment's goals and template.
 - Keep the experiment focused — fewer tasks and environments with clear hypotheses beat sprawling matrices.
