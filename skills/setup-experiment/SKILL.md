@@ -91,24 +91,63 @@ When drafting the `prompt` field and each goal's `description`, follow the guide
 | `--tag-ids` | no | Comma-separated. |
 | `--task-ids` | no | Tasks to link at creation. |
 
-Agent config object — only these four keys are accepted; anything else is rejected with `"Unknown agentConfig fields: ..."`.
+Agent config object — set only these four keys; the API rejects unknown fields with `"Unknown agentConfig fields: ..."`.
 
 | Field | Required | Type | Notes |
 |---|---|---|---|
 | `harness` | yes | enum | `claude`, `codex`, `opencode`. |
-| `provider` | yes | string | e.g. `anthropic`, `openai`, `fireworks`. Must be supported by the chosen `harness`. |
+| `provider` | yes | string | e.g. `anthropic`, `openai`, `google`, `fireworks`, `custom`. Must be supported by the chosen `harness`. |
 | `model` | yes | string | Provider-specific model ID. Must be supported by the chosen `harness`. |
 | `sandboxResources` | no | object | See below. |
 
-`sandboxResources` object (all optional, numeric):
+The sandbox provider is chosen automatically (the default; GPU workloads route to Modal). Don't set it.
+
+`sandboxResources` object (all optional, numeric — not strings):
 
 | Field | Type | Range | Default |
 |---|---|---|---|
-| `cpu` | number | 1–4 | 1 |
-| `memory` | number (GB) | 1–8 | 1 |
-| `disk` | number (GB) | 1–10 (30+ needs custom tier) | 3 |
+| `cpu` | number | 1–4 | 4 |
+| `memory` | number (GB) | 1–8 | 4 |
+| `disk` | number (GB) | 1–10 (30+ needs custom tier) | 10 |
 | `gpu` | enum | `T4`, `L4`, `A10G`, `A100`, `A100-80GB`, `H100` | unset |
 | `gpuCount` | number | 1–8 | 1 (when `gpu` is set) |
+
+Optionally prepare the sandbox before the agent runs via **init commands** (bash, installs deps) and **init files** (git clone or uploaded zip). See the [Tasks](https://docs.promptingcompany.com/guides/coding-agent-optimization/tasks) doc for what these are and when to use them, and [Limits & constraints](https://docs.promptingcompany.com/guides/coding-agent-optimization/limits) for their hard limits.
+
+## Concepts & restrictions
+
+Definitions, use cases, and platform limits live in the Coding Agent
+Optimization docs — read them rather than re-deriving anything here:
+
+| Topic | Doc |
+|---|---|
+| What a task is, instructions, goals/criteria, init files & commands, secrets | [Tasks](https://docs.promptingcompany.com/guides/coding-agent-optimization/tasks) |
+| Harness/model, sandbox resources, GPU, secrets CLI | [Environments](https://docs.promptingcompany.com/guides/coding-agent-optimization/environments) |
+| Run lifecycle, what each run records, iterations | [Runs & iterations](https://docs.promptingcompany.com/guides/coding-agent-optimization/runs) |
+| Signal extraction (also see the `signal-config` skill) | [Signals](https://docs.promptingcompany.com/guides/coding-agent-optimization/signals) |
+| **Execution constraints + all hard limits** | [Limits & constraints](https://docs.promptingcompany.com/guides/coding-agent-optimization/limits) |
+
+The constraints below come from that
+[Limits](https://docs.promptingcompany.com/guides/coding-agent-optimization/limits)
+page. Keep them in mind on **every** task and prompt you draft — most "the run
+produced nothing" failures trace back to one of them:
+
+- **Fresh sandbox per run, no shared state.** Each task runs isolated — nothing
+  carries over. Tasks must be self-contained; deps come from init commands/files.
+- **One-shot prompt.** The agent gets the prompt once and runs to exit — no
+  multi-turn, no follow-up, no clarifying question.
+- **No browser/GUI.** Headless Linux only — a task that needs a clickable UI
+  can't be measured here.
+- **Background processes are killed.** When the agent exits, the sandbox is torn
+  down. A prompt that ends with "server running in the background" captures
+  nothing — prompt the agent to **finish and write an artifact**, and score the
+  artifact.
+- **Hard caps:** run ceiling **60 min**; init zip **≤ 500 MB**; init command ≤
+  10k chars, ≤ 50 commands, default 5 min each; CPU 1–4, mem 1–8 GB, disk 1–10
+  GB; GPU forces Modal.
+- **Secrets are environment-scoped** (`tpc sim env secret set`), revoked during
+  `script_judge`; `script_judge` needs the org feature flag + passes a security
+  review at registration.
 
 ## Workflows
 
