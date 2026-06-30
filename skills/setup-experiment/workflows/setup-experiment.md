@@ -254,26 +254,28 @@ Note each returned task ID.
 
 ### Step B3 — Configure credentials
 
-Most tasks need to hit the customer's product. Set up credentials before creating the experiment.
+Most tasks need to hit the customer's product. Secrets are **environment-scoped** — injected into the sandbox as env vars at run time — so set them on the environment(s) the tasks will run against. (Do this after Step B4 creates the environments, or update them afterward.)
 
 > "Tasks will need to hit [product]. How should agents authenticate?
-> - Paste an API key / token (I'll store it as a secret on the product profile)
+> - Paste an API key / token (I'll store it as a secret on the environment)
 > - Skip — only run tasks that don't need auth
 > - Already configured"
 
-If paste:
+If paste (use `--from-env` to avoid echoing the value into history):
 
 ```
-tpc product secret set <product-slug> <key-name> <value>
+tpc sim env secret set <env-id> --name <KEY_NAME> --value <value>
+tpc sim env secret set <env-id> --name <KEY_NAME> --from-env <YOUR_SHELL_VAR>
+tpc sim env secret import <env-id> --env-file .env.simulation   # bulk
 ```
 
 Confirm:
 
 ```
-tpc product secret list <product-slug>
+tpc sim env secret list <env-id>
 ```
 
-If skip, flag tasks that require auth and exclude them from the run.
+Reserved platform names (`ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, `AWS_*`, `HOME`, `PATH`, …) can't be overridden. If skip, flag tasks that require auth and exclude them from the run.
 
 ### Step B4 — Pick an experiment template
 
@@ -324,24 +326,36 @@ If skip, flag tasks that require auth and exclude them from the run.
 | `--tag-ids` | no | Comma-separated tag IDs. |
 | `--task-ids` | no | Tasks to link at creation. |
 
-**Agent config object** — only these four keys are accepted; any other key is rejected by the API with `"Unknown agentConfig fields: ..."`.
+**Agent config object** — set only these four keys; any other key is rejected by the API with `"Unknown agentConfig fields: ..."`.
 
 | Field | Required | Notes |
 |---|---|---|
 | `harness` | yes | `claude`, `codex`, `opencode`. |
-| `provider` | yes | e.g. `anthropic`, `openai`, `fireworks`. Must be supported by the chosen `harness`. |
+| `provider` | yes | e.g. `anthropic`, `openai`, `google`, `fireworks`, `custom`. Must be supported by the chosen `harness`. |
 | `model` | yes | Provider-specific model ID. Must be supported by the chosen `harness`. |
 | `sandboxResources` | no | Object (see below). |
+
+The sandbox provider is chosen automatically (the default; GPU workloads route to Modal) — don't set it.
 
 `sandboxResources` (all optional, numeric — not strings):
 
 | Field | Type | Range | Default |
 |---|---|---|---|
-| `cpu` | number | 1–4 | 1 |
-| `memory` | number (GB) | 1–8 | 1 |
-| `disk` | number (GB) | 1–10 (30+ needs custom tier) | 3 |
+| `cpu` | number | 1–4 | 4 |
+| `memory` | number (GB) | 1–8 | 4 |
+| `disk` | number (GB) | 1–10 (30+ needs custom tier) | 10 |
 | `gpu` | enum | `T4`, `L4`, `A10G`, `A100`, `A100-80GB`, `H100` | unset |
 | `gpuCount` | number | 1–8 | 1 (when `gpu` is set) |
+
+**Prepare the sandbox (optional).** Add init commands (bash, installs deps) and init files (git clone or uploaded zip) at create time, or later via update:
+
+```
+tpc sim env create --name "<name>" --agent-config @cfg.json \
+  --init-commands '[{"command":"pip install <pkg>"}]' \
+  --init-files '[{"repoUrl":"https://github.com/org/skills","targetPath":"/home/agent-user/.claude/skills"}]'
+```
+
+The `--init-files` flag is git-only; upload a zip (≤ 500 MB, auto-unzipped) via the web/API. The skill-ON arm of a friction delta is usually the skill cloned in as an init file. See the [Tasks](https://docs.promptingcompany.com/guides/coding-agent-optimization/tasks) and [Limits & constraints](https://docs.promptingcompany.com/guides/coding-agent-optimization/limits) docs.
 
 ```json
 {
