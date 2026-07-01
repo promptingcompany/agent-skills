@@ -1,6 +1,6 @@
 # Analyze Experiment
 
-Turn a completed experiment iteration into a portable data dump and an honest, evidence-backed markdown report — the third skill in the experiment suite: **setup → run → analyze**.
+Turn a completed experiment iteration into a portable data dump and an honest, evidence-backed markdown report — the third skill in the experiment suite: **setup → run → analyze**. Reports lead with a compact executive summary, prioritized recommended actions, and evidence-linked detail pages.
 
 ## Workflows
 

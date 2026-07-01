@@ -12,6 +12,8 @@ Two paths after product selection, depending on what the user already has:
 - **Path A — Run what I have**: returning user with existing tasks and environments. Pick from lists, attach, run.
 - **Path B — Set up something new**: first-time setup or fresh experiment. Capture context, suggest tasks from docs, pick a template, run.
 
+If the user asks to compare products/providers on the same use-case set, stop this single-product flow and use [`cross-product-benchmark.md`](cross-product-benchmark.md).
+
 Pull what the platform already knows. Never block on missing information — fall back to web search and sensible defaults.
 
 ## Prerequisites
@@ -36,13 +38,13 @@ tpc org switch <org-slug>
 
 ### Step 1 — Pick the product
 
-Check the active product:
+Check the active org/product context:
 
 ```
-tpc product current
+tpc auth whoami --format json
 ```
 
-If none is set, list and ask:
+If no active product is shown, or if the command output is unclear, list and ask:
 
 ```
 tpc product list

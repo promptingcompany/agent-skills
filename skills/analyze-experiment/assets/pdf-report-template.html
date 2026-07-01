@@ -1,29 +1,27 @@
 <!DOCTYPE html>
 <!--
-  TPC pilot-report PDF template — used by workflows/generate-pdf.md.
+  TPC evidence-backed experiment report template.
 
   HOW TO USE
-  - This file is a design system + page skeletons, not a fill-in-the-blanks form.
-    Copy it next to the markdown report, replace every {{PLACEHOLDER}} and the
-    example content with the report's actual content, and DELETE skeleton pages
-    you don't need (e.g. extra finding pages).
-  - Pagination is manual: each .page div is exactly one 8.5x11in letter page.
-    There is no auto-flow across pages — if content overflows a page, the fix is
-    to trim, split into two .page divs, or shrink a table's font-size inline.
-  - The cover page carries no footer and no number. Every other page gets the
-    .footer div, numbered sequentially starting at 2.
-  - Render with headless Chrome (see workflows/generate-pdf.md), then READ the
-    rendered PDF page by page and fix overflows before delivering.
+  - Copy this file next to the markdown report, replace every {{PLACEHOLDER}},
+    and remove unused example rows.
+  - This template is natural-flow. Use ordinary document flow and visible
+    overflow. Let Chrome paginate the document.
+  - The first page starts with the report header, Executive Summary
+    methodology, findings bullets, and "Recommended actions, in priority order".
+  - Keep the section order: first-page brief, urgent recommendation detail pages, P1/P2
+    Recommended Changes, Evidence Appendix.
+  - Each P0 detail page and the Evidence Appendix must start on a new PDF page.
+  - Every recommendation must include evidence and a success check.
 
-  BLOCK INVENTORY (all styled below, compose freely):
-    .eyebrow + h1.section   numbered section header ("2 · RESULTS" + serif title)
-    .cards > .card          big-number stat cards (use 2-3, lead the Results page)
-    table + .caption        zebra table with green header row + small gray caption
-    .callout                green left-bar box with letterspaced label (key asides)
-    .measurebox             dark-green-header box ("HOW WE MEASURED" on Methodology)
-    .codeblock              code/log block; wrap error lines in <span class="err">
-    .pullquote              italic serif pull quote with green left bar
-    .pass / .fail           green check / red cross styling inside table cells
+  BLOCK INVENTORY
+    .report-header       title, metadata, and the one-question frame
+    .findings-list       executive summary findings bullets
+    .priority-table      compact action list and P1/P2 recommendation tables
+    .p0-detail-start     page break before each P0 detail page
+    .evidence-card       compact evidence clusters inside the appendix
+    .codeblock           transcript/log/YAML block with wrapping
+    .appendix-start      page break before the Evidence Appendix
 -->
 <html lang="en">
 <head>
@@ -35,218 +33,440 @@
     --green-mid: #2e6b50;
     --green-tint: #eef5f0;
     --green-line: #d6e5dc;
-    --ink: #2b2b2b;
-    --gray: #6b6f6d;
-    --red: #b03434;
-    --rule: #cfd8d2;
+    --ink: #252826;
+    --muted: #66706b;
+    --rule: #d8e1dc;
+    --paper: #ffffff;
+    --soft: #f7faf8;
+    --red: #a83b3b;
   }
-  @page { size: letter; margin: 0; }
-  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  html, body { background: #fff; }
-  body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; color: var(--ink); font-size: 10.2pt; line-height: 1.55; }
-  .page { width: 8.5in; height: 11in; padding: 0.85in 0.9in 0.9in 0.9in; position: relative; page-break-after: always; overflow: hidden; }
-  .page:last-child { page-break-after: auto; }
 
-  .footer { position: absolute; bottom: 0.45in; left: 0.9in; right: 0.9in; display: flex; justify-content: space-between; font-size: 7.5pt; color: #9aa39e; border-top: 0.5pt solid #e4e9e6; padding-top: 6pt; }
+  @page {
+    size: letter;
+    margin: 0.54in 0.58in 0.62in 0.58in;
+  }
 
-  .eyebrow { font-size: 8.5pt; font-weight: 700; letter-spacing: 0.22em; color: var(--green-mid); text-transform: uppercase; margin-bottom: 6pt; }
-  h1.section { font-family: Georgia, "Times New Roman", serif; font-size: 21pt; font-weight: 700; color: var(--green); line-height: 1.15; padding-bottom: 8pt; border-bottom: 2.5pt solid var(--green); margin-bottom: 12pt; }
-  h2 { font-family: Georgia, serif; font-size: 13.5pt; color: var(--green); margin: 16pt 0 6pt 0; }
-  h3 { font-family: Georgia, serif; font-size: 11.5pt; color: var(--green-mid); margin: 12pt 0 4pt 0; }
-  p { margin-bottom: 8pt; }
-  ul, ol { margin: 0 0 8pt 16pt; }
-  li { margin-bottom: 5pt; }
-  strong { color: #1a1a1a; }
-  code, .mono { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 0.92em; }
+  * {
+    box-sizing: border-box;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
 
-  .callout { background: var(--green-tint); border-left: 3.5pt solid var(--green); padding: 10pt 14pt; margin: 12pt 0; border-radius: 0 3pt 3pt 0; }
-  .callout .label { font-size: 8pt; font-weight: 700; letter-spacing: 0.18em; color: var(--green-mid); text-transform: uppercase; margin-bottom: 5pt; }
-  .callout p:last-child { margin-bottom: 0; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--paper);
+    color: var(--ink);
+  }
 
-  .measurebox { border: 0.75pt solid var(--green-line); border-radius: 3pt; margin: 12pt 0; overflow: hidden; }
-  .measurebox .head { background: var(--green); color: #fff; font-size: 8pt; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; padding: 6pt 14pt; }
-  .measurebox .body { padding: 10pt 14pt; }
-  .measurebox p { margin-bottom: 7pt; }
-  .measurebox p:last-child { margin-bottom: 0; }
+  body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 9.6pt;
+    line-height: 1.45;
+  }
 
-  .cards { display: flex; gap: 14pt; margin: 14pt 0 16pt 0; }
-  .card { flex: 1; border: 0.75pt solid var(--green-line); border-top: 3pt solid var(--green); padding: 12pt 12pt 10pt 12pt; border-radius: 0 0 3pt 3pt; }
-  .card .num { font-family: Georgia, serif; font-size: 26pt; font-weight: 700; color: var(--green); line-height: 1.1; margin-bottom: 4pt; }
-  .card .cap { font-size: 8.2pt; color: var(--gray); line-height: 1.4; }
+  .report {
+    max-width: 7.35in;
+    margin: 0 auto;
+  }
 
-  table { width: 100%; border-collapse: collapse; margin: 8pt 0 4pt 0; font-size: 9pt; }
-  th { background: var(--green-tint); color: var(--green); font-weight: 700; text-align: left; padding: 6pt 8pt; border-bottom: 1pt solid var(--green-line); }
-  td { padding: 5.5pt 8pt; border-bottom: 0.5pt solid #e8ece9; vertical-align: top; }
-  tr:nth-child(even) td { background: #f8fbf9; }
-  .num-r { text-align: right; }
-  .ctr { text-align: center; }
-  .pass { color: #1d7a4a; font-weight: 600; }
-  .fail { color: var(--red); font-weight: 700; }
-  .caption { font-size: 8pt; color: var(--gray); margin: 4pt 0 12pt 0; }
+  .report-header {
+    padding-bottom: 12pt;
+    margin-bottom: 14pt;
+    border-bottom: 2pt solid var(--green);
+  }
 
-  .codeblock { background: #f5f8f6; border-left: 3pt solid var(--green); padding: 9pt 12pt; margin: 10pt 0; font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 8.2pt; line-height: 1.5; white-space: pre-wrap; border-radius: 0 3pt 3pt 0; }
-  .codeblock .err { color: var(--red); }
+  .kicker {
+    font-size: 7.8pt;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--green-mid);
+    margin-bottom: 6pt;
+  }
 
-  .pullquote { font-family: Georgia, serif; font-style: italic; font-size: 12.5pt; color: var(--green); border-left: 3pt solid var(--green); padding: 4pt 0 4pt 16pt; margin: 16pt 0; line-height: 1.45; }
+  h1 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 25pt;
+    line-height: 1.08;
+    color: var(--green);
+    margin: 0 0 8pt 0;
+  }
 
-  /* cover */
-  .cover { padding-top: 1.4in; }
-  .cover .bar { width: 0.8in; height: 0.11in; background: var(--green); margin-bottom: 0.35in; }
-  .cover .company { font-size: 11pt; font-weight: 700; letter-spacing: 0.28em; color: var(--green); margin-bottom: 5pt; }
-  .cover .sub { font-size: 10pt; color: var(--gray); margin-bottom: 0.55in; }
-  .cover h1 { font-family: Georgia, serif; font-size: 41pt; font-weight: 700; color: var(--green); line-height: 1.12; margin-bottom: 0.3in; }
-  .cover .question { font-family: Georgia, serif; font-style: italic; font-size: 15pt; color: var(--green-mid); line-height: 1.4; margin-bottom: 0.28in; }
-  .cover .abstract { font-size: 10.5pt; color: #444; max-width: 6.1in; }
-  .cover .meta { position: absolute; bottom: 0.85in; left: 0.9in; right: 0.9in; border-top: 0.75pt solid var(--rule); padding-top: 14pt; display: flex; gap: 0.6in; }
-  .cover .meta .k { font-size: 8pt; font-weight: 700; letter-spacing: 0.18em; color: #9aa39e; text-transform: uppercase; margin-bottom: 4pt; }
-  .cover .meta .v { font-size: 10pt; font-weight: 600; color: #333; }
+  h2 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 15pt;
+    line-height: 1.2;
+    color: var(--green);
+    margin: 16pt 0 6pt 0;
+    padding-top: 2pt;
+  }
+
+  h3 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 11.2pt;
+    color: var(--green-mid);
+    margin: 12pt 0 5pt 0;
+  }
+
+  p {
+    margin: 0 0 7pt 0;
+  }
+
+  ul, ol {
+    margin: 0 0 8pt 16pt;
+    padding: 0;
+  }
+
+  li {
+    margin-bottom: 4pt;
+  }
+
+  strong {
+    color: #171917;
+  }
+
+  code, .mono {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 0.92em;
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8pt 16pt;
+    font-size: 8pt;
+    color: var(--muted);
+    margin-top: 8pt;
+  }
+
+  .meta span {
+    white-space: nowrap;
+  }
+
+  .lede {
+    font-size: 10.4pt;
+    color: #353936;
+    margin-bottom: 10pt;
+  }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8pt;
+    margin: 10pt 0 12pt 0;
+  }
+
+  .summary-card {
+    border: 0.75pt solid var(--green-line);
+    border-top: 3pt solid var(--green);
+    background: var(--soft);
+    padding: 8pt 9pt;
+    min-height: 0.72in;
+  }
+
+  .summary-card .value {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 18pt;
+    font-weight: 700;
+    line-height: 1.05;
+    color: var(--green);
+    margin-bottom: 3pt;
+  }
+
+  .summary-card .label {
+    font-size: 7.7pt;
+    line-height: 1.35;
+    color: var(--muted);
+  }
+
+  .findings-list {
+    margin: 5pt 0 9pt 15pt;
+  }
+
+  .findings-list li {
+    margin-bottom: 4pt;
+  }
+
+  .callout {
+    background: var(--green-tint);
+    border-left: 3.5pt solid var(--green);
+    padding: 8pt 10pt;
+    margin: 10pt 0 12pt 0;
+  }
+
+  .callout .label {
+    font-size: 7.5pt;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--green-mid);
+    margin-bottom: 4pt;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 6pt 0 6pt 0;
+    font-size: 8.2pt;
+    page-break-inside: auto;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tr {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  th {
+    text-align: left;
+    vertical-align: top;
+    background: var(--green-tint);
+    color: var(--green);
+    font-weight: 700;
+    padding: 5.5pt 6pt;
+    border-bottom: 0.9pt solid var(--green-line);
+  }
+
+  td {
+    vertical-align: top;
+    padding: 5.5pt 6pt;
+    border-bottom: 0.5pt solid #e7ece9;
+  }
+
+  tbody tr:nth-child(even) td {
+    background: #fafcfb;
+  }
+
+  .priority-table th:nth-child(1) { width: 15%; }
+  .priority-table th:nth-child(2) { width: 24%; }
+  .priority-table th:nth-child(3) { width: 34%; }
+  .priority-table th:nth-child(4) { width: 27%; }
+
+  .caption {
+    font-size: 7.5pt;
+    color: var(--muted);
+    margin: 3pt 0 10pt 0;
+  }
+
+  .section-note {
+    color: var(--muted);
+    font-size: 8.5pt;
+    margin-bottom: 6pt;
+  }
+
+  .appendix-start {
+    break-before: page;
+    page-break-before: always;
+  }
+
+  .p0-detail-start {
+    break-before: page;
+    page-break-before: always;
+  }
+
+  .evidence-card {
+    border: 0.75pt solid var(--green-line);
+    background: #fbfdfc;
+    padding: 8pt 10pt;
+    margin: 8pt 0;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .evidence-card h3 {
+    margin-top: 0;
+  }
+
+  .codeblock {
+    background: #f5f8f6;
+    border-left: 3pt solid var(--green);
+    padding: 8pt 10pt;
+    margin: 7pt 0 10pt 0;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 7.5pt;
+    line-height: 1.45;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+
+  .pass {
+    color: #1d7a4a;
+    font-weight: 700;
+  }
+
+  .fail {
+    color: var(--red);
+    font-weight: 700;
+  }
+
+  @media screen {
+    body {
+      background: #eef2ef;
+      padding: 24px;
+    }
+
+    .report {
+      background: #fff;
+      padding: 0.54in 0.58in 0.62in 0.58in;
+      box-shadow: 0 18px 60px rgba(0, 0, 0, 0.12);
+    }
+  }
 </style>
 </head>
 <body>
-
-<!-- ============ PAGE 1 · COVER (no footer, no page number) ============ -->
-<div class="page cover">
-  <div class="bar"></div>
-  <div class="company">THE PROMPTING COMPANY</div>
-  <div class="sub">Coding Agent Optimization &middot; Pilot Report</div>
-  <h1>{{TITLE_LINE_1}}<br>{{TITLE_LINE_2}}</h1>
-  <div class="question">{{ITALIC_RESEARCH_QUESTION — the one question the pilot answers, ending in ?}}</div>
-  <div class="abstract">{{ABSTRACT — 2-4 sentences: what was evaluated, how it was judged, scale (N runs, experiment short-id, iteration N).}}</div>
-  <div class="meta">
-    <div><div class="k">Prepared by</div><div class="v">The Prompting Company</div></div>
-    <div><div class="k">Report type</div><div class="v">CAO pilot</div></div>
-    <div><div class="k">Pilot date</div><div class="v">{{DATE}}</div></div>
-  </div>
-</div>
-
-<!-- ============ PAGE 2 · EXECUTIVE SUMMARY ============ -->
-<div class="page">
-  <div class="eyebrow">Executive summary</div>
-  <h1 class="section">{{VERDICT_HEADLINE — the answer, not the topic}}</h1>
-  <p>{{Lead with the audience's question and the answer. Counts inline.}}</p>
-  <ul>
-    <li><strong>{{Key result 1.}}</strong> {{count-backed}}</li>
-    <li><strong>{{Key result 2.}}</strong> {{count-backed}}</li>
-  </ul>
-  <div class="callout">
-    <div class="label">{{The part that matters for X}}</div>
-    <p>{{The single insight the customer should retain.}}</p>
-  </div>
-  <h2>Recommended actions, in priority order</h2>
-  <ol>
-    <li><strong>{{Action 1}}</strong> {{(highest leverage) — tie to a finding.}}</li>
-    <li><strong>{{Action 2}}</strong></li>
-  </ol>
-  <div class="footer"><span>The Prompting Company &middot; {{SHORT_TITLE}} &middot; {{MONTH_YEAR}}</span><span>2</span></div>
-</div>
-
-<!-- ============ PAGE 3 · METHODOLOGY ============ -->
-<div class="page">
-  <div class="eyebrow">1 &middot; Methodology</div>
-  <h1 class="section">{{What we tested, and why}}</h1>
-  <p>{{What question the design isolates; what the task prompts ask; what they deliberately do not ask.}}</p>
-  <div class="measurebox">
-    <div class="head">How we measured</div>
-    <div class="body">
-      <p><strong>The arms.</strong> {{models x conditions}}</p>
-      <p><strong>The tasks.</strong> {{task list, runs-per-cell}}</p>
-      <p><strong>The gate.</strong> {{judge/criterion, threshold}}</p>
-      <p><strong>Scale.</strong> {{N runs · $X total · tokens · avg duration · experiment id, iteration, window}}</p>
+<main class="report">
+  <header class="report-header">
+    <div class="kicker">The Prompting Company &middot; Experiment Report</div>
+    <h1>{{REPORT_TITLE}}</h1>
+    <p class="lede">{{ONE_QUESTION_FRAME_AND_VERDICT}}</p>
+    <div class="meta">
+      <span><strong>Experiment:</strong> {{EXPERIMENT_ID_OR_NAME}}</span>
+      <span><strong>Iteration:</strong> {{ITERATION}}</span>
+      <span><strong>Runs:</strong> {{RUN_COUNT}}</span>
+      <span><strong>Prepared:</strong> {{DATE}}</span>
     </div>
-  </div>
-  <h2>A note on sample and claims</h2>
-  <p>{{n, ceiling effects, what is and is not comparable. This is the honesty section — never cut it.}}</p>
-  <div class="footer"><span>The Prompting Company &middot; {{SHORT_TITLE}} &middot; {{MONTH_YEAR}}</span><span>3</span></div>
-</div>
+  </header>
 
-<!-- ============ PAGE 4 · RESULTS ============ -->
-<div class="page">
-  <div class="eyebrow">2 &middot; Results</div>
-  <h1 class="section">{{Results headline}}</h1>
-  <div class="cards">
-    <div class="card"><div class="num">{{19 / 20}}</div><div class="cap">{{what this number is}}</div></div>
-    <div class="card"><div class="num">{{10 / 10}}</div><div class="cap">{{what this number is}}</div></div>
-    <div class="card"><div class="num">{{9 / 10}}</div><div class="cap">{{what this number is}}</div></div>
-  </div>
-  <h2>Per-task scores</h2>
-  <table>
-    <tr><th>Task</th><th class="ctr">{{Arm 1}}</th><th class="ctr">{{Arm 2}}</th></tr>
-    <tr><td>{{Task name}}</td><td class="ctr pass">100 &#10003;</td><td class="ctr fail">0 &#10007;</td></tr>
-  </table>
-  <div class="caption">Table 1 &mdash; {{caption; reference the failing run id and the section that examines it}}</div>
-  <div class="footer"><span>The Prompting Company &middot; {{SHORT_TITLE}} &middot; {{MONTH_YEAR}}</span><span>4</span></div>
-</div>
+  <section>
+    <div class="kicker">Executive Summary</div>
+    <h2>{{EXECUTIVE_SUMMARY_HEADLINE}}</h2>
+    <p><strong>Methodology:</strong> {{METHODOLOGY_PARAGRAPH}}</p>
+    <p><strong>Findings:</strong></p>
+    <ul class="findings-list">
+      <li>{{FINDING_WITH_EVIDENCE}}</li>
+    </ul>
+  </section>
 
-<!-- ============ PAGE 5+ · FINDINGS (one .page per finding; eyebrow "3 · FINDING A" etc.) ============ -->
-<div class="page">
-  <div class="eyebrow">3 &middot; Finding A</div>
-  <h1 class="section">{{Finding headline — the claim, not the category}}</h1>
-  <p>{{Narrative with run ids and counts.}}</p>
-  <div class="codeblock">{{verbatim log/judge output}}
-<span class="err">{{the error line, verbatim}}</span></div>
-  <div class="pullquote">{{One italic sentence that carries the finding.}}</div>
-  <div class="footer"><span>The Prompting Company &middot; {{SHORT_TITLE}} &middot; {{MONTH_YEAR}}</span><span>5</span></div>
-</div>
+  <section>
+    <h2>Recommended actions, in priority order</h2>
+    <p class="section-note">First-page action surface. Keep detailed agent instructions on the recommendation detail pages.</p>
+    <table class="priority-table">
+      <thead>
+        <tr>
+          <th>Priority</th>
+          <th>Owner / surface</th>
+          <th>Change</th>
+          <th>Evidence</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ACTION_TITLE}}</td>
+          <td>{{OWNER_AND_SPECIFIC_SURFACE}}</td>
+          <td>{{COMPACT_CHANGE}}</td>
+          <td>{{EVIDENCE_LINKS}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
 
-<!-- ============ LEVERS / GAPS PAGE (eyebrow "N · Agent-readiness gaps & CAO levers") ============ -->
-<div class="page">
-  <div class="eyebrow">{{N}} &middot; Agent-readiness gaps &amp; CAO levers</div>
-  <h1 class="section">{{Levers headline}}</h1>
-  <h2>Lever 1 &mdash; {{name}} <span style="font-size:9pt; color:var(--gray); font-family:'Helvetica Neue',sans-serif; font-weight:400;">(highest leverage)</span></h2>
-  <p>{{What to change, tied to the cluster that evidences it.}}</p>
-  <div class="callout">
-    <div class="label">What this does not require</div>
-    <p>{{Scope reassurance, if the data supports it.}}</p>
-  </div>
-  <div class="footer"><span>The Prompting Company &middot; {{SHORT_TITLE}} &middot; {{MONTH_YEAR}}</span><span>6</span></div>
-</div>
+  <section class="p0-detail-start">
+    <h2>{{P0_DETAIL_TITLE}}</h2>
+    <p><strong>Owner:</strong> {{OWNER}}</p>
+    <p><strong>Where to change:</strong> {{SPECIFIC_SURFACE}}</p>
+    <div class="callout">
+      <div class="label">Agent instruction</div>
+      <p>{{AGENT_INSTRUCTION}}</p>
+    </div>
+    <p><strong>Required changes:</strong></p>
+    <ul>
+      <li>{{REQUIRED_CHANGE}}</li>
+    </ul>
+    <p><strong>Evidence:</strong> {{RUN_TASK_LOG_EVIDENCE}}</p>
+    <p><strong>Success check:</strong> {{SUCCESS_CHECK}}</p>
+  </section>
 
-<!-- ============ CONCLUSION PAGE (eyebrow "N · Conclusion & next steps") ============ -->
-<div class="page">
-  <div class="eyebrow">{{N}} &middot; Conclusion &amp; next steps</div>
-  <h1 class="section">{{Conclusion headline}}</h1>
-  <p><strong>On the question asked:</strong> {{the answer, restated with counts}}</p>
-  <h2>Next steps</h2>
-  <ul>
-    <li><strong>{{Next step 1.}}</strong> {{why}}</li>
-  </ul>
-  <div class="pullquote">{{Closing pull quote.}}</div>
-  <div class="footer"><span>The Prompting Company &middot; {{SHORT_TITLE}} &middot; {{MONTH_YEAR}}</span><span>7</span></div>
-</div>
+  <section>
+    <h2>P1/P2 Recommended Changes</h2>
+    <table class="priority-table">
+      <thead>
+        <tr>
+          <th>Priority / owner</th>
+          <th>Where to change</th>
+          <th>Recommended change</th>
+          <th>Evidence and success check</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{P1_OR_P2_OWNER}}</td>
+          <td>{{SPECIFIC_SURFACE}}</td>
+          <td>{{RECOMMENDED_CHANGE}}</td>
+          <td>{{EVIDENCE_PLUS_SUCCESS_CHECK}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
 
-<!-- ============ APPENDICES (one .page each: A run inventory, B cluster seed block, C method notes) ============ -->
-<div class="page">
-  <div class="eyebrow">Appendix A</div>
-  <h1 class="section">Run-level inventory</h1>
-  <table style="font-size: 8.2pt;">
-    <tr><th>Task</th><th>Arm</th><th class="ctr">Score</th><th class="ctr">Result</th><th class="num-r">Tokens</th><th class="num-r">Cost</th><th class="num-r">Dur.</th><th>Run</th></tr>
-    <tr><td>{{task}}</td><td>{{arm}}</td><td class="ctr">100</td><td class="ctr pass">pass</td><td class="num-r">305,727</td><td class="num-r">$0.450</td><td class="num-r">75 s</td><td class="mono">{{run8}}</td></tr>
-  </table>
-  <div class="caption">Appendix A &mdash; All {{N}} runs. Totals: {{$X, tokens}}. Drill into any run with <code>tpc sim run logs &lt;run-id&gt;</code>.</div>
-  <div class="footer"><span>The Prompting Company &middot; {{SHORT_TITLE}} &middot; {{MONTH_YEAR}}</span><span>8</span></div>
-</div>
+  <section class="appendix-start">
+    <div class="kicker">Evidence Appendix</div>
+    <h2>{{APPENDIX_HEADLINE}}</h2>
+    <p class="section-note">This appendix is the proof behind the recommendation tables. Keep counts and verbatim examples close to the claims they support.</p>
 
-<div class="page">
-  <div class="eyebrow">Appendix B</div>
-  <h1 class="section">Friction-cluster seed data</h1>
-  <p>{{One line on the seed-taxonomy rule.}}</p>
-  <div class="codeblock">{{the structured cluster YAML block from the markdown report — keep every line under ~95 chars so nothing wraps}}</div>
-  <div class="footer"><span>The Prompting Company &middot; {{SHORT_TITLE}} &middot; {{MONTH_YEAR}}</span><span>9</span></div>
-</div>
+    <h3>E1. Provider Scorecard And Task Matrix</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Task</th>
+          <th>Provider / arm</th>
+          <th>Result</th>
+          <th>Score / criteria</th>
+          <th>Evidence</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{TASK}}</td>
+          <td>{{PROVIDER_OR_ARM}}</td>
+          <td class="{{PASS_OR_FAIL_CLASS}}">{{PASS_OR_FAIL}}</td>
+          <td>{{SCORE_AND_CRITERIA}}</td>
+          <td>{{RUN_ID_AND_EVIDENCE}}</td>
+        </tr>
+      </tbody>
+    </table>
 
-<div class="page">
-  <div class="eyebrow">Appendix C</div>
-  <h1 class="section">Method &amp; environment notes</h1>
-  <table>
-    <tr><td style="width: 1.6in;"><strong>Experiment</strong></td><td>{{full id, name, iteration, window}}</td></tr>
-    <tr><td><strong>Arms</strong></td><td>{{harness + model versions}}</td></tr>
-    <tr><td><strong>Gate</strong></td><td>{{judge details}}</td></tr>
-    <tr><td><strong>Signals</strong></td><td>{{signal config status / instrument gaps}}</td></tr>
-    <tr><td><strong>Data</strong></td><td>{{data dump filename}}</td></tr>
-  </table>
-  <div class="caption" style="margin-top: 8pt;">Source: <code>tpc</code> CLI, pulled {{DATE}}. Prepared by The Prompting Company as part of the ongoing Coding Agent Optimization engagement with {{CUSTOMER}}. {{Scope-limit sentence.}}</div>
-  <div class="footer"><span>The Prompting Company &middot; {{SHORT_TITLE}} &middot; {{MONTH_YEAR}}</span><span>10</span></div>
-</div>
+    <div class="evidence-card">
+      <h3>E2. Comparator Evidence: What Others Did Better</h3>
+      <p>{{COMPARATOR_ADVANTAGE_EVIDENCE}}</p>
+    </div>
 
+    <div class="evidence-card">
+      <h3>E3. Comparator Evidence: What The Focal Product Did Uniquely Well</h3>
+      <p>{{FOCAL_PRODUCT_STRENGTH_EVIDENCE}}</p>
+    </div>
+
+    <h3>E4/E5. Strengths And Friction Clusters</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Cluster</th>
+          <th>Runs affected</th>
+          <th>Mechanism categories</th>
+          <th>Verbatim evidence</th>
+          <th>Fix lever</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ROOT_CAUSE_CLUSTER}}</td>
+          <td>{{N_OF_M}}</td>
+          <td>{{MECHANISM_CATEGORIES}}</td>
+          <td>{{RUN_ID_LOGINDEX_AND_QUOTE}}</td>
+          <td>{{FIX_LEVER}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>E6. Caveats</h3>
+    <p>{{N_CEILING_EFFECTS_SIGNAL_FAILURES_AND_SCOPE_LIMITS}}</p>
+
+    <h3>E7. Taxonomy Seed</h3>
+    <div class="codeblock">{{FRICTION_CLUSTER_YAML}}</div>
+  </section>
+</main>
 </body>
 </html>

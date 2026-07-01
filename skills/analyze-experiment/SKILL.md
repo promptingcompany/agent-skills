@@ -38,8 +38,8 @@ The deliverable a customer asks for after a run is almost always the same: *how 
 Two outputs, plus an optional third:
 
 1. **Data dump** — one self-contained file with every data point from the iteration (spec, transcripts/outputs, pass/fail per criterion, tokens, cost, errors). Portable so it can be fed to another LLM if context runs out.
-2. **Report** — an honest markdown doc: per-task results, friction clusters grouped by root cause, model/arm differences, and a short closing on agent-readiness gaps.
-3. **PDF (optional, on request)** — the same report restyled into the branded TPC pilot-report layout (cover, executive summary, numbered findings, appendices) for customer delivery. Generated from the markdown report, never instead of it.
+2. **Report** — an honest markdown doc that leads with the decision surface: a one-page executive summary with compact methodology and findings bullets plus "Recommended actions, in priority order", then one detail page per urgent agent instruction, P1/P2 recommended changes, and an Evidence Appendix with task results, comparator data, friction clusters, caveats, and taxonomy seed data.
+3. **PDF (optional, on request)** — the same report restyled into the branded TPC report layout, starting with the Executive Summary and placing the Evidence Appendix on a new page. Generated from the markdown report, never instead of it.
 
 ## Prerequisites
 
@@ -99,19 +99,19 @@ See [`workflows/analyze-experiment.md`](workflows/analyze-experiment.md) for the
 1. **Locate** the experiment + iteration.
 2. **Pull & dump** all data into one portable file.
 3. **Detect mode** — A/B comparison vs single-arm benchmark (changes the report's lead).
-4. **Per-task results** — pass/fail per criterion, what the agent did, where it tripped.
-5. **Friction clusters** — root-cause grouped, runs-affected, evidence + fix each.
-6. **Arm/model comparison** — where the arms diverge, with counts.
-7. **Closing + structured cluster block** — agent-readiness gaps and the levers that address them; emit the structured cluster list for taxonomy seeding.
-8. **Honesty pass** — caveats, n, ceiling effects, disclosed instrument gaps.
+4. **Evidence spine** — per-task results, arm/provider comparison, friction clusters, and caveats.
+5. **Executive summary + recommended actions** — one first-page brief with methodology, evidence-backed findings bullets, and "Recommended actions, in priority order" with evidence.
+6. **Urgent recommendation detail pages** — one page per urgent recommendation with owner, exact surface, compact highlighted agent instruction, required changes, evidence, and success check.
+7. **P1/P2 recommended changes + appendix** — follow-up actions after the urgent detail pages, then the full Evidence Appendix and structured cluster list for taxonomy seeding.
+8. **Honesty pass** — caveats, n, ceiling effects, disclosed instrument gaps, and no unsupported recommendations.
 
 ### 2. Generate PDF Report (optional)
 
-See [`workflows/generate-pdf.md`](workflows/generate-pdf.md). Restyles a completed markdown report into the branded TPC pilot-report PDF (cover page, executive summary, "HOW WE MEASURED" box, stat cards, per-finding pages with pull quotes, appendices) using [`assets/pdf-report-template.html`](assets/pdf-report-template.html), rendered with headless Chrome and verified page by page. Run only on request ("generate a pdf", "client-ready report", "like the previous pilot PDF") and only after Workflow 1 — the PDF restyles the markdown report; it never adds claims beyond it.
+See [`workflows/generate-pdf.md`](workflows/generate-pdf.md). Restyles a completed markdown report into the branded TPC report PDF using [`assets/pdf-report-template.html`](assets/pdf-report-template.html): one-page executive brief with methodology, findings bullets, and "Recommended actions, in priority order" first, dedicated urgent recommendation detail pages next, then P1/P2 details and the Evidence Appendix. Run only on request ("generate a pdf", "client-ready report", "like the previous pilot PDF") and only after Workflow 1 — the PDF restyles the markdown report; it never adds claims beyond it.
 
 ## General principles
 
 - The report is *generated*, not hand-written. If the output is rough, improve the skill — do not fall back to writing it by hand.
 - One source of truth: the pulled data. The report narrates it; it never invents beyond it.
-- Lead with the question the audience is asking, not with the methodology.
+- Frame the report around the audience's question; keep first-page methodology compact and evidence-scoped.
 - A green score hides the work — surface the friction even when every run passed.
