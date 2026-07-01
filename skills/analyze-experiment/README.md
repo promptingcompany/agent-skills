@@ -1,6 +1,6 @@
 # Analyze Experiment
 
-Turn a completed experiment iteration into a portable data dump and an honest, evidence-backed markdown report — the third skill in the experiment suite: **setup → run → analyze**. Reports lead with a compact executive summary, prioritized recommended actions, and evidence-linked detail pages.
+Turn a completed experiment iteration into a portable data dump and an honest, evidence-backed markdown report — the third skill in the experiment suite: **setup → run → analyze**.
 
 ## Workflows
 
@@ -8,6 +8,7 @@ Turn a completed experiment iteration into a portable data dump and an honest, e
 |---|---|
 | Analyze Experiment | "analyze my experiment", "write the report", "experiment report", "analyze the results", "report gen" |
 | Generate PDF Report (optional) | "generate a pdf", "pdf report", "client-ready report", "like the previous pilot PDF" |
+| Deep Evidence Report | "evidence-backed report", "no-fluff report", "deep report", "prioritized recommendations" |
 
 ## Install
 
