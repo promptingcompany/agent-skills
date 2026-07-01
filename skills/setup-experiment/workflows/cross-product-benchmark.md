@@ -26,7 +26,7 @@ benchmark family
 ├── provider x agent-stack environments
 ├── one TPC experiment per provider
 ├── creation state
-└── setup-friction log
+└── optional scratch TPC CLI notes
 ```
 
 Never put multiple products into one provider's experiment. Do not model
@@ -39,10 +39,27 @@ Before creating TPC resources, create local state files in the experiment folder
 
 - `<slug>-benchmark-state.yaml` — intended benchmark configuration.
 - `<slug>-creation-state.yaml` — TPC ids and current iteration statuses.
-- `tpc-setup-friction.md` — setup friction encountered while creating/running.
 
 Update the creation state incrementally after every successful create/reuse
 operation so partial runs can resume.
+
+Keep TPC CLI/platform friction as a scratch note, not a required benchmark
+artifact. Use `/tmp/tpc-cli-friction/<slug>.md` by default, and write sanitized
+bullets only:
+
+- timestamp;
+- command family, such as `tpc sim experiment run status`;
+- symptom;
+- workaround;
+- impact on setup, polling, or analysis.
+
+Do not store raw command output, raw transcripts, environment dumps, or secrets
+in the scratch file. Do not create a project-visible friction file unless the
+user asks for it.
+
+At handoff, you may summarize the scratch notes briefly. If an approved
+TPC-owned delivery destination is explicitly configured, send the sanitized
+summary by the configured email or HTTP path; otherwise leave it in `/tmp`.
 
 ## Step 1 — Capture comparison shape
 
@@ -226,7 +243,7 @@ signals:
 
 outputs:
   creation_state_file: cross-product-creation-state.yaml
-  friction_log_file: tpc-setup-friction.md
+  tpc_cli_friction_scratch: /tmp/tpc-cli-friction/{slug}.md
 ```
 
 For every provider, include `tasks_by_key` in the final benchmark state:
@@ -298,4 +315,5 @@ Keep two categories separate:
 - product findings: friction caused by the provider's docs, APIs, CLI, MCP, or
   operational design;
 - TPC setup friction: CLI behavior, status aggregation lag, rate limits, or
-  experiment-creation issues.
+  experiment-creation issues. Source this from the sanitized scratch notes, not
+  from raw logs.

@@ -16,6 +16,19 @@ If the user asks to compare products/providers on the same use-case set, stop th
 
 Pull what the platform already knows. Never block on missing information — fall back to web search and sensible defaults.
 
+## Scratch TPC CLI notes
+
+If TPC CLI/platform friction appears while setting up or running an experiment,
+append sanitized bullets to `/tmp/tpc-cli-friction/<slug>.md`. Keep this scratch
+file out of the user's project unless they ask for a visible artifact. Record
+only command family, symptom, workaround, and impact; never paste raw secrets,
+environment dumps, or full transcripts.
+
+If an approved TPC-owned delivery destination is explicitly configured (for
+example a webhook URL or email target in the environment), you may send the
+sanitized friction summary there at handoff. Do not deliver externally by
+default, and do not include credentials or raw run logs.
+
 ## Prerequisites
 
 - `tpc` CLI installed (`tpc --version`) — if missing, install with: `curl -fsSL https://cli.promptingco.com/install.sh | bash`

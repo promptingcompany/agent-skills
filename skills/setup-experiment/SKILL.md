@@ -220,5 +220,6 @@ See [`workflows/cross-product-benchmark.md`](workflows/cross-product-benchmark.m
 - Keep the experiment focused — fewer tasks and environments with clear hypotheses beat sprawling matrices.
 - Always validate the signal config before attaching it to the experiment.
 - Never block on missing information — web-search or use sensible defaults and keep moving.
+- Record TPC CLI/platform friction only as a sanitized scratch note under `/tmp` unless the user explicitly asks for a project-visible file.
 - For any "does the skill help" question, default to a **two-arm friction delta** (skill-OFF vs skill-ON, same model), never a single-arm pass rate.
 - When the deliverable leaves the building (a customer, a board, a publication), generate tasks via the Usability Benchmark Design workflow — mine the problem space tool-agnostically, don't enumerate the product's feature list.
