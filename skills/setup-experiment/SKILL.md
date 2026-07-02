@@ -5,14 +5,18 @@ description: >
   tasks and environments (Path A) or set up new ones from docs, suggested
   tasks, credentials, and templates (Path B). Builds the experiment, attaches
   signals, and optionally triggers the first iteration. For high-stakes customer
-  deliverables, the Usability Benchmark Design workflow generates a rigorous,
-  demand-ranked, two-arm friction-delta benchmark instead of quick suggestions.
+  deliverables, Usability Benchmark Design generates a rigorous, demand-ranked,
+  two-arm friction-delta benchmark instead of quick suggestions. For product
+  comparisons, Cross-Product Benchmark creates shared use-case configuration,
+  then one product-scoped TPC experiment per provider.
 
   Trigger when users say: "set up an experiment", "create an experiment",
   "I want to run an experiment", "run my tasks", "setup experiment",
   "new experiment", "configure an experiment", "experiment setup",
-  "usability benchmark", "friction delta", "skill-off vs skill-on", or
-  "does the skill help".
+  "usability benchmark", "friction delta", "skill-off vs skill-on",
+  "does the skill help", "compare products", "benchmark products",
+  "compare providers", "same tasks across products", or
+  "PlanetScale vs Neon vs Supabase".
 ---
 
 # Setup Experiment
@@ -151,10 +155,11 @@ produced nothing" failures trace back to one of them:
 
 ## Workflows
 
-Two workflows. Pick by stakes:
+Three workflows. Pick by shape:
 
 - **Setup Experiment** — interactive, fast. Pick a product, run existing tasks or suggest new ones from docs, run. Right for internal probes and quick comparisons.
 - **Usability Benchmark Design** — rigorous, demand-ranked, two-arm friction delta. Right when the deliverable is a customer ROI proof, a roadmap input, or a published benchmark.
+- **Cross-Product Benchmark** — compare multiple products on the same use-case set. Create shared local state, then one product-scoped TPC experiment per provider.
 
 ### 1. Setup Experiment
 
@@ -202,6 +207,10 @@ Score "usable" as a 5-stage funnel — **Comprehension → Formation → Executi
 
 On the platform: arms → two environments differing only by skill/docs attachment (same model); funnel → `signal-config.yaml`; goals → deterministic `script_judge`; tiers → `tagIds`; k repeats → re-runs aggregated across runs.
 
+### 3. Cross-Product Benchmark
+
+See [`workflows/cross-product-benchmark.md`](workflows/cross-product-benchmark.md) when the user wants to compare products/providers using the same use-case set, for example PlanetScale vs Neon vs Supabase. Treat this as an experiment family: TPC resources remain product-scoped, but local state keeps task keys, goals, signals, environments, and analysis aligned across products.
+
 ## General principles
 
 - Walk the user through each step interactively — confirm before creating resources.
@@ -211,5 +220,6 @@ On the platform: arms → two environments differing only by skill/docs attachme
 - Keep the experiment focused — fewer tasks and environments with clear hypotheses beat sprawling matrices.
 - Always validate the signal config before attaching it to the experiment.
 - Never block on missing information — web-search or use sensible defaults and keep moving.
+- Record TPC CLI/platform friction only as a sanitized scratch note under `/tmp` unless the user explicitly asks for a project-visible file.
 - For any "does the skill help" question, default to a **two-arm friction delta** (skill-OFF vs skill-ON, same model), never a single-arm pass rate.
 - When the deliverable leaves the building (a customer, a board, a publication), generate tasks via the Usability Benchmark Design workflow — mine the problem space tool-agnostically, don't enumerate the product's feature list.

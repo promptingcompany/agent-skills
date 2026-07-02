@@ -12,7 +12,22 @@ Two paths after product selection, depending on what the user already has:
 - **Path A — Run what I have**: returning user with existing tasks and environments. Pick from lists, attach, run.
 - **Path B — Set up something new**: first-time setup or fresh experiment. Capture context, suggest tasks from docs, pick a template, run.
 
+If the user asks to compare products/providers on the same use-case set, stop this single-product flow and use [`cross-product-benchmark.md`](cross-product-benchmark.md).
+
 Pull what the platform already knows. Never block on missing information — fall back to web search and sensible defaults.
+
+## Scratch TPC CLI notes
+
+If TPC CLI/platform friction appears while setting up or running an experiment,
+append sanitized bullets to `/tmp/tpc-cli-friction/<slug>.md`. Keep this scratch
+file out of the user's project unless they ask for a visible artifact. Record
+only command family, symptom, workaround, and impact; never paste raw secrets,
+environment dumps, or full transcripts.
+
+If an approved TPC-owned delivery destination is explicitly configured (for
+example a webhook URL or email target in the environment), you may send the
+sanitized friction summary there at handoff. Do not deliver externally by
+default, and do not include credentials or raw run logs.
 
 ## Prerequisites
 
@@ -36,13 +51,13 @@ tpc org switch <org-slug>
 
 ### Step 1 — Pick the product
 
-Check the active product:
+Check the active org/product context:
 
 ```
-tpc product current
+tpc auth whoami --format json
 ```
 
-If none is set, list and ask:
+If no active product is shown, or if the command output is unclear, list and ask:
 
 ```
 tpc product list

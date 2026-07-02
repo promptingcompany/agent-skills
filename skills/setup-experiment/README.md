@@ -8,6 +8,7 @@ Interactive workflow to set up agent simulation experiments end-to-end — tasks
 |---|---|
 | Setup Experiment | "set up an experiment", "create an experiment", "I want to run an experiment", "new experiment" |
 | Usability Benchmark Design | "usability benchmark", "friction delta", "skill-off vs skill-on", "does the skill help", "rigorous benchmark" |
+| Cross-Product Benchmark | "compare products", "benchmark products", "compare providers", "same tasks across products", "PlanetScale vs Neon vs Supabase" |
 
 ## Reference
 

@@ -5,11 +5,14 @@ description: >
   analysis — a markdown report and a portable data dump. Pulls run data via
   the tpc CLI, scores each task, clusters friction by root cause (with a
   transcript example per claim), compares arms, and closes on agent-readiness
-  gaps. The natural companion to setup-experiment: setup → run → analyze.
+  gaps. Optionally produces a deeper no-fluff evidence report with prioritized
+  actions and agent instructions. The natural companion to setup-experiment:
+  setup → run → analyze.
 
   Trigger when users say: "analyze my experiment", "write the report",
   "experiment report", "analyze the results", "summarize the runs",
-  "what happened in this iteration", "friction report", or "report gen".
+  "what happened in this iteration", "friction report", "report gen",
+  "evidence-backed report", "no-fluff report", or "deep report".
 ---
 
 # Analyze Experiment
@@ -29,6 +32,7 @@ This skill activates when the user asks to:
 - Summarize the runs or explain what happened in an iteration
 - Produce a friction report or rank where agents tripped
 - Compare arms or models after a completed run
+- Produce a deeper evidence-backed, no-fluff report with prioritized actions
 - Generate a PDF, client-ready report, or "a report like the previous pilot PDF"
 
 ## What this skill is for
@@ -108,6 +112,10 @@ See [`workflows/analyze-experiment.md`](workflows/analyze-experiment.md) for the
 ### 2. Generate PDF Report (optional)
 
 See [`workflows/generate-pdf.md`](workflows/generate-pdf.md). Restyles a completed markdown report into the branded TPC pilot-report PDF (cover page, executive summary, "HOW WE MEASURED" box, stat cards, per-finding pages with pull quotes, appendices) using [`assets/pdf-report-template.html`](assets/pdf-report-template.html), rendered with headless Chrome and verified page by page. Run only on request ("generate a pdf", "client-ready report", "like the previous pilot PDF") and only after Workflow 1 — the PDF restyles the markdown report; it never adds claims beyond it.
+
+### 3. Deep Evidence Report
+
+See [`workflows/deep-evidence-report.md`](workflows/deep-evidence-report.md) when the user asks for a deeper, evidence-backed, no-fluff report with prioritized actions, exact owner/surface recommendations, and compact agent instructions. This workflow changes the markdown report structure only; it does not modify or replace the existing PDF generator.
 
 ## General principles
 
