@@ -1,5 +1,5 @@
 {
-  "version": "0.1.2",
+  "version": "0.1.3",
   "organization": "Prompting Company",
   "abstract": "Agent simulation and GEO simulation prompt generation workflows."
 }
