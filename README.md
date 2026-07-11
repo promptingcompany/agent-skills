@@ -18,6 +18,7 @@ Skills are reusable instruction sets that extend what Claude can do inside Claud
 | [setup-experiment](skills/setup-experiment/) | Interactive workflow to set up agent simulation experiments end-to-end |
 | [signal-config](skills/signal-config/) | Generate YAML signal configs for agent simulation experiments |
 | [skills-admin](skills/skills-admin/) | Open PRs and update installed skills in the agent-skills repository |
+| [tpc-existing-product-ui](skills/tpc-existing-product-ui/) | Refine existing TPC product interfaces without scope drift |
 
 ## Installing a skill
 
