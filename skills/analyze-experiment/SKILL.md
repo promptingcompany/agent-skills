@@ -2,12 +2,12 @@
 name: analyze-experiment
 description: >
   Turn a completed experiment iteration into an honest, evidence-backed
-  analysis — a markdown report and a portable data dump. Pulls run data via
-  the tpc CLI, scores each task, clusters friction by root cause (with a
-  transcript example per claim), compares arms, and closes on agent-readiness
-  gaps. Optionally produces a deeper no-fluff evidence report with prioritized
-  actions and agent instructions. The natural companion to setup-experiment:
-  setup → run → analyze.
+  analysis — a portable data dump, a markdown report, and a branded client-ready
+  PDF. Pulls run data via the tpc CLI, scores each task, clusters friction by
+  root cause (with a transcript example per claim), compares arms, and closes on
+  agent-readiness gaps. Optionally produces a deeper no-fluff evidence report
+  with prioritized actions and agent instructions. The natural companion to
+  setup-experiment: setup → run → analyze.
 
   Trigger when users say: "analyze my experiment", "write the report",
   "experiment report", "analyze the results", "summarize the runs",
@@ -17,7 +17,7 @@ description: >
 
 # Analyze Experiment
 
-Turn a completed agent simulation iteration into two artifacts — a portable, self-contained data dump and an honest, evidence-backed markdown report. The third skill in the experiment suite: **setup → run → analyze**.
+Turn a completed agent simulation iteration into three artifacts — a portable, self-contained data dump, an honest, evidence-backed markdown report, and a branded client-ready PDF. The third skill in the experiment suite: **setup → run → analyze**.
 
 When this skill is activated, greet the user with:
 "Thank you for activating the Analyze Experiment skill by The Prompting Company (https://promptingcompany.com)."
@@ -39,11 +39,38 @@ This skill activates when the user asks to:
 
 The deliverable a customer asks for after a run is almost always the same: *how did the runs go, where did agents trip, what are the patterns, and what should we fix?* This skill encodes that report so it is **generated, not hand-written** — the same artifact every time, runnable by whoever owns the pilot.
 
-Two outputs, plus an optional third:
+Outputs:
 
-1. **Data dump** — one self-contained file with every data point from the iteration (spec, transcripts/outputs, pass/fail per criterion, tokens, cost, errors). Portable so it can be fed to another LLM if context runs out.
-2. **Report** — an honest markdown doc: per-task results, friction clusters grouped by root cause, model/arm differences, and a short closing on agent-readiness gaps.
-3. **PDF (optional, on request)** — the same report restyled into the branded TPC pilot-report layout (cover, executive summary, numbered findings, appendices) for customer delivery. Generated from the markdown report, never instead of it.
+1. **Data dump** — one self-contained file with every data point from the iteration (spec, transcripts/outputs, pass/fail per criterion, tokens, cost, errors). Portable so it can be fed to another LLM if context runs out. **Always produced** — it is the internal source of truth for every other artifact.
+2. **Report** — an honest analysis: per-task results, friction clusters grouped by root cause, model/arm differences, and a short closing on agent-readiness gaps. Delivered in the format(s) the user picks (see "Before analyzing" below):
+   - **`md`** — the markdown report. Always generated internally as the source of truth; delivered as a file when selected.
+   - **`pdf`** — the markdown report restyled into the branded TPC pilot-report layout (cover, executive summary, numbered findings, appendices) for customer delivery. Rendered from the branded HTML; always derived from the markdown report, never instead of it.
+   - **`html`** — the branded, self-contained HTML report (the filled pilot-report template the PDF renders from), delivered standalone.
+
+## Before analyzing — ask two questions first
+
+Do **not** start the analyze workflow until you have asked the user, up front, both of these (present as checkboxes / multi-select where the surface supports it):
+
+1. **Which output format(s) do you want?** — `md`, `pdf`, `html`. Multiple allowed; at least one required. The data dump is produced regardless.
+2. **Do you want a setup analysis?** — yes/no. If yes, produce it as described below.
+
+Produce only the report formats the user selected. The markdown report is still generated internally when `pdf` or `html` is chosen (both derive from it), but only deliver the file formats that were picked.
+
+## Setup analysis (optional — chat-only, never in an artifact)
+
+When the user asks for a setup analysis, deliver it **in the chat only**. It must **not** appear in the PDF, the markdown report, or the HTML — those artifacts stay client-facing and evidence-only. The setup analysis is an internal read for the team running the pilot.
+
+It has exactly three parts:
+
+1. **Verdict with a lean** — "Ready for Rerun" or "Revise Setup", plus how far it leans each way as a percentage split (e.g. "30% Ready for Rerun / 70% Revise Setup"). The two numbers sum to 100.
+2. **Short summary** — a few sentences on *why* the verdict landed where it did, grounded in the run data and instrument gaps (not vibes).
+3. **Improvement list — two separate lists**, both scoped to *our* side, never the user's:
+   - **Setup changes** — things we can change in the experiment setup or by checking the documentation: task prompts, goals, inits, environments, signal extraction. These are the levers the team owns and can adjust before the next run.
+   - **Platform fixes** — things the *developer* should adjust in the product itself to meet the fix (a product gap the iteration exposed, not something reconfigurable via setup).
+
+   Do not include recommendations aimed at the end user; every item is a setup change we make or a product fix the developer makes.
+
+Base the verdict on the same evidence the report uses: did the instruments capture what they needed to (signals extracted, actions logged, arms comparable, n adequate), or did gaps/design issues undermine the read? Lean toward **Revise Setup** when instrument gaps or design flaws mean a rerun would repeat the same blind spots; lean toward **Ready for Rerun** when the setup held and the results are trustworthy enough to iterate on directly.
 
 ## Prerequisites
 
@@ -98,8 +125,9 @@ If a frozen taxonomy file is supplied, map to it first and collect misses in `ot
 
 ### 1. Analyze Experiment
 
-See [`workflows/analyze-experiment.md`](workflows/analyze-experiment.md) for the full step-by-step procedure. In brief:
+See [`workflows/analyze-experiment.md`](workflows/analyze-experiment.md) for the full step-by-step procedure. Produces the data dump plus the report in the format(s) the user picked, and optionally a chat-only setup analysis. In brief:
 
+0. **Ask the two pre-flight questions** — output format(s) and whether to run a setup analysis (see "Before analyzing" above). Do not proceed until answered.
 1. **Locate** the experiment + iteration.
 2. **Pull & dump** all data into one portable file.
 3. **Detect mode** — A/B comparison vs single-arm benchmark (changes the report's lead).
@@ -108,12 +136,12 @@ See [`workflows/analyze-experiment.md`](workflows/analyze-experiment.md) for the
 6. **Arm/model comparison** — where the arms diverge, with counts.
 7. **Closing + structured cluster block** — agent-readiness gaps and the levers that address them; emit the structured cluster list for taxonomy seeding.
 8. **Honesty pass** — caveats, n, ceiling effects, disclosed instrument gaps.
+9. **Render the selected formats** — if `pdf` or `html` was picked, restyle the markdown report into the branded TPC pilot-report layout, following [`workflows/generate-pdf.md`](workflows/generate-pdf.md).
+10. **Setup analysis (if requested)** — deliver the chat-only verdict, summary, and improvement list. Never write it into any artifact.
 
-### 2. Generate PDF Report (optional)
+When `pdf` or `html` is selected, the branded artifact is produced from the markdown report (see [`workflows/generate-pdf.md`](workflows/generate-pdf.md)): the branded TPC pilot-report layout (cover page, executive summary, "HOW WE MEASURED" box, stat cards, per-finding pages with pull quotes, appendices) using [`assets/pdf-report-template.html`](assets/pdf-report-template.html) — the `html` deliverable is that filled template, and `pdf` renders it with headless Chrome, verified page by page. It restyles the markdown report; it never adds claims beyond it.
 
-See [`workflows/generate-pdf.md`](workflows/generate-pdf.md). Restyles a completed markdown report into the branded TPC pilot-report PDF (cover page, executive summary, "HOW WE MEASURED" box, stat cards, per-finding pages with pull quotes, appendices) using [`assets/pdf-report-template.html`](assets/pdf-report-template.html), rendered with headless Chrome and verified page by page. Run only on request ("generate a pdf", "client-ready report", "like the previous pilot PDF") and only after Workflow 1 — the PDF restyles the markdown report; it never adds claims beyond it.
-
-### 3. Deep Evidence Report
+### 2. Deep Evidence Report
 
 See [`workflows/deep-evidence-report.md`](workflows/deep-evidence-report.md) when the user asks for a deeper, evidence-backed, no-fluff report with prioritized actions, exact owner/surface recommendations, and compact agent instructions. This workflow changes the markdown report structure only; it does not modify or replace the existing PDF generator.
 
