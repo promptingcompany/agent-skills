@@ -7,10 +7,14 @@ description: Full step-by-step procedure to turn a completed experiment iteratio
 
 ## Overview
 
-Produce two artifacts from one completed iteration:
+Produce, from one completed iteration:
 
-- **`<experiment>-iter<N>-data.json|md`** — portable, self-contained data dump.
-- **`<experiment>-iter<N>-report.md`** — the honest analysis report.
+- **`<experiment>-iter<N>-data.json|md`** — portable, self-contained data dump. **Always produced.**
+- **The report**, in the format(s) the user picked in Step 0:
+  - **`md`** — `<experiment>-iter<N>-report.md`, the honest analysis report.
+  - **`pdf`** — `<Customer>_<Short_Title>.pdf`, the branded client-ready PDF (Step 9).
+  - **`html`** — `<experiment>-iter<N>-report-pdf.html`, the branded HTML report (Step 9).
+- **Setup analysis** — chat-only, if requested (Step 10). Never written into any artifact.
 
 Pull everything from the `tpc` CLI. Fabricate nothing. Lead with the audience's question. Surface friction even when runs pass.
 
@@ -19,6 +23,17 @@ Pull everything from the `tpc` CLI. Fabricate nothing. Lead with the audience's 
 - `tpc --version` and `tpc auth whoami` succeed.
 - Active product set (`tpc product current`).
 - Target iteration is `completed` or `generating_results`.
+
+---
+
+## Step 0 — Ask the two pre-flight questions (do not skip)
+
+Before pulling any data, ask the user both questions and wait for answers. Present as checkboxes / multi-select where the surface supports it.
+
+1. **Which output format(s) do you want?** — `md`, `pdf`, `html`. Multiple allowed; at least one required. The data dump is produced regardless of the answer.
+2. **Do you want a setup analysis?** — yes/no. If yes, produce it in Step 10 (chat-only).
+
+Record both answers. They govern which formats you render in Step 9 and whether you run Step 10. The markdown report is always drafted internally (Steps 3–8) because `pdf` and `html` both derive from it — but only deliver the file formats the user selected.
 
 ---
 
@@ -148,11 +163,40 @@ Then re-read the whole report against the honesty rules: every quantitative clai
 
 ---
 
+## Step 9 — Render the selected formats
+
+Deliver only the report formats picked in Step 0:
+
+- **`md`** — deliver the `<experiment>-iter<N>-report.md` you drafted in Steps 3–8.
+- **`pdf`** and/or **`html`** — restyle the markdown report into the branded TPC pilot-report layout by following [`generate-pdf.md`](generate-pdf.md) (map sections → fill the template → render/verify). The filled template *is* the `html` deliverable; rendering it with headless Chrome and verifying page by page produces the `pdf`. If only `html` was picked, stop after filling and verifying the template — no Chrome render needed.
+
+The branded artifacts restyle the markdown report for a customer audience; they never add claims beyond it, and every number must match the data dump.
+
+---
+
+## Step 10 — Setup analysis (only if requested in Step 0)
+
+If the user asked for a setup analysis, deliver it **in the chat only** — never in the PDF, markdown report, or HTML. Those artifacts stay client-facing and evidence-only; the setup analysis is an internal read for the team running the pilot.
+
+Deliver exactly three parts:
+
+1. **Verdict with a lean** — "Ready for Rerun" or "Revise Setup", with a percentage split showing how far it leans each way (e.g. "30% Ready for Rerun / 70% Revise Setup"). The two numbers sum to 100.
+2. **Short summary** — a few sentences on why the verdict landed there, grounded in the run data and instrument gaps from Steps 2–8 (not vibes).
+3. **Improvement list — two separate lists**, both on *our* side (never the user's):
+   - **Setup changes** — things we change in the experiment setup or via the documentation: task prompts, goals, inits, environments, signal extraction. The levers the team owns before the next run.
+   - **Platform fixes** — things the developer adjusts in the product itself to meet the fix: a product gap the iteration exposed, not something reconfigurable through setup.
+
+   No end-user recommendations — every item is either a setup change we make or a product fix the developer makes.
+
+Lean toward **Revise Setup** when instrument gaps or design flaws (unextracted signals, zero-action harnesses, non-comparable arms, too-small n) mean a rerun would repeat the same blind spots. Lean toward **Ready for Rerun** when the setup held and the results are trustworthy enough to iterate on directly.
+
+---
+
 ## Deliver
 
-> "Report: `<file>`. Data dump: `<file>`.
+> "Data dump: `<file>`. Report delivered as: [the selected formats and their files].
 > Headline: [one sentence — the verdict and the tension].
 > Top friction: [cluster 1], [cluster 2], [cluster 3] (by runs-affected).
 > Open the data dump in the CLI to drill further: `tpc sim run logs <run-id>`."
 
-If the user wants a client-ready deliverable (or asks for "a PDF like the previous pilot report"), continue with [`generate-pdf.md`](generate-pdf.md) — it restyles this report into the branded TPC pilot-report PDF without adding any claims.
+Then, if a setup analysis was requested, deliver it in chat per Step 10 (not as a file).

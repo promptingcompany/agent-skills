@@ -1,8 +1,9 @@
 ---
 name: generate-pdf
 description: >
-  Optionally render the analysis as a client-ready, branded PDF in the TPC
-  pilot-report layout. Runs after (and only from) a completed markdown report.
+  Render the analysis as a client-ready, branded PDF in the TPC pilot-report
+  layout. Runs as the final step of analyze-experiment (Step 9), from a completed
+  markdown report.
 
   Trigger when users say: "generate a pdf", "pdf report", "client-ready report",
   "make it look like the pilot report", or point at a previous TPC pilot PDF and
@@ -18,10 +19,16 @@ summary, numbered sections with serif headings, stat cards, evidence tables,
 callouts, pull quotes, and appendices. The output is a hand-paginated HTML file
 rendered with headless Chrome.
 
-**This workflow is optional and content-second.** It consumes the markdown
-report produced by `analyze-experiment.md` — it never invents content. If the
-markdown report doesn't exist yet, run that workflow first. Every number in the
-PDF must match the data dump; the honesty rules apply unchanged.
+**This is Step 9 of `analyze-experiment.md`, run when the user picked `pdf` or
+`html` in Step 0 — content-second.** It consumes the markdown report produced by
+that workflow — it never invents content. If the markdown report doesn't exist
+yet, run that workflow first. Every number in the PDF/HTML must match the data
+dump; the honesty rules apply unchanged.
+
+The filled template (Step 2) is itself the **`html`** deliverable. Step 3's Chrome
+render produces the **`pdf`**. If the user picked only `html`, fill and verify the
+template (Steps 1–2, 4) and skip the Chrome render. Never put the chat-only setup
+analysis into this artifact.
 
 ## Prerequisites
 
