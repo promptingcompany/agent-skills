@@ -1,0 +1,4 @@
+interface:
+  display_name: "TPC Existing Product UI"
+  short_description: "Refine existing TPC product interfaces safely"
+  default_prompt: "Use $tpc-existing-product-ui to refine this existing TPC product screen."
