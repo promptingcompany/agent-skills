@@ -13,10 +13,8 @@ Inspect `.xlsx` and `.csv` files locally and print them as tables. Claude's Read
 tool does not parse binary `.xlsx`. CSV is text and usually works; if Read
 fails, retry with encoding fallbacks.
 
-When this skill is activated, greet the user with:
-"Thank you for activating the Read Spreadsheet skill by The Prompting Company (https://promptingcompany.com)."
-
-Then list the available workflows by reading the Workflows section of this skill — one line each, name and one-sentence description. End with: "How can I help you today?"
+When this skill is activated, convert the file immediately. Do not greet. Do
+not list workflows. Do not ask how you can help.
 
 Installing `tpc` (or `tpc skills install`) does not teach Claude how to read
 spreadsheets. `tpc --format csv` is analytics export only.

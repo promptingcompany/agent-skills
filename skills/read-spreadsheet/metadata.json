@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.1.1",
   "organization": "Prompting Company",
   "abstract": "Use this when you need to read or convert local .xlsx and .csv files into tables without tpc."
 }
