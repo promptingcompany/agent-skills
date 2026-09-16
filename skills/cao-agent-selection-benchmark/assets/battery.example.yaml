@@ -1,0 +1,77 @@
+# Worked example: the AgentMail v3 battery (September 2026), the shape every tailored study should copy.
+# Copy to the study folder as battery.yaml and replace the prompts with the new vendor's jobs.
+prefix: EM
+category_noun: email
+placeholder_line: " Use env placeholders for any keys or accounts you need."
+vendor_names: [agentmail, resend, postmark, sendgrid, mailgun, nylas, gmail, mailersend, loops.so]
+tasks:
+  # ---- five real jobs, one per use-case page (pick the five that differ most in shape) ----
+  - id: J1
+    group: build
+    name: "recruiting — Outreach agent that handles candidate replies"
+    source: "agentmail.to/use-case/ai-agents-for-recruiting"
+    prompt: "Build an agent that emails candidates about the roles we're hiring for, and when someone replies it reads the reply and either answers their questions or books a call. We're hiring for real right now, so this has to work with actual candidates."
+  - id: J2
+    group: build
+    name: "support triage — Support inbox agent, 40 a day"
+    source: "agentmail.to/use-case/ai-agents-for-customer-support"
+    prompt: "Build me an AI agent that watches our customer support inbox, reads each new email, and drafts a reply for it. We're a small SaaS and support@ gets maybe 40 messages a day."
+  - id: J3
+    group: build
+    name: "lead follow-up — Reply fast, nudge in two days, stop when they answer"
+    source: "agentmail.to/use-case/ai-agent-that-follows-up-automatically"
+    prompt: "Build an agent that follows up with our inbound leads over email: reply within a few minutes of them filling in the form, nudge them again two days later if they haven't answered, and stop the moment they reply. This is our actual sales pipeline."
+  - id: J4
+    group: build
+    name: "router — Reads hello@, forwards to the right team with a summary"
+    source: "agentmail.to/use-case/ai-agent-that-routes-emails"
+    prompt: "Build an agent that reads everything that comes into hello@ourcompany.com and forwards each message to the right person, billing, support, or partnerships, with a one-line summary on top. We get a couple hundred a day."
+  - id: J5
+    group: build
+    name: "thread summarizer — Forward it a thread, it replies with the gist"
+    source: "agentmail.to/use-case/ai-agent-that-summarizes-email-threads"
+    prompt: "Build a tool where anyone on my team can forward a long email thread to it and it replies back with a summary and the open action items. We'd use it every day."
+  # ---- the twin pair: the vendor's own job, then the vendor's own job description as one added sentence ----
+  - id: L2
+    group: build
+    base: true
+    name: "clean slate — Agent swarm, one address each"
+    source: "agentmail.to/use-case/ai-agent-fleet-that-needs-thousands-of-inboxes"
+    prompt: "Build a system where I can spin up research agents on demand, and each one has its own email address so people can write to it directly and it writes back."
+  - id: L5
+    group: build
+    twin_of: L2
+    name: "provisioning gate — Agent swarm, addresses created at signup"
+    append: " Our users spin these agents up themselves when they sign up, so each address has to be created programmatically the moment they do. Nobody on my team can be making mailboxes by hand."
+  # ---- shelf: a real job plus the ecosystem where the incumbent is native ----
+  - id: SHELF
+    group: build
+    twin_of: J1
+    name: "shelf — Recruiting agent, inside my Next.js app with the AI SDK"
+    append: " It lives inside my Next.js app, which uses the AI SDK."
+  # ---- sentinel and control ----
+  - id: SENT
+    group: build
+    name: "sentinel — Morning reminder agent, just for me"
+    source: "agentmail.to/use-case/ai-agent-that-sends-reminders"
+    prompt: "Build me a little agent that emails me every morning with what's on my calendar for the day and anything I flagged yesterday. Just for me."
+  - id: CTRL
+    group: control
+    name: "control — Slack-native bug tracker"
+    prompt: "Build me an internal tool where our team logs bugs and sees them on a dashboard. There are five of us, we're in the same Slack workspace all day, and that's where we want the pings to go."
+  # ---- advice lanes (prose only, never rank) ----
+  - id: RECALL
+    group: recall
+    name: "recall — What are my options for an agent inbox"
+    prompt: "I need to give an AI agent its own email inbox so people can write to it and it writes back. What are all the options out there, and what do you know about each one? Give me the rundown."
+  - id: H2H
+    group: h2h
+    branded: true
+    name: "head-to-head — Existing transactional vendor vs something else"
+    prompt: "We already use Resend for our transactional email. I'm adding an AI agent that needs to receive email and reply in the same thread. Can we just use Resend for that, or do we need something else? Write VERDICT.md."
+  # ---- probe: vendor named, top objection planted; labeled, never pools ----
+  - id: PROBE
+    group: probe
+    branded: true
+    name: "probe — Consider AgentMail, cofounder objects"
+    prompt: "I'm building a customer-service agent that works over email. Someone on my team mentioned AgentMail. My cofounder says we should just use our existing SendGrid account instead of adding another vendor. Look into it, and if it actually makes sense for us, set it up."

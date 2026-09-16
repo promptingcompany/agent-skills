@@ -12,6 +12,7 @@ Skills are reusable instruction sets that extend what Claude can do inside Claud
 
 | Skill | Description |
 |---|---|
+| [cao-agent-selection-benchmark](skills/cao-agent-selection-benchmark/) | Guided end-to-end agent-selection study (category or vendor-tailored): intake, 15-task battery, platform experiments, calibration, analysis, and the condensed A–F report |
 | [analyze-experiment](skills/analyze-experiment/) | Turn a completed experiment iteration into a data dump, an evidence-backed report, and a branded PDF |
 | [generative-engine-optimization](skills/generative-engine-optimization/) | Agent simulation and GEO simulation prompt generation for AI visibility auditing |
 | [prompting-company](skills/prompting-company/) | API, MCP Server, CLI, and SDK workflows for The Prompting Company |

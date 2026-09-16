@@ -1,0 +1,74 @@
+# study.yaml — one file drives every script. Copy to the study folder and fill in.
+name: agentmail-sep2026
+prefix: EM                          # task-name prefix; lanes key off EM-<GROUP>
+vendor: agentmail                   # key in vendor_code / vendor_prose below
+org: agent-mail
+product: agent-mail
+
+envs:                               # created in Phase 3; paste ids back here
+  - {name: "Claude Code — Opus 5", harness: claude, model: claude-opus-5, id: ""}
+  - {name: "Codex — 5.6 Sol",      harness: codex,  model: gpt-5.6-sol,  id: ""}
+
+experiments:                        # one per lane family; paste ids back after create
+  BUILD:  {id: "", groups: [build, control]}
+  ADVICE: {id: "", groups: [advice, recall, h2h]}
+  PROBE:  {id: "", groups: [probe]}
+
+lanes:                              # task-name prefix → lane (used by calibrate/deepdive)
+  J: BUILD
+  L: BUILD-twin
+  SHELF: BUILD-shelf
+  SENT: BUILD-sentinel
+  GATE: BUILD-gate
+  CTRL: CONTROL
+  RECALL: ADVICE
+  H2H: ADVICE
+  ADV: ADVICE
+  PROBE: PROBE
+
+twin: {base: L2, gate: L5}          # the controlled experiment
+
+# CODE-channel regexes: anchored to product surfaces only (SDK import, env prefix, host, dep, payload fields).
+vendor_code:
+  agentmail:  'agentmail\.to|\bfrom agentmail\b|\bimport agentmail\b|require\([''"]agentmail[''"]\)|from [''"]agentmail[''"]|AGENTMAIL_[A-Z_]+|[''"]agentmail[''"]\s*:\s*[''"][\^~]?\d|(?:pip|uv) (?:install|add)[^\n]*\bagentmail\b|npm (?:i|install|add)[^\n]*\bagentmail\b|agentmail-(?:mcp|cli|python|node)|\bAgentMail\('
+  resend:     'resend\.com|resend\.dev|resend\.app|RESEND_API_KEY|from [''"]resend[''"]|require\([''"]resend[''"]\)|import resend|@react-email'
+  postmark:   'postmarkapp\.com|POSTMARK_(SERVER|API)_TOKEN|postmark-js|from [''"]postmark[''"]|InboundHookUrl|\bFromFull\b|\bMailboxHash\b|\bStrippedTextReply\b|Postmark Inbound|inbound\.postmarkapp'
+  sendgrid:   '@sendgrid/|SENDGRID_API_KEY|api\.sendgrid\.com|sendgrid\.com|\bsgMail\b|smtp\.sendgrid\.net'
+  mailgun:    'MAILGUN_(API_KEY|DOMAIN|SIGNING)|api\.mailgun\.net|smtp\.mailgun\.org|mailgun\.js|mailgun-js|from [''"]mailgun|verifyMailgunSignature|createMailgunSender|normalizeMailgun|match_recipient'
+  ses:        'aws-sdk/client-ses|@aws-sdk/client-sesv2|boto3\.client\([''"]ses|SES_REGION|email\.[a-z0-9-]+\.amazonaws\.com'
+  nylas:      'NYLAS_API_KEY|api\.(us|eu)\.nylas\.com|nylas\.email|from [''"]nylas|import nylas'
+  cf_email:   'cloudflare:email|wrangler[^\n]{0,80}email|email_routing[^\n]{0,40}(binding|worker|wrangler)|\bEmailEvent\b|@cloudflare/email'
+  gmail_api:  '\bgmail\.users|googleapis.*gmail|google-api-python-client|\bgmail\.(readonly|modify|send)|auth/gmail\.|users\.watch'
+
+# PROSE/DOCS-channel regexes: word-boundary names are correct here (a vendor NAMED is prescribed).
+vendor_prose:
+  agentmail: '\bagentmail\b(?!r)|agentmail\.to'
+  resend:    '\bresend\b(?!\s+(the|it|that|this|a|an|your|my|these|those|them|him|her|us|me)\b)(?!\()|resend\.com'
+  postmark:  '\bpostmark\b|postmarkapp'
+  sendgrid:  '\bsendgrid\b'
+  mailgun:   '\bmailgun\b'
+  nylas:     '\bnylas\b'
+  ses:       '\bamazon ses\b|\baws ses\b'
+  cf_email:  'cloudflare (email|workers?)|email workers?\b|email routing\b'
+  gmail_api: '\bgmail api\b|\bgoogle workspace\b|\bgmail\b'
+
+# DIY / escape-hatch shapes in CODE.
+local:
+  smtp:  'smtplib|nodemailer|createTransport|smtp\.gmail\.com|SMTP_(HOST|USER|PASS|PORT)|MIMEMultipart|MIMEText|from email\.message import|email\.utils'
+  imap:  'imaplib|imapflow|node-imap|poplib|imap\.gmail\.com|mailparser|IMAP_(HOST|USER|PASS)'
+  console: 'console\.log\([''"].*email|print\(f?[''"].*[Ee]mail.*sent'
+  filequeue: 'outbox|mail_queue|emails\.jsonl|pending_emails'
+
+# Capability markers (mechanism, vendor-independent) in CODE.
+caps:
+  inbound:      'message\.received|email\.received|inbound.?(webhook|parse|route|hook)|/webhooks?/(email|inbound|mail)|onEmail'
+  provisioning: 'inboxes\.create|create_inbox|createInbox|POST /inboxes|routes\.create|catch.?all'
+  domainauth:   'v=spf1|v=DMARC1|\bDKIM\b|\bMX record|_dmarc'
+  threading:    'In-Reply-To|References:|thread_id|threadId|messages\.reply'
+
+# Hand-audit exclusions: run-id prefix → vendor keys that are NOT the vendor, with the reason.
+manual_exclude:
+  c3ed6be4: {agentmail: "agent named its own CLI `agentmail spawn`; no vendor awareness"}
+
+# Named facts the report may state; check_report verifies each appears in a transcript.
+facts: ["eesel.ai", "svix", "$20", "$200", "3 inboxes"]
