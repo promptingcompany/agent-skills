@@ -7,9 +7,10 @@ https://promptingco.slack.com/archives/C09C6M40QAF/p1791422954739579?thread_ts=1
 Written for someone running it for the first time. Budget a working day the first time, half a day after that.
 Cost: about $600 in model credits per full read (Opus about $5 a run, Sol about $1, 196 runs).
 
-Owners (from Oct 2026): Kelly runs it, Albert for platform problems, Kevin N reads the message and the PDF before
-they go to Exa. Cadence: monthly. Next reads: Oct 29 (noise check, internal only), Nov 30 (readout Dec 2), Dec 14
-(readout Dec 16).
+Roles: one operator runs it; the platform team handles `tpc` or dashboard problems; whoever owns the Exa
+relationship reads the message and the PDF before they go to Exa. Cadence: monthly. The October action list
+proposed these dates, to be confirmed by the team: Oct 29 (noise check, internal only), Nov 30 (readout Dec 2),
+Dec 14 (readout Dec 16).
 
 The one condition: **same default models.** Claude Code on Opus 5.5, Codex on GPT-6.1 Sol. If either harness
 changed its default, say so at the top of the message, and treat that month as a new baseline, not a delta.
@@ -18,14 +19,14 @@ changed its default, say so at the top of the message, and treat that month as a
 
 ## Step 0. Before firing (15 minutes)
 
-1. `tpc update`, then `tpc auth whoami`. It must show the **Exa** organization. If not, ask Albert to add you to the
-   Exa org as admin.
+1. `tpc update`, then `tpc auth whoami`. It must show the **Exa** organization. If not, ask the platform team to add you to
+   the Exa org as admin.
 2. Open `assets/tracker.oct-research.yaml` and `assets/tracker.oct-default.yaml`. Set `workdir` in both to the
    same absolute path (for example `/Users/you/exa-cao-tracker`). Keep that path between months: history and
    month-over-month deltas live there.
 3. **Register pages that went live since the last read.** `published_pages` in both files already covers every
-   `tpc-*.exa.ai` page. Anything published on `exa.ai` itself (for example the Exa vs Brave page John approved on
-   Oct 9) needs its own line with the date it went live. Skip this and the "citing a page we publish" number is wrong.
+   `tpc-*.exa.ai` page. Anything published on `exa.ai` itself (for example an Exa vs Brave comparison page, if it
+   has gone live) needs its own line with the date it went live. Skip this and the "citing a page we publish" number is wrong.
 4. Check the environments: `tpc sim experiment get 904a2cf3-8e5f-40a9-af70-c83c3333fc11 --scope exa/exa-search-docs`
    lists the environments and their models. Expect `claude-opus-5-5` and `gpt-6.1-sol`. The two **usability**
    environments carry `EXA_API_KEY`; every other environment must have **no** Exa key, only the model provider's.
@@ -144,8 +145,8 @@ described that way.
 
 ## Step 7. Send
 
-Kevin N reads `<out>.slack.md` and the PDF first. Then post the message in `#ext-exa-promptingco` with the PDF
-attached, tagging John Sillings and Jason Garoutte. Keep the format: headline, the three numbers with deltas,
+Whoever owns the Exa relationship reads `<out>.slack.md` and the PDF first. Then post the message in
+`#ext-exa-promptingco` with the PDF attached, tagging the Exa contacts who received the October baseline. Keep the format: headline, the three numbers with deltas,
 findings, setup notes, action items. Add the live pages and dates to the shared "TPC x Exa CAO Actions" sheet.
 
 ---
@@ -167,5 +168,6 @@ findings, setup notes, action items. Add the live pages and dates to the shared 
   be `main`; JSON-escaped `type: "web_search"` in Sol builds is missed (4 runs in October); specialist APIs are not
   recorded in `wired`.
 - **Everything shipped so far:** October readout and action list in `#ext-exa-promptingco` (Oct 8), the tracker
-  sheet "TPC x Exa CAO Actions (October 2026)", docs suggestions to John (Oct 9). The Nov/Dec goals in
-  `actions.2026-10.json` were proposed to Exa in the action list; confirm them with Kevin N before repeating them.
+  sheet "TPC x Exa CAO Actions (October 2026)", docs suggestions posted in the Exa channel (Oct 9). The Nov/Dec
+  goals in `actions.2026-10.json` were proposed to Exa in the action list, not confirmed; agree them internally
+  before repeating them.
