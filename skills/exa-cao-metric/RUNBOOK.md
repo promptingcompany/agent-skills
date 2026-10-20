@@ -87,6 +87,11 @@ classifier said 1 of 32 research builds used Exa; after reading the runs it was 
   provider's built-in search is `secondary`.
 - **Tool-seeking "listed" means Exa is offered as a viable option.** Named only to rule it out is `absent`.
 
+The queue is a floor, not the whole job. The October queue had 15 runs; a blind re-read of all 192 answers changed
+8 more labels, and the v0.2 rules now queue those cases too (hedged wins, table-only mentions, usability timeouts).
+Expect roughly 20 queued runs per mode. If the month's numbers look surprising, re-read every head-to-head `win`
+and every tool-seeking `listed` answer as well.
+
 For each queued run, open the log (`log` path in the queue entry; for builds read the code the agent wrote), decide,
 and write `<workdir>/<label>/reviews.json` as `{"<run id>": "<verdict>", ...}`. Then re-run `analyze.py` for that
 label until the queue is empty. October's settled files are in `assets/examples/2026-10/` as worked examples.

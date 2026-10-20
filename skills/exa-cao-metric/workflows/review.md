@@ -29,6 +29,19 @@ read the code the agent wrote (Write/Edit/apply_patch steps), plus its final sum
 **usability:** `pass` if the built tool uses the target and the grader's run of it returned real results;
 otherwise `fail`.
 
+## Why a run is queued (v0.2)
+- build: the target is wired next to another provider (`shared`). Decide `main` or `secondary` from the code's default path.
+- head-to-head: grader and the answer's recommendation sentence disagree; a `win` whose answer hedges (built-in search
+  first, "either one", "it's close", target as fallback); a `split` that names the target first.
+- tool-seeking: grader and recommendation disagree; `listed` where the target appears only in a comparison table or next
+  to rule-out language ("more than you need", "cost more", "built for other uses"); `top`/`listed` where the answer never
+  names the target.
+- usability: `fail` with the target wired (graders time out on slow APIs: read whether the live run returned results)
+  or `pass` without it.
+In October 2026 the queue caught 15 runs and a blind re-read of all 192 changed 8 more; the v0.2 rules queue all 8.
+The queue is still a floor. If a month's numbers look surprising, re-read every head-to-head `win` and every
+tool-seeking `listed` answer, not just the queue.
+
 ## Known grader failure modes (from the Exa study)
 - **The grader scored 0 on an answer whose recommendation sentence is the target** ("My recommendation
   is Exa…"). Trust the recommendation sentence.

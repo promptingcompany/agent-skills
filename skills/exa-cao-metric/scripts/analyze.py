@@ -92,6 +92,26 @@ REC = re.compile(r"(?:my recommendation(?: is)?|i(?:'|’)?d (?:use|pick|go with
                  r"i recommend|recommendation:|use \*\*|go with|pick)[:\s]*(.{0,160})", re.I)
 
 
+HEDGE = re.compile(r"built-?in (web )?search|if it has one|wouldn'?t rely|either one|no single|it'?s close|lean slightly"
+                   r"|as a fallback|fallback\b|if (it|that|you) (doesn'?t|don'?t)|depends on|not assume either|either (tool|option) (would|will) work", re.I)
+RULED_OUT = re.compile(r"rule[sd]? out|not (a |the )?(good |right |best )?fit|cost(s)? more|built for other|skip|avoid|instead|overkill"
+                       r"|don'?t need|wouldn'?t (use|recommend)|too (expensive|heavy)|unnecessary|more than .{0,60} needs?", re.I)
+LINKS = re.compile(r"\[[^\]]*\]\([^)]*\)")      # markdown links: a citation naming the target is not a recommendation
+
+
+def near_target(cfg, text, span=220):
+    """Text within `span` chars of each target mention (links removed), joined."""
+    rx = cfg.name_re["target"]; text = LINKS.sub("", text)
+    return " || ".join(text[max(0, m.start() - span): m.end() + span] for m in rx.finditer(text))
+
+
+def table_only(cfg, text):
+    """True when every target mention (outside links) sits inside a markdown table row."""
+    rx = cfg.name_re["target"]
+    rows = [ln for ln in LINKS.sub("", text).splitlines() if rx.search(ln)]
+    return bool(rows) and all(ln.strip().startswith("|") for ln in rows)
+
+
 def recommended(cfg, final):
     """First vendor named inside the first recommendation phrase of the answer (first ~1,200 chars)."""
     for m in REC.finditer(final[:1200]):
@@ -115,7 +135,8 @@ def classify(cfg, pt, P, goals, wired):
     if pt == "usability":
         g = goals.get(cfg.goals.get("usability", ""), None)
         if g is None: return "fail" if not wired else ("pass" if "target" in wired else "fail"), "no grader; wiring only", True
-        return ("pass" if g >= 50 and "target" in wired else "fail"), f"grader {g}", g >= 50 and "target" not in wired
+        # review every fail where the target IS wired (graders time out on slow APIs) and every pass where it is not
+        return ("pass" if g >= 50 and "target" in wired else "fail"), f"grader {g}", (g >= 50) != ("target" in wired)
     # advice: grader first, then check against first vendor named in the answer
     pos = sorted((m.start(), k) for k, rx in cfg.name_re.items() for m in [rx.search(final)] if m)
     first = pos[0][1] if pos else None
@@ -128,11 +149,20 @@ def classify(cfg, pt, P, goals, wired):
             return out, "no grader; first-named heuristic", True
         out = "top" if g >= 100 else ("listed" if g >= 50 else "absent")
         disagree = (pick is not None and (out == "top") != (pick == "target")) or (out == "absent" and mentioned)
+        # "listed" only counts when the target is offered as a viable option: a mention that sits only in a
+        # comparison table, or next to rule-out language, goes to review (Oct 2026: 4 of 64 labels flipped this way)
+        if out == "listed" and mentioned and (table_only(cfg, final) or RULED_OUT.search(near_target(cfg, final))):
+            disagree = True
+        if out in ("top", "listed") and not mentioned: disagree = True     # grader credited a target the answer never names
         return out, f"grader {g}; recommends {pick or '?'}; first named {first}", disagree or not final
     if pt == "head-to-head":
         if g is None: return "split", "no grader", True
         out = "win" if g >= 100 else ("split" if g >= 50 else "loss")
         disagree = (out == "win" and not mentioned) or (pick is not None and (out == "win") != (pick == "target"))
+        # a "win" that hedges (built-in search first, "either one", "it's close", target as fallback) is a split or a
+        # loss under the strict rule; a "split" that names the target first may be a win. Both go to review.
+        if out == "win" and HEDGE.search(final): disagree = True
+        if out == "split" and first == "target": disagree = True
         return out, f"grader {g}; recommends {pick or '?'}; first named {first}", disagree or not final
     return "?", "unknown prompt type", True
 
