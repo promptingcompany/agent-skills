@@ -1,0 +1,486 @@
+{
+ "by_type": {
+  "build": {
+   "pooled": {
+    "k": 0,
+    "n": 32,
+    "rate": 0.0,
+    "ci": [
+     0,
+     0.107
+    ]
+   },
+   "outcomes": {
+    "absent": 32
+   },
+   "by_agent": {
+    "Claude Code": {
+     "k": 0,
+     "n": 16,
+     "rate": 0.0,
+     "ci": [
+      0,
+      0.194
+     ]
+    },
+    "Codex": {
+     "k": 0,
+     "n": 16,
+     "rate": 0.0,
+     "ci": [
+      0,
+      0.194
+     ]
+    }
+   },
+   "reach": {
+    "k": 0,
+    "n": 32,
+    "rate": 0.0,
+    "ci": [
+     0,
+     0.107
+    ]
+   },
+   "conversion": {
+    "k": 0,
+    "n": 0,
+    "rate": null,
+    "ci": [
+     0.0,
+     0.0
+    ]
+   },
+   "no_target_page_success": {
+    "k": 0,
+    "n": 32,
+    "rate": 0.0,
+    "ci": [
+     0,
+     0.107
+    ]
+   },
+   "by_use_case": {
+    "account-research": "0/2",
+    "candidate-portfolio": "0/2",
+    "coding-cli": "0/2",
+    "csv-enrichment": "0/2",
+    "deep-research": "0/2",
+    "docs-retrieval": "0/2",
+    "free-library": "0/2",
+    "gtm-tam": "0/2",
+    "knowledge-base": "0/2",
+    "outreach-signals": "0/2",
+    "people-enrichment": "0/2",
+    "recruiting": "0/2",
+    "scraper-blocked": "0/2",
+    "similar-companies": "0/2",
+    "ts-stub": "0/2",
+    "voice-agent": "0/2"
+   }
+  },
+  "tool-seeking": {
+   "pooled": {
+    "k": 4,
+    "n": 32,
+    "rate": 0.125,
+    "ci": [
+     0.05,
+     0.281
+    ]
+   },
+   "outcomes": {
+    "absent": 21,
+    "top": 4,
+    "listed": 7
+   },
+   "by_agent": {
+    "Claude Code": {
+     "k": 1,
+     "n": 16,
+     "rate": 0.062,
+     "ci": [
+      0.011,
+      0.283
+     ]
+    },
+    "Codex": {
+     "k": 3,
+     "n": 16,
+     "rate": 0.188,
+     "ci": [
+      0.066,
+      0.43
+     ]
+    }
+   },
+   "by_use_case": {
+    "account-research": "0/2",
+    "candidate-portfolio": "0/2",
+    "coding-cli": "1/2",
+    "csv-enrichment": "0/2",
+    "deep-research": "0/2",
+    "docs-retrieval": "0/2",
+    "free-library": "0/2",
+    "gtm-tam": "0/2",
+    "knowledge-base": "0/2",
+    "outreach-signals": "0/2",
+    "people-enrichment": "0/2",
+    "recruiting": "2/2",
+    "scraper-blocked": "0/2",
+    "similar-companies": "1/2",
+    "ts-stub": "0/2",
+    "voice-agent": "0/2"
+   }
+  },
+  "head-to-head": {
+   "pooled": {
+    "k": 16,
+    "n": 32,
+    "rate": 0.5,
+    "ci": [
+     0.336,
+     0.664
+    ]
+   },
+   "outcomes": {
+    "win": 16,
+    "loss": 8,
+    "split": 8
+   },
+   "by_agent": {
+    "Claude Code": {
+     "k": 8,
+     "n": 16,
+     "rate": 0.5,
+     "ci": [
+      0.28,
+      0.72
+     ]
+    },
+    "Codex": {
+     "k": 8,
+     "n": 16,
+     "rate": 0.5,
+     "ci": [
+      0.28,
+      0.72
+     ]
+    }
+   },
+   "by_use_case": {
+    "account-research": "1/2",
+    "candidate-portfolio": "0/2",
+    "coding-cli": "2/2",
+    "csv-enrichment": "2/2",
+    "deep-research": "0/2",
+    "docs-retrieval": "0/2",
+    "free-library": "1/2",
+    "gtm-tam": "0/2",
+    "knowledge-base": "2/2",
+    "outreach-signals": "2/2",
+    "people-enrichment": "2/2",
+    "recruiting": "2/2",
+    "scraper-blocked": "0/2",
+    "similar-companies": "2/2",
+    "ts-stub": "0/2",
+    "voice-agent": "0/2"
+   }
+  }
+ },
+ "pages": {
+  "by_category": {
+   "target: docs/API reference": {
+    "won": 10,
+    "lost": 4
+   },
+   "model docs: OpenAI": {
+    "won": 0,
+    "lost": 11
+   },
+   "rival: Tavily (own)": {
+    "won": 1,
+    "lost": 3
+   },
+   "target: pricing": {
+    "won": 2,
+    "lost": 1
+   },
+   "rival: Firecrawl (own)": {
+    "won": 1,
+    "lost": 1
+   },
+   "target: websets docs": {
+    "won": 1,
+    "lost": 1
+   },
+   "target: other": {
+    "won": 1,
+    "lost": 1
+   },
+   "third-party: linear.app": {
+    "won": 0,
+    "lost": 1
+   },
+   "third-party: github.com": {
+    "won": 0,
+    "lost": 1
+   },
+   "third-party: sarah.dev": {
+    "won": 0,
+    "lost": 1
+   },
+   "rival: Context7 (own)": {
+    "won": 0,
+    "lost": 1
+   },
+   "third-party: docs.python.org": {
+    "won": 0,
+    "lost": 1
+   },
+   "third-party: docs.peopledatalabs.com": {
+    "won": 0,
+    "lost": 1
+   },
+   "third-party: developers.openalex.org": {
+    "won": 1,
+    "lost": 0
+   },
+   "rival: Parallel (own)": {
+    "won": 0,
+    "lost": 1
+   }
+  },
+  "by_page": {
+   "developers.openai.com/api/docs/guides/tools-web-search": {
+    "won": 0,
+    "lost": 9
+   },
+   "exa.ai/docs/reference/search": {
+    "won": 6,
+    "lost": 2
+   },
+   "docs.tavily.com/documentation/api-reference/endpoint/search": {
+    "won": 1,
+    "lost": 3
+   },
+   "docs.exa.ai/reference/search": {
+    "won": 3,
+    "lost": 0
+   },
+   "developers.openai.com/api/docs/guides/function-calling": {
+    "won": 0,
+    "lost": 2
+   },
+   "exa.ai/docs/llms.txt": {
+    "won": 2,
+    "lost": 0
+   },
+   "exa.ai/pricing": {
+    "won": 1,
+    "lost": 1
+   },
+   "exa.ai/docs/reference/context": {
+    "won": 1,
+    "lost": 1
+   }
+  }
+ },
+ "citations": {
+  "runs_citing_anything": 43,
+  "by_category": {
+   "target: docs/API reference": 32,
+   "rival: Tavily (own)": 19,
+   "rival: Brave (own)": 15,
+   "rival: Context7 (own)": 15,
+   "model docs: OpenAI": 9,
+   "third-party: localhost:3000": 7,
+   "target: websets docs": 6,
+   "rival: Firecrawl (own)": 6,
+   "rival: Parallel (own)": 6,
+   "third-party: data.crunchbase.com": 5,
+   "third-party: docs.github.com": 4,
+   "third-party: sec.gov": 3,
+   "third-party: github.com": 2,
+   "third-party: wappalyzer.com": 2,
+   "third-party: developers.google.com": 2,
+   "third-party: playwright.dev": 2,
+   "target: other": 2,
+   "target: pricing": 2,
+   "third-party: deltafaucet.com": 1,
+   "third-party: 127.0.0.1:8000": 1,
+   "third-party: localhost:8000": 1,
+   "third-party: pandas.pydata.org": 1,
+   "third-party: localhost:8765": 1,
+   "third-party: localhost:5173": 1,
+   "third-party: crunchbase.com": 1,
+   "third-party: google.com": 1,
+   "third-party: docs.pydantic.dev": 1,
+   "third-party: dealroom.co": 1,
+   "third-party: pitchbook.com": 1,
+   "third-party: help.tracxn.com": 1
+  },
+  "top_urls": {
+   "exa.ai/docs/reference/search": 18,
+   "docs.tavily.com/documentation/api-reference/endpoint/search": 16,
+   "localhost:3000": 7,
+   "context7.com/docs/api-guide": 6,
+   "exa.ai/docs/reference/get-contents": 5,
+   "developers.openai.com/api/docs/guides/tools-web-search": 4,
+   "websets.exa.ai/websets": 4,
+   "context7.com/docs/sdks/ts/commands/search": 4,
+   "docs.exa.ai/reference/search": 4,
+   "api-dashboard.search.brave.com/api-reference/web/search/post": 3,
+   "context7.com/docs/search-api": 3,
+   "docs.firecrawl.dev/features/scrape": 3,
+   "data.crunchbase.com/v4-legacy/docs/using-search-apis": 3,
+   "brave.com/search/api": 3,
+   "api-dashboard.search.brave.com/app/documentation/web-search/responses": 3,
+   "github.com/upstash/context7": 2,
+   "wappalyzer.com/docs/api/v2/lookup": 2,
+   "developers.google.com/maps/documentation/places/web-service/policies": 2,
+   "developers.openai.com/api/docs/guides/function-calling": 2,
+   "developers.openai.com/api/docs/guides/tools-file-search": 2,
+   "docs.github.com/en/rest/users/users": 2,
+   "docs.firecrawl.dev/features/search": 2,
+   "api-dashboard.search.brave.com/documentation/services/llm-context": 2,
+   "api-dashboard.search.brave.com/documentation/resources/search-operators": 2,
+   "docs.parallel.ai/extract/extract-quickstart": 2,
+   "deltafaucet.com": 1,
+   "127.0.0.1:8000": 1,
+   "localhost:8000": 1,
+   "pandas.pydata.org/docs/dev/whatsnew/v2.0.0.html": 1,
+   "localhost:8765": 1
+  }
+ },
+ "published": {
+  "All TPC-published Exa pages (tpc-*.exa.ai)": {
+   "seen": 0,
+   "opened": 0,
+   "cited": 0,
+   "runs": 96
+  }
+ },
+ "planted": {
+  "$10 monthly free credits": {
+   "reach": 1,
+   "runs": 96,
+   "conversion": 1,
+   "opened_page": 2
+  }
+ },
+ "negative": {
+  "findSimilar deprecated": 0,
+  "not benchmarked / unproven": 0,
+  "pricier than Brave": 1,
+  "weak on keyword / fresh queries": 0
+ },
+ "behavior": {
+  "build | Claude Code": {
+   "runs": 16,
+   "searched": 0,
+   "queries": {},
+   "neutral": 0,
+   "neutral_visible": 0,
+   "own_name": 0,
+   "own_name_first": 0,
+   "typed_from_memory": 0,
+   "opens": 0,
+   "fetch_asks": {}
+  },
+  "build | Codex": {
+   "runs": 16,
+   "searched": 16,
+   "queries": {
+    "neutral category": 30,
+    "inside a vendor site": 35,
+    "vendor by name": 1
+   },
+   "neutral": 0,
+   "neutral_visible": 0,
+   "own_name": 0,
+   "own_name_first": 0,
+   "typed_from_memory": 0,
+   "opens": 0,
+   "fetch_asks": {}
+  },
+  "tool-seeking | Claude Code": {
+   "runs": 16,
+   "searched": 0,
+   "queries": {},
+   "neutral": 0,
+   "neutral_visible": 0,
+   "own_name": 0,
+   "own_name_first": 0,
+   "typed_from_memory": 0,
+   "opens": 0,
+   "fetch_asks": {}
+  },
+  "tool-seeking | Codex": {
+   "runs": 16,
+   "searched": 16,
+   "queries": {
+    "inside a vendor site": 53,
+    "neutral category": 5,
+    "vendor by name": 11
+   },
+   "neutral": 0,
+   "neutral_visible": 0,
+   "own_name": 0,
+   "own_name_first": 0,
+   "typed_from_memory": 0,
+   "opens": 0,
+   "fetch_asks": {}
+  },
+  "head-to-head | Claude Code": {
+   "runs": 16,
+   "searched": 1,
+   "queries": {},
+   "neutral": 0,
+   "neutral_visible": 0,
+   "own_name": 0,
+   "own_name_first": 0,
+   "typed_from_memory": 2,
+   "opens": 2,
+   "fetch_asks": {
+    "how to call it": 2
+   }
+  },
+  "head-to-head | Codex": {
+   "runs": 16,
+   "searched": 16,
+   "queries": {
+    "inside a vendor site": 73,
+    "neutral category": 1,
+    "vendor by name": 2
+   },
+   "neutral": 0,
+   "neutral_visible": 0,
+   "own_name": 0,
+   "own_name_first": 0,
+   "typed_from_memory": 0,
+   "opens": 0,
+   "fetch_asks": {}
+  }
+ },
+ "won_instead": {
+  "build": {
+   "native-anthropic": 10,
+   "brave,diy,tavily": 1,
+   "native-openai": 3,
+   "none/DIY": 13,
+   "brave": 2,
+   "diy": 1,
+   "tavily": 2
+  }
+ },
+ "errors": {
+  "target_pages_erroring": {}
+ },
+ "no_build": 0,
+ "own_name_outranked_by": {},
+ "own_subdomain": {
+  "opened": 0,
+  "cited": 0
+ }
+}

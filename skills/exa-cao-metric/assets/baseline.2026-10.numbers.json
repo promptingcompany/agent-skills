@@ -1,0 +1,196 @@
+{
+ "chosen": [
+  45,
+  192
+ ],
+ "lost": [
+  147,
+  192
+ ],
+ "pub_default": [
+  0,
+  96
+ ],
+ "exa_default": [
+  17,
+  96
+ ],
+ "build_default": [
+  0,
+  32
+ ],
+ "h2h_default": [
+  16,
+  32
+ ],
+ "top_default": [
+  4,
+  32
+ ],
+ "named_default": [
+  11,
+  32
+ ],
+ "pub_default_Claude Code": [
+  0,
+  48
+ ],
+ "exa_default_Claude Code": [
+  0,
+  48
+ ],
+ "build_default_Claude Code": [
+  0,
+  16
+ ],
+ "h2h_default_Claude Code": [
+  8,
+  16
+ ],
+ "top_default_Claude Code": [
+  1,
+  16
+ ],
+ "searched_default_Claude Code": [
+  0,
+  48
+ ],
+ "opened_default_Claude Code": [
+  1,
+  48
+ ],
+ "opened_default": [
+  15,
+  96
+ ],
+ "pub_default_Codex": [
+  0,
+  48
+ ],
+ "exa_default_Codex": [
+  17,
+  48
+ ],
+ "build_default_Codex": [
+  0,
+  16
+ ],
+ "h2h_default_Codex": [
+  8,
+  16
+ ],
+ "top_default_Codex": [
+  3,
+  16
+ ],
+ "searched_default_Codex": [
+  48,
+  48
+ ],
+ "opened_default_Codex": [
+  14,
+  48
+ ],
+ "pub_research": [
+  1,
+  96
+ ],
+ "exa_research": [
+  47,
+  96
+ ],
+ "build_research": [
+  4,
+  32
+ ],
+ "h2h_research": [
+  15,
+  32
+ ],
+ "top_research": [
+  6,
+  32
+ ],
+ "named_research": [
+  20,
+  32
+ ],
+ "pub_research_Claude Code": [
+  1,
+  48
+ ],
+ "exa_research_Claude Code": [
+  23,
+  48
+ ],
+ "build_research_Claude Code": [
+  0,
+  16
+ ],
+ "h2h_research_Claude Code": [
+  8,
+  16
+ ],
+ "top_research_Claude Code": [
+  2,
+  16
+ ],
+ "searched_research_Claude Code": [
+  48,
+  48
+ ],
+ "opened_research_Claude Code": [
+  21,
+  48
+ ],
+ "opened_research": [
+  44,
+  96
+ ],
+ "pub_research_Codex": [
+  0,
+  48
+ ],
+ "exa_research_Codex": [
+  24,
+  48
+ ],
+ "build_research_Codex": [
+  4,
+  16
+ ],
+ "h2h_research_Codex": [
+  7,
+  16
+ ],
+ "top_research_Codex": [
+  4,
+  16
+ ],
+ "searched_research_Codex": [
+  48,
+  48
+ ],
+ "opened_research_Codex": [
+  23,
+  48
+ ],
+ "build_both": [
+  4,
+  64
+ ],
+ "research_build_opened_used": [
+  6,
+  6
+ ],
+ "research_build_notopened_used": [
+  0,
+  26
+ ],
+ "usability": [
+  4,
+  4
+ ],
+ "responses": 196,
+ "use_cases": 16
+}

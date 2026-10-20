@@ -1,0 +1,341 @@
+{
+ "_readme": "Action list for the monthly PDF and Slack message. Rewrite each month from the loss labels (see RUNBOOK.md step 5). priority: High | Medium | Low | Other. exa_ok: true when the page names a rival or states facts Exa must confirm. Goals: targets agreed with Exa; the baseline column is computed from the numbers.",
+ "kicker": "ACTION LIST  |  OCTOBER 2026",
+ "title": "Moving the three metrics",
+ "intro": "20 actions to move the three metrics we report week over week and month over month, ranked by priority, plus 5 smaller fixes agents ran into. Most actions are pages on our Exa site; a few are short additions to Exa&rsquo;s docs.",
+ "goals_note": "Goals are conservative because October is the first baseline. Provisional goals are confirmed after the Nov 4 noise rerun.",
+ "goals_columns": [
+  "NOVEMBER",
+  "DECEMBER"
+ ],
+ "goals": [
+  {
+   "metric": "pub",
+   "label": "Answers citing a page we publish",
+   "targets": [
+    "2%",
+    "4%"
+   ]
+  },
+  {
+   "metric": "h2h",
+   "label": "Head-to-head wins",
+   "targets": [
+    "Hold",
+    "50%, provisional"
+   ]
+  },
+  {
+   "metric": "build",
+   "label": "Builds using Exa as the main search",
+   "targets": [
+    "Hold",
+    "16%, provisional"
+   ]
+  }
+ ],
+ "top_note": "Every page puts the answer in its title and first lines (agents cited most pages from the search snippet without opening them), and includes Python and TypeScript code.",
+ "all_dek": "&ldquo;Exa OK&rdquo; means the page names a rival or states facts Exa confirms, so it waits for Exa&rsquo;s approval.",
+ "actions": [
+  {
+   "rank": 1,
+   "priority": "High",
+   "title": "Check search engines can find our existing Exa pages, and submit every new page",
+   "detail": "Search Console and Bing Webmaster access for tpc-*.exa.ai; request indexing for each page the day it goes live",
+   "where": "Our pages (tpc-*.exa.ai)",
+   "aim": "Agents' search engines can find our pages at all",
+   "moves": "Citations",
+   "why": "Our pages live since Sep 1 were found in only 2 of 192 runs",
+   "live_by": "Oct 16",
+   "exa_ok": false
+  },
+  {
+   "rank": 2,
+   "priority": "High",
+   "title": "Ask Exa to confirm facts and approve naming competitors in page titles",
+   "detail": "Current prices and free credits; whether exact-phrase search exists; whether /context has a total token limit; how field-level citations work; what replaced findSimilar; OK to name Brave, Tavily and Context7 in titles",
+   "where": "Request to Exa",
+   "aim": "Pages state facts Exa stands behind; a rival's name in the title lets Opus find the page",
+   "moves": "All three",
+   "why": "Opus searched \"Exa vs X\" in 7 of 16 head-to-heads; Brave won on token budget, exact phrase and price",
+   "live_by": "Oct 20",
+   "exa_ok": false
+  },
+  {
+   "rank": 3,
+   "priority": "High",
+   "title": "Publish a comparison page: Exa vs Brave Search API for coding agents (2026)",
+   "detail": "When to pick each; fitting results into an LLM token budget; plain title-URL-snippet results; exact-phrase search; price per 1,000 searches; code for both",
+   "where": "Our page (tpc-search.exa.ai)",
+   "aim": "Win the close calls that went to Brave",
+   "moves": "Head-to-head",
+   "why": "Brave was picked over Exa in 9 head-to-heads, never on search quality",
+   "live_by": "Nov 9",
+   "exa_ok": true
+  },
+  {
+   "rank": 4,
+   "priority": "High",
+   "title": "Publish a page: How much Exa costs for common jobs (2026)",
+   "detail": "Worked costs, e.g. enriching 1,000 companies, daily news on 50 companies, a 200-candidate recruiting search, one Exa Agent list; what each is made of; \"prices checked on\" date, re-checked monthly",
+   "where": "Our page (tpc-search.exa.ai)",
+   "aim": "Answer the question agents asked most about Exa",
+   "moves": "Citations; head-to-head",
+   "why": "Sol searched Exa pricing in 26 runs",
+   "live_by": "Nov 9",
+   "exa_ok": true
+  },
+  {
+   "rank": 5,
+   "priority": "High",
+   "title": "Write 4 short sections for Exa to add to its docs",
+   "detail": "News and date filters; field-level citations; getting plain title, URL and snippet results; when to use Exa alongside Claude's or OpenAI's built-in search",
+   "where": "Exa's docs (/reference/search, Agent docs). We write, Exa adds",
+   "aim": "Reach the searches only Exa's docs can answer",
+   "moves": "Head-to-head",
+   "why": "46 of 78 Sol searches about Exa were docs lookups",
+   "live_by": "Nov 20",
+   "exa_ok": true
+  },
+  {
+   "rank": 6,
+   "priority": "Medium",
+   "title": "Publish a comparison page: Exa vs Tavily for news and recent results (2026)",
+   "detail": "Exa's news category and date filters vs Tavily's news mode; freshness; code for a \"last 7 days\" search",
+   "where": "Our page (tpc-search.exa.ai)",
+   "aim": "Win the news close calls that went to Tavily",
+   "moves": "Head-to-head",
+   "why": "2 news head-to-heads went to Tavily's news mode",
+   "live_by": "Nov 9",
+   "exa_ok": true
+  },
+  {
+   "rank": 7,
+   "priority": "Medium",
+   "title": "Publish a how-to: Getting short excerpts from Exa within a token budget",
+   "detail": "Highlights and contents limits; capping total tokens in code (or /context if current); Python and TypeScript for a coding agent",
+   "where": "Our page (tpc-search.exa.ai)",
+   "aim": "Show coding agents Exa fits a context budget",
+   "moves": "Citations; head-to-head",
+   "why": "Sol searched Exa contents or highlights in 27 runs",
+   "live_by": "Nov 9",
+   "exa_ok": true
+  },
+  {
+   "rank": 8,
+   "priority": "Medium",
+   "title": "Publish a how-to: People search with Exa",
+   "detail": "Finding engineers by what they have written or built; the people category; filtering by company or role; code that returns a candidate list",
+   "where": "Our page (tpc-search.exa.ai)",
+   "aim": "Be the page agents find when they look up Exa people search",
+   "moves": "Citations",
+   "why": "Sol searched Exa people search in 12 runs",
+   "live_by": "Nov 9",
+   "exa_ok": false
+  },
+  {
+   "rank": 9,
+   "priority": "Medium",
+   "title": "Publish a how-to: Company search with Exa",
+   "detail": "Finding companies by description; the company category; enriching a list from a CSV; code",
+   "where": "Our page (tpc-search.exa.ai)",
+   "aim": "Be the page agents find when they look up Exa company search",
+   "moves": "Citations",
+   "why": "Sol searched Exa company search in 20 runs",
+   "live_by": "Nov 9",
+   "exa_ok": false
+  },
+  {
+   "rank": 10,
+   "priority": "Medium",
+   "title": "Ask Exa to add a \"Guides\" list to its docs that links to our pages",
+   "detail": "One short list in the docs (e.g. on /reference/search) linking to our pages",
+   "where": "Exa's docs",
+   "aim": "Send docs readers to the page that answers their question",
+   "moves": "Citations",
+   "why": "/reference/search was the most-opened Exa page (35 runs)",
+   "live_by": "Nov 20",
+   "exa_ok": true
+  },
+  {
+   "rank": 11,
+   "priority": "Medium",
+   "title": "Publish a code example: Exa as the search tool in a Claude app",
+   "detail": "Working Python and TypeScript using Exa as a tool in Claude's tool-use loop, tested live; when to use it instead of Claude's built-in search",
+   "where": "Our page (tpc-search.exa.ai)",
+   "aim": "Give Opus working code that uses Exa instead of Anthropic's search",
+   "moves": "Builds",
+   "why": "Opus used Anthropic's search in 18 of 20 builds that loaded its skill",
+   "live_by": "Nov 30",
+   "exa_ok": false
+  },
+  {
+   "rank": 12,
+   "priority": "Medium",
+   "title": "Publish a code example: Exa as the search tool in an OpenAI app",
+   "detail": "Working Python and TypeScript using Exa as a tool with OpenAI's Responses API, tested live; when to use it instead of OpenAI's built-in search",
+   "where": "Our page (tpc-search.exa.ai)",
+   "aim": "Same for Sol and OpenAI's search",
+   "moves": "Builds",
+   "why": "Sol used OpenAI's search in 6 of 8 task-only builds that loaded its skill",
+   "live_by": "Nov 30",
+   "exa_ok": false
+  },
+  {
+   "rank": 13,
+   "priority": "Medium",
+   "title": "Publish a page: What Exa adds if your agent already has web search",
+   "detail": "People and company search, full page contents, date filters, structured results; short examples; no claims about other products",
+   "where": "Our page (tpc-search.exa.ai)",
+   "aim": "Answer \"I already have search\", which lost Exa head-to-heads",
+   "moves": "Head-to-head; builds",
+   "why": "Opus: \"I already have web search and page fetching here\"",
+   "live_by": "Nov 30",
+   "exa_ok": true
+  },
+  {
+   "rank": 14,
+   "priority": "Medium",
+   "title": "Publish a page: Exa Agent and Websets, what they cost and how long they take",
+   "detail": "Price per run and per result; typical run time at each effort level; what field-level citations look like; example code",
+   "where": "Our page (tpc-search.exa.ai)",
+   "aim": "Answer Websets lookups",
+   "moves": "Citations",
+   "why": "Sol searched Websets or Agent in 9 runs",
+   "live_by": "Nov 30",
+   "exa_ok": true
+  },
+  {
+   "rank": 15,
+   "priority": "Medium",
+   "title": "Publish a comparison page: Exa vs Tavily for search inside an AI app (2026)",
+   "detail": "SDKs, result format, pricing and setup; when each fits; code for both",
+   "where": "Our page (tpc-search.exa.ai)",
+   "aim": "Get Exa recommended first where Tavily led",
+   "moves": "Head-to-head",
+   "why": "Tavily was recommended first in 7 tool-selection answers that Exa lost",
+   "live_by": "Nov 30",
+   "exa_ok": true
+  },
+  {
+   "rank": 16,
+   "priority": "Low",
+   "title": "Publish a page: Using Exa with Context7 for documentation lookup",
+   "detail": "Context7 for pinned library versions, Exa for everything else; how a coding agent uses both; code",
+   "where": "Our page (tpc-search.exa.ai)",
+   "aim": "Keep Exa in the answer for coding docs",
+   "moves": "Head-to-head",
+   "why": "Context7 won 4 of 4 versioned-docs head-to-heads",
+   "live_by": "Dec 17",
+   "exa_ok": true
+  },
+  {
+   "rank": 17,
+   "priority": "Low",
+   "title": "Publish a how-to: Brand-mention monitoring with Exa Monitors",
+   "detail": "Setting up a Monitor; schedule and deduplication; exact-phrase filtering in Exa or in code",
+   "where": "Our page (tpc-search.exa.ai)",
+   "aim": "Get Exa considered for brand monitoring",
+   "moves": "Head-to-head",
+   "why": "Exa was not recommended in 4 brand-mention answers",
+   "live_by": "Dec 17",
+   "exa_ok": true
+  },
+  {
+   "rank": 18,
+   "priority": "Low",
+   "title": "Publish a how-to: Finding similar companies now that findSimilar is deprecated",
+   "detail": "What replaced it (per Exa's answer); example: \"companies like stripe.com\"; code",
+   "where": "Our page (tpc-search.exa.ai)",
+   "aim": "Stop agents dropping Exa when findSimilar looks gone",
+   "moves": "Citations",
+   "why": "Sol searched findSimilar in 5 runs",
+   "live_by": "Dec 17",
+   "exa_ok": true
+  },
+  {
+   "rank": 19,
+   "priority": "Low",
+   "title": "Publish a reference page: Exa search parameters with examples",
+   "detail": "category, includeDomains, published-date filters, livecrawl, numResults: one example each",
+   "where": "Our page (tpc-search.exa.ai)",
+   "aim": "Answer parameter lookups outside the docs",
+   "moves": "Citations",
+   "why": "Sol searched Exa's category filter in 16 runs",
+   "live_by": "Dec 17",
+   "exa_ok": false
+  },
+  {
+   "rank": 20,
+   "priority": "Low",
+   "title": "Suggest Exa consider a keyless or free-trial path for agents",
+   "detail": "e.g. a few free requests without a key, so an agent can test Exa while building. Exa's product decision",
+   "where": "Exa's product",
+   "aim": "Remove the main reason builds skip Exa",
+   "moves": "Builds",
+   "why": "With no Exa key, 28 of 32 task-only builds used built-in or free search",
+   "live_by": "No date",
+   "exa_ok": false
+  },
+  {
+   "rank": 21,
+   "priority": "Other",
+   "title": "Suggest Exa fix old docs.exa.ai links that redirect",
+   "detail": "Send old URLs straight to the matching new page",
+   "where": "Exa's docs",
+   "aim": "Agents reach the right docs page on the first fetch",
+   "moves": "Other: docs reachability",
+   "why": "Claude Code needed a second fetch in 10 runs when an old link redirected (it always recovered)",
+   "live_by": "No date",
+   "exa_ok": false
+  },
+  {
+   "rank": 22,
+   "priority": "Other",
+   "title": "Suggest Exa say on the findSimilar docs page what replaced it",
+   "detail": "One line at the top of /reference/find-similar-links",
+   "where": "Exa's docs",
+   "aim": "Agents stop concluding the feature is gone",
+   "moves": "Other: wrong conclusions",
+   "why": "The page showed only the search spec; one agent listed Exa's regular search instead (24b730ec)",
+   "live_by": "No date",
+   "exa_ok": false
+  },
+  {
+   "rank": 23,
+   "priority": "Other",
+   "title": "Suggest Exa state exa-code's status in one place",
+   "detail": "One line: available, changed or retired, and what to use instead",
+   "where": "Exa's docs",
+   "aim": "Agents stop telling users it was retired",
+   "moves": "Other: wrong conclusions",
+   "why": "One agent told a user exa-code had been retired",
+   "live_by": "No date",
+   "exa_ok": false
+  },
+  {
+   "rank": 24,
+   "priority": "Other",
+   "title": "Suggest Exa recommend an effort level for agents in the Exa Agent docs",
+   "detail": "e.g. \"start with effort=low for quick lookups\"",
+   "where": "Exa's docs",
+   "aim": "Faster, cheaper first runs for coding agents",
+   "moves": "Other: usability",
+   "why": "At default effort one lookup took about 4.5 minutes and $0.94; at effort=low, 25 seconds and $0.025",
+   "live_by": "No date",
+   "exa_ok": false
+  },
+  {
+   "rank": 25,
+   "priority": "Other",
+   "title": "Suggest Exa show the rate limit and a retry pattern next to its code samples",
+   "detail": "The requests-per-second limit and a short retry snippet",
+   "where": "Exa's docs",
+   "aim": "Agents' code handles rate limits instead of failing",
+   "moves": "Other: usability",
+   "why": "One usability run hit the 10 requests-per-second limit (36f00d1a)",
+   "live_by": "No date",
+   "exa_ok": false
+  }
+ ]
+}

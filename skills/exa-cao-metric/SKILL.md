@@ -35,14 +35,22 @@ Then check which config to use (step 0) and run the pipeline.
 - `scripts/analyze.py`: per-run facts, `metrics.json`, `review_queue.json`. `reviews.json` overrides outcomes.
 - `scripts/report.py`: `report.md`, and appends `history.json` **only when the review queue is empty**.
 - `scripts/logparse.py`: log parser (Claude Code WebSearch/WebFetch and Codex `web__run` formats).
-- `assets/tracker.exa.yaml`: Exa config. It has every field, with comments. Copy it for other vendors.
-- `workflows/review.md`: how to settle queued runs.
+- `scripts/build_pdf.py`: tracker output → the one-PDF monthly readout (findings + action list), `.numbers.json`
+  and the Slack message. Needs an empty review queue in both modes.
+- `assets/tracker.oct-research.yaml` and `assets/tracker.oct-default.yaml`: the live Exa configs (October 2026
+  prompt set, 7 experiments). `assets/tracker.smoke-sep29.yaml` is the 29 Sep smoke test, not the real set.
+- `assets/narrative.2026-10.json`, `assets/actions.2026-10.json`: the hand-written parts of the October readout.
+  Copy and edit each month. `assets/baseline.2026-10.numbers.json`: October's numbers, for `--previous`.
+- `assets/examples/2026-10/`: October's settled `reviews.json` for both modes, its metrics and its Slack message.
+- `workflows/review.md`: how to settle queued runs. `RUNBOOK.md`: the monthly procedure, start to finish.
 
 ## Pipeline
 
-**0. Config.** Use the config the user names. The default for Exa is `assets/tracker.exa.yaml`.
-- Confirm the `experiments` list holds the current prompt set's experiment IDs. The shipped file points
-  at the 29 Sep research-nudge experiments as a smoke test.
+**0. Config.** Use the config the user names. For the Exa monthly readout there are two, one per mode:
+`assets/tracker.oct-research.yaml` and `assets/tracker.oct-default.yaml`. Run the pipeline once per config.
+- Both point at the October 2026 prompt set (the 7 experiments fired 2026-10-06/07). Set `workdir` to one
+  absolute path and keep it between months, or history and `--previous` break.
+- For the full monthly procedure (firing, both modes, the PDF, the Slack message) follow `RUNBOOK.md`.
 - Confirm `published_pages` and `planted_facts` include anything published since last run, with its date.
   Ask the user: "Did anything go live on exa.ai (or a TPC page) since the last run?"
 - `tpc auth whoami` must show access to `scope`. If a pull says "not found", the scope is wrong.
@@ -70,7 +78,16 @@ Then re-run step 2. For more than ~15 queued runs, split them across parallel su
   reached agents.
 - Give the user a 5-line summary in chat, plus the path to `report.md`.
 
-**5. Recurring.** To run it every week, create a scheduled task (the `scheduled-tasks` tools, or `/loop`).
+**5. PDF and Slack message (monthly readout).** Once both modes have an empty queue:
+```bash
+python3 build_pdf.py --research <workdir>/<label>-research --default <workdir>/<label>-default \
+    --narrative ../assets/narrative.<YYYY-MM>.json --actions ../assets/actions.<YYYY-MM>.json \
+    --previous ../assets/baseline.2026-10.numbers.json --out "TPC x Exa Coding Agent Readout <Month>.pdf"
+```
+It writes the PDF, `<out>.numbers.json` and `<out>.slack.md`. Cross-check every number in `.numbers.json`
+against run IDs before anything leaves (RUNBOOK step 6).
+
+**6. Recurring.** To run it every week, create a scheduled task (the `scheduled-tasks` tools, or `/loop`).
 Its prompt: "Run the exa-cao-metric skill with <config>, review the queue, and summarise the report."
 Only schedule it once the user asks. Remind them that new iterations must be fired separately, before the
 tracker runs.

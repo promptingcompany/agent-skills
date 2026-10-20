@@ -1,0 +1,871 @@
+{
+ "by_type": {
+  "build": {
+   "pooled": {
+    "k": 4,
+    "n": 32,
+    "rate": 0.125,
+    "ci": [
+     0.05,
+     0.281
+    ]
+   },
+   "outcomes": {
+    "main": 4,
+    "absent": 26,
+    "secondary": 2
+   },
+   "by_agent": {
+    "Claude Code": {
+     "k": 0,
+     "n": 16,
+     "rate": 0.0,
+     "ci": [
+      0,
+      0.194
+     ]
+    },
+    "Codex": {
+     "k": 4,
+     "n": 16,
+     "rate": 0.25,
+     "ci": [
+      0.102,
+      0.495
+     ]
+    }
+   },
+   "reach": {
+    "k": 6,
+    "n": 32,
+    "rate": 0.188,
+    "ci": [
+     0.089,
+     0.353
+    ]
+   },
+   "conversion": {
+    "k": 4,
+    "n": 6,
+    "rate": 0.667,
+    "ci": [
+     0.3,
+     0.903
+    ]
+   },
+   "no_target_page_success": {
+    "k": 0,
+    "n": 26,
+    "rate": 0.0,
+    "ci": [
+     0,
+     0.129
+    ]
+   },
+   "by_use_case": {
+    "account-research": "0/2",
+    "candidate-portfolio": "0/2",
+    "coding-cli": "1/2",
+    "csv-enrichment": "0/2",
+    "deep-research": "0/2",
+    "docs-retrieval": "0/2",
+    "free-library": "0/2",
+    "gtm-tam": "0/2",
+    "knowledge-base": "0/2",
+    "outreach-signals": "1/2",
+    "people-enrichment": "0/2",
+    "recruiting": "1/2",
+    "scraper-blocked": "0/2",
+    "similar-companies": "1/2",
+    "ts-stub": "0/2",
+    "voice-agent": "0/2"
+   }
+  },
+  "tool-seeking": {
+   "pooled": {
+    "k": 6,
+    "n": 32,
+    "rate": 0.188,
+    "ci": [
+     0.089,
+     0.353
+    ]
+   },
+   "outcomes": {
+    "listed": 14,
+    "top": 6,
+    "absent": 12
+   },
+   "by_agent": {
+    "Claude Code": {
+     "k": 2,
+     "n": 16,
+     "rate": 0.125,
+     "ci": [
+      0.035,
+      0.36
+     ]
+    },
+    "Codex": {
+     "k": 4,
+     "n": 16,
+     "rate": 0.25,
+     "ci": [
+      0.102,
+      0.495
+     ]
+    }
+   },
+   "by_use_case": {
+    "account-research": "0/2",
+    "candidate-portfolio": "0/2",
+    "coding-cli": "1/2",
+    "csv-enrichment": "0/2",
+    "deep-research": "0/2",
+    "docs-retrieval": "0/2",
+    "free-library": "0/2",
+    "gtm-tam": "0/2",
+    "knowledge-base": "1/2",
+    "outreach-signals": "0/2",
+    "people-enrichment": "1/2",
+    "recruiting": "2/2",
+    "scraper-blocked": "0/2",
+    "similar-companies": "1/2",
+    "ts-stub": "0/2",
+    "voice-agent": "0/2"
+   }
+  },
+  "head-to-head": {
+   "pooled": {
+    "k": 15,
+    "n": 32,
+    "rate": 0.469,
+    "ci": [
+     0.309,
+     0.636
+    ]
+   },
+   "outcomes": {
+    "win": 15,
+    "loss": 8,
+    "split": 9
+   },
+   "by_agent": {
+    "Claude Code": {
+     "k": 8,
+     "n": 16,
+     "rate": 0.5,
+     "ci": [
+      0.28,
+      0.72
+     ]
+    },
+    "Codex": {
+     "k": 7,
+     "n": 16,
+     "rate": 0.438,
+     "ci": [
+      0.231,
+      0.668
+     ]
+    }
+   },
+   "by_use_case": {
+    "account-research": "1/2",
+    "candidate-portfolio": "1/2",
+    "coding-cli": "0/2",
+    "csv-enrichment": "2/2",
+    "deep-research": "0/2",
+    "docs-retrieval": "0/2",
+    "free-library": "1/2",
+    "gtm-tam": "0/2",
+    "knowledge-base": "2/2",
+    "outreach-signals": "2/2",
+    "people-enrichment": "2/2",
+    "recruiting": "2/2",
+    "scraper-blocked": "0/2",
+    "similar-companies": "2/2",
+    "ts-stub": "0/2",
+    "voice-agent": "0/2"
+   }
+  },
+  "usability": {
+   "pooled": {
+    "k": 4,
+    "n": 4,
+    "rate": 1.0,
+    "ci": [
+     0.51,
+     1
+    ]
+   },
+   "outcomes": {
+    "pass": 4
+   },
+   "by_agent": {
+    "Claude Code": {
+     "k": 2,
+     "n": 2,
+     "rate": 1.0,
+     "ci": [
+      0.342,
+      1
+     ]
+    },
+    "Codex": {
+     "k": 2,
+     "n": 2,
+     "rate": 1.0,
+     "ci": [
+      0.342,
+      1
+     ]
+    }
+   },
+   "by_use_case": {
+    "?": "4/4"
+   }
+  }
+ },
+ "pages": {
+  "by_category": {
+   "target: docs/API reference": {
+    "won": 19,
+    "lost": 19
+   },
+   "rival: Tavily (own)": {
+    "won": 10,
+    "lost": 15
+   },
+   "target: pricing": {
+    "won": 7,
+    "lost": 8
+   },
+   "rival: Brave (own)": {
+    "won": 3,
+    "lost": 8
+   },
+   "model docs: Anthropic": {
+    "won": 1,
+    "lost": 7
+   },
+   "third-party: github.com": {
+    "won": 0,
+    "lost": 6
+   },
+   "rival: Context7 (own)": {
+    "won": 0,
+    "lost": 6
+   },
+   "model docs: OpenAI": {
+    "won": 2,
+    "lost": 4
+   },
+   "rival: Parallel (own)": {
+    "won": 2,
+    "lost": 4
+   },
+   "target: websets docs": {
+    "won": 2,
+    "lost": 4
+   },
+   "third-party: openbenchmarks.com": {
+    "won": 1,
+    "lost": 4
+   },
+   "third-party: docs.peopledatalabs.com": {
+    "won": 1,
+    "lost": 4
+   },
+   "third-party: developer.ticketmaster.com": {
+    "won": 0,
+    "lost": 4
+   },
+   "rival: Serper/SerpApi (own)": {
+    "won": 0,
+    "lost": 4
+   },
+   "third-party: data.crunchbase.com": {
+    "won": 0,
+    "lost": 3
+   },
+   "third-party: developers.google.com": {
+    "won": 0,
+    "lost": 3
+   },
+   "rival: Parallel (comparison)": {
+    "won": 1,
+    "lost": 2
+   },
+   "rival: Firecrawl (own)": {
+    "won": 2,
+    "lost": 1
+   },
+   "third-party: docs.github.com": {
+    "won": 0,
+    "lost": 2
+   },
+   "third-party: docs.overturemaps.org": {
+    "won": 0,
+    "lost": 2
+   },
+   "third-party: docs.predicthq.com": {
+    "won": 0,
+    "lost": 2
+   },
+   "third-party: wappalyzer.com": {
+    "won": 0,
+    "lost": 2
+   },
+   "third-party: chatforest.com": {
+    "won": 0,
+    "lost": 2
+   },
+   "third-party: cloud.google.com": {
+    "won": 0,
+    "lost": 2
+   },
+   "third-party: docs.ref.tools": {
+    "won": 0,
+    "lost": 2
+   },
+   "rival: Perplexity (own)": {
+    "won": 0,
+    "lost": 2
+   },
+   "third-party: huyenchip.com": {
+    "won": 1,
+    "lost": 0
+   },
+   "third-party: pypi.org": {
+    "won": 0,
+    "lost": 1
+   },
+   "third-party: leerob.com": {
+    "won": 0,
+    "lost": 1
+   },
+   "third-party: blog.predictleads.com": {
+    "won": 0,
+    "lost": 1
+   },
+   "third-party: docs.tryfundable.ai": {
+    "won": 0,
+    "lost": 1
+   },
+   "third-party: tryfundable.ai": {
+    "won": 0,
+    "lost": 1
+   },
+   "third-party: operations.osmfoundation.org": {
+    "won": 0,
+    "lost": 1
+   },
+   "third-party: seatgeek.github.io": {
+    "won": 0,
+    "lost": 1
+   },
+   "third-party: developers.forem.com": {
+    "won": 0,
+    "lost": 1
+   },
+   "third-party: docs.apollo.io": {
+    "won": 0,
+    "lost": 1
+   },
+   "third-party: docs.readthedocs.com": {
+    "won": 0,
+    "lost": 1
+   },
+   "third-party: docs.foursquare.com": {
+    "won": 0,
+    "lost": 1
+   },
+   "third-party: educate.dentalintel.com": {
+    "won": 0,
+    "lost": 1
+   },
+   "third-party: developers.beta.dealroom.co": {
+    "won": 0,
+    "lost": 1
+   },
+   "third-party: llmstxt.org": {
+    "won": 0,
+    "lost": 1
+   },
+   "third-party: companyenrich.com": {
+    "won": 0,
+    "lost": 1
+   },
+   "third-party: predictleads.com": {
+    "won": 0,
+    "lost": 1
+   },
+   "third-party: thecompaniesapi.com": {
+    "won": 0,
+    "lost": 1
+   },
+   "third-party: effiflo.com": {
+    "won": 1,
+    "lost": 0
+   },
+   "third-party: blog.gdeltproject.org": {
+    "won": 0,
+    "lost": 1
+   },
+   "third-party: sec.gov": {
+    "won": 0,
+    "lost": 1
+   },
+   "third-party: pin.com": {
+    "won": 1,
+    "lost": 0
+   },
+   "third-party: newscatcherapi.com": {
+    "won": 0,
+    "lost": 1
+   },
+   "third-party: cufinder.io": {
+    "won": 0,
+    "lost": 1
+   },
+   "third-party: peopledatalabs.com": {
+    "won": 1,
+    "lost": 0
+   },
+   "third-party: npiregistry.cms.hhs.gov": {
+    "won": 0,
+    "lost": 1
+   },
+   "third-party: dev.to": {
+    "won": 0,
+    "lost": 1
+   },
+   "third-party: kapa.ai": {
+    "won": 0,
+    "lost": 1
+   },
+   "target: own subdomain pages": {
+    "won": 0,
+    "lost": 1
+   },
+   "third-party: dataforb2b.ai": {
+    "won": 1,
+    "lost": 0
+   },
+   "third-party: treg.to": {
+    "won": 1,
+    "lost": 0
+   }
+  },
+  "by_page": {
+   "exa.ai/docs/reference/search": {
+    "won": 12,
+    "lost": 9
+   },
+   "docs.tavily.com/documentation/api-reference/endpoint/search": {
+    "won": 5,
+    "lost": 13
+   },
+   "exa.ai/pricing": {
+    "won": 4,
+    "lost": 5
+   },
+   "docs.exa.ai/reference/search": {
+    "won": 4,
+    "lost": 4
+   },
+   "platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool": {
+    "won": 0,
+    "lost": 5
+   },
+   "docs.tavily.com/documentation/api-credits": {
+    "won": 3,
+    "lost": 2
+   },
+   "brave.com/search/api": {
+    "won": 3,
+    "lost": 2
+   },
+   "exa.ai/docs/reference/context": {
+    "won": 1,
+    "lost": 4
+   },
+   "developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2": {
+    "won": 0,
+    "lost": 4
+   },
+   "serpapi.com/google-events-api": {
+    "won": 0,
+    "lost": 4
+   },
+   "developers.openai.com/api/docs/guides/tools-web-search": {
+    "won": 1,
+    "lost": 2
+   },
+   "exa.ai/docs/reference/find-similar-links": {
+    "won": 2,
+    "lost": 1
+   },
+   "context7.com/docs/api-guide": {
+    "won": 0,
+    "lost": 3
+   },
+   "github.com/upstash/context7": {
+    "won": 0,
+    "lost": 3
+   },
+   "platform.claude.com/docs/en/build-with-claude/search-results": {
+    "won": 1,
+    "lost": 2
+   },
+   "developers.google.com/maps/documentation/places/web-service/policies": {
+    "won": 0,
+    "lost": 3
+   },
+   "exa.ai/docs/reference/pricing": {
+    "won": 1,
+    "lost": 2
+   },
+   "exa.ai/docs/reference/verticals/people": {
+    "won": 3,
+    "lost": 0
+   },
+   "exa.ai/docs/admin/pricing": {
+    "won": 2,
+    "lost": 1
+   },
+   "exa.ai/docs/llms.txt": {
+    "won": 1,
+    "lost": 2
+   },
+   "developers.openai.com/api/docs/guides/function-calling": {
+    "won": 1,
+    "lost": 1
+   },
+   "api-dashboard.search.brave.com/app/documentation/web-search/get-started": {
+    "won": 0,
+    "lost": 2
+   },
+   "docs.overturemaps.org/guides/places": {
+    "won": 0,
+    "lost": 2
+   },
+   "data.crunchbase.com/docs/using-search-apis": {
+    "won": 0,
+    "lost": 2
+   },
+   "docs.peopledatalabs.com/docs/input-parameters-person-enrichment-api": {
+    "won": 0,
+    "lost": 2
+   },
+   "docs.peopledatalabs.com/docs/output-response-person-enrichment-api": {
+    "won": 0,
+    "lost": 2
+   },
+   "docs.parallel.ai/search/search-quickstart": {
+    "won": 1,
+    "lost": 1
+   },
+   "parallel.ai/articles/best-api-for-company-research": {
+    "won": 1,
+    "lost": 1
+   },
+   "tavily.com/pricing": {
+    "won": 1,
+    "lost": 1
+   },
+   "api-dashboard.search.brave.com/app/documentation/web-search/query": {
+    "won": 0,
+    "lost": 2
+   },
+   "docs.ref.tools/context/mcp/tools": {
+    "won": 0,
+    "lost": 2
+   },
+   "docs.ref.tools/llms.txt": {
+    "won": 0,
+    "lost": 2
+   },
+   "docs.peopledatalabs.com/docs/company-enrichment-api": {
+    "won": 1,
+    "lost": 1
+   },
+   "exa.ai/docs/websets/faq": {
+    "won": 1,
+    "lost": 1
+   }
+  }
+ },
+ "citations": {
+  "runs_citing_anything": 86,
+  "by_category": {
+   "target: docs/API reference": 70,
+   "rival: Tavily (own)": 47,
+   "rival: Brave (own)": 43,
+   "third-party: github.com": 31,
+   "rival: Context7 (own)": 28,
+   "rival: Parallel (own)": 23,
+   "target: pricing": 22,
+   "rival: Firecrawl (own)": 20,
+   "target: websets docs": 17,
+   "third-party: data.crunchbase.com": 16,
+   "third-party: openbenchmarks.com": 15,
+   "third-party: dev.to": 14,
+   "third-party: apify.com": 14,
+   "third-party: developers.google.com": 14,
+   "rival: Firecrawl (comparison)": 14,
+   "model docs: Anthropic": 12,
+   "rival: Serper/SerpApi (own)": 12,
+   "rival: Parallel (comparison)": 11,
+   "third-party: stork.ai": 10,
+   "third-party: docs.peopledatalabs.com": 10,
+   "third-party: docs.github.com": 9,
+   "third-party: fastcrw.com": 9,
+   "third-party: keirolabs.cloud": 8,
+   "third-party: coldiq.com": 8,
+   "third-party: developer.ticketmaster.com": 7,
+   "third-party: docs.predicthq.com": 7,
+   "third-party: cloro.dev": 6,
+   "third-party: api.builtwith.com": 6,
+   "third-party: companyenrich.com": 6,
+   "rival: Tavily (comparison)": 6
+  },
+  "top_urls": {
+   "docs.tavily.com/documentation/api-reference/endpoint/search": 32,
+   "exa.ai/docs/reference/search": 32,
+   "brave.com/search/api": 17,
+   "exa.ai/pricing": 16,
+   "stork.ai/blog/best-web-search-apis-for-ai-applications-2026": 10,
+   "context7.com/docs/api-guide": 9,
+   "docs.tavily.com/documentation/api-credits": 9,
+   "exa.ai/docs/reference/verticals/people": 7,
+   "docs.firecrawl.dev/features/search": 7,
+   "docs.firecrawl.dev/features/scrape": 7,
+   "exa.ai/docs/reference/context": 7,
+   "developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2": 6,
+   "localhost:3000": 5,
+   "cloro.dev/blog/bing-search-api-key": 5,
+   "thecompaniesapi.com/api/search-similar-companies": 5,
+   "platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool": 5,
+   "coldiq.com/blog/tavily-pricing": 5,
+   "docs.parallel.ai/findall-api/findall-quickstart": 5,
+   "docs.exa.ai/reference/search": 5,
+   "context7.com/docs/search-api": 5,
+   "api-dashboard.search.brave.com/documentation/services/llm-context": 5,
+   "oxylabs.io/blog/best-web-search-apis": 4,
+   "developers.google.com/maps/documentation/places/web-service/policies": 4,
+   "docs.overturemaps.org/guides/places": 4,
+   "fastcrw.com/blog/web-search-api-pricing-2026": 4,
+   "developers.google.com/custom-search/v1/overview": 4,
+   "claude.com/blog/web-search-api": 4,
+   "alternativeto.net/news/2026/2/brave-updates-its-search-api-with-a-new-llm-context-endpoint-for-ai-and-new-pricing": 4,
+   "docs.parallel.ai/search/search-quickstart": 4,
+   "buildmvpfast.com/api-costs/ai-search": 4
+  }
+ },
+ "published": {
+  "All TPC-published Exa pages (tpc-*.exa.ai)": {
+   "seen": 2,
+   "opened": 1,
+   "cited": 1,
+   "runs": 100
+  }
+ },
+ "planted": {
+  "$10 monthly free credits": {
+   "reach": 19,
+   "runs": 100,
+   "conversion": 6,
+   "opened_page": 9
+  }
+ },
+ "negative": {
+  "findSimilar deprecated": 1,
+  "not benchmarked / unproven": 0,
+  "pricier than Brave": 0,
+  "weak on keyword / fresh queries": 0
+ },
+ "behavior": {
+  "build | Claude Code": {
+   "runs": 16,
+   "searched": 16,
+   "queries": {
+    "neutral category": 48,
+    "vendor by name": 11,
+    "named comparison": 11
+   },
+   "neutral": 48,
+   "neutral_visible": 0,
+   "own_name": 4,
+   "own_name_first": 3,
+   "typed_from_memory": 15,
+   "opens": 34,
+   "fetch_asks": {
+    "how to call it": 27,
+    "rate limits": 7,
+    "price per 1,000": 11,
+    "free tier": 5,
+    "benchmark": 2,
+    "latency": 1
+   }
+  },
+  "build | Codex": {
+   "runs": 16,
+   "searched": 16,
+   "queries": {
+    "vendor by name": 15,
+    "neutral category": 14,
+    "inside a vendor site": 89
+   },
+   "neutral": 0,
+   "neutral_visible": 0,
+   "own_name": 0,
+   "own_name_first": 0,
+   "typed_from_memory": 0,
+   "opens": 0,
+   "fetch_asks": {}
+  },
+  "tool-seeking | Claude Code": {
+   "runs": 16,
+   "searched": 16,
+   "queries": {
+    "neutral category": 62,
+    "named comparison": 12,
+    "vendor by name": 14
+   },
+   "neutral": 62,
+   "neutral_visible": 1,
+   "own_name": 6,
+   "own_name_first": 2,
+   "typed_from_memory": 25,
+   "opens": 44,
+   "fetch_asks": {
+    "how to call it": 20,
+    "price per 1,000": 22,
+    "rate limits": 11,
+    "free tier": 13,
+    "benchmark": 2
+   }
+  },
+  "tool-seeking | Codex": {
+   "runs": 16,
+   "searched": 16,
+   "queries": {
+    "vendor by name": 23,
+    "neutral category": 22,
+    "inside a vendor site": 116
+   },
+   "neutral": 0,
+   "neutral_visible": 0,
+   "own_name": 0,
+   "own_name_first": 0,
+   "typed_from_memory": 0,
+   "opens": 0,
+   "fetch_asks": {}
+  },
+  "head-to-head | Claude Code": {
+   "runs": 16,
+   "searched": 16,
+   "queries": {
+    "vendor by name": 43,
+    "named comparison": 13,
+    "neutral category": 16
+   },
+   "neutral": 16,
+   "neutral_visible": 0,
+   "own_name": 21,
+   "own_name_first": 11,
+   "typed_from_memory": 39,
+   "opens": 80,
+   "fetch_asks": {
+    "how to call it": 48,
+    "price per 1,000": 45,
+    "free tier": 15,
+    "rate limits": 9,
+    "latency": 8,
+    "who runs it / affiliation": 4,
+    "benchmark": 5
+   }
+  },
+  "head-to-head | Codex": {
+   "runs": 16,
+   "searched": 16,
+   "queries": {
+    "vendor by name": 8,
+    "named comparison": 1,
+    "inside a vendor site": 135,
+    "neutral category": 7
+   },
+   "neutral": 0,
+   "neutral_visible": 0,
+   "own_name": 0,
+   "own_name_first": 0,
+   "typed_from_memory": 0,
+   "opens": 0,
+   "fetch_asks": {}
+  },
+  "usability | Claude Code": {
+   "runs": 2,
+   "searched": 1,
+   "queries": {
+    "vendor by name": 1
+   },
+   "neutral": 0,
+   "neutral_visible": 0,
+   "own_name": 1,
+   "own_name_first": 1,
+   "typed_from_memory": 0,
+   "opens": 0,
+   "fetch_asks": {}
+  },
+  "usability | Codex": {
+   "runs": 2,
+   "searched": 2,
+   "queries": {
+    "inside a vendor site": 4
+   },
+   "neutral": 0,
+   "neutral_visible": 0,
+   "own_name": 0,
+   "own_name_first": 0,
+   "typed_from_memory": 0,
+   "opens": 0,
+   "fetch_asks": {}
+  }
+ },
+ "won_instead": {
+  "build": {
+   "context7": 2,
+   "brave,diy,tavily": 2,
+   "brave": 3,
+   "none/DIY": 7,
+   "native-anthropic": 7,
+   "context7,native-anthropic": 1,
+   "tavily": 3,
+   "serp": 1,
+   "native-openai": 1,
+   "native-openai,tavily": 1
+  }
+ },
+ "errors": {
+  "target_pages_erroring": {}
+ },
+ "no_build": 0,
+ "own_name_outranked_by": {
+  "therundown.ai": 2,
+  "github.com": 2,
+  "buildmvpfast.com": 2,
+  "apify.com": 2,
+  "dev.to": 1,
+  "parallel.ai": 1,
+  "pymnts.com": 1,
+  "respan.ai": 1,
+  "you.com": 1,
+  "coldiq.com": 1
+ },
+ "own_subdomain": {
+  "opened": 1,
+  "cited": 1
+ }
+}

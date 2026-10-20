@@ -22,9 +22,11 @@ pip install pyyaml
 
 ## First run
 
-1. Open `assets/tracker.exa.yaml`. Set `experiments` to the current prompt set's experiment IDs (the
-   shipped IDs are the 29 Sep 2026 research-nudge experiments, a working smoke test), and set `workdir`.
-2. `cd ~/.claude/skills/exa-cao-metric/scripts && python3 pull.py ../assets/tracker.exa.yaml --latest`
-3. Follow `SKILL.md` from step 2 (analyze → review → report).
+Follow `RUNBOOK.md`. In short: set `workdir` in `assets/tracker.oct-research.yaml` and
+`assets/tracker.oct-default.yaml` to one absolute path, fire the seven experiments, then pull → analyze → review →
+report for each config, then `build_pdf.py` for the PDF and the Slack message.
 
-For another vendor, copy the config and change `target`, `rivals`, `use_cases` and `grader_goals`.
+`build_pdf.py` also needs `pip install reportlab`. `assets/tracker.smoke-sep29.yaml` points at the 29 Sep 2026
+smoke-test experiments and is only for trying the scripts.
+
+For another vendor, copy a config and change `target`, `rivals`, `use_cases` and `grader_goals`.

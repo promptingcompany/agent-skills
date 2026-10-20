@@ -1,0 +1,289 @@
+{
+ "_readme": "Hand-written parts of the monthly PDF. build_pdf.py computes every number on page 1, sections 3-4, the page deks, the builds headline, usability and scope from metrics.json + facts.json. Everything in this file is prose or hand-reviewed tables: copy it to narrative.<YYYY-MM>.json each month and rewrite what changed. Text is reportlab mini-HTML: use &rsquo; &ldquo; &rdquo; &mdash; and <b>.",
+ "kicker": "OCTOBER 2026",
+ "prepared_for": "PREPARED FOR EXA",
+ "date": "7 OCTOBER 2026",
+ "footer": "THE PROMPTING COMPANY  |  EXA  |  CODING AGENT VISIBILITY  |  OCTOBER",
+ "pdf_title": "Exa | Coding agent visibility | October 2026 baseline",
+ "pdf_subject": "October 2026 baseline",
+ "title_tail": "as first pick, head-to-head winner or main search in a build.",
+ "p1_definitions": "<b>Pages we publish:</b> pages The Prompting Company publishes for Exa (tpc-*.exa.ai). <b>Task only:</b> the developer&rsquo;s request as written. <b>Research:</b> the same request plus &ldquo;research the available tools and services online.&rdquo;",
+ "p1_noise": "Each agent answers each prompt once. Moves under 15 points are within noise.",
+ "p2_sol_note": "Sol reads many results as snippets, so its &ldquo;opened&rdquo; figures are a minimum.",
+ "p2_how_agents_find_tools": [
+  [
+   "",
+   "OPUS 5.5",
+   "GPT-6.1 SOL"
+  ],
+  [
+   "How it searches",
+   "Category searches (55% of queries)",
+   "Inside vendor sites (78% of queries)"
+  ],
+  [
+   "Exa&rsquo;s visibility",
+   "Top 10 in 1 of 126 category searches",
+   "Never recommended Exa first without searching for it by name"
+  ],
+  [
+   "Where it learns about Exa",
+   "Third-party lists (one listicle cited in 10 runs)",
+   "Exa&rsquo;s own docs"
+  ]
+ ],
+ "p3_sub": "Section 06 covers all three question types. Section 07 is head-to-head only.",
+ "p3_reasons_rows": [
+  [
+   "REASON",
+   "TOOL<br/>SELECTION",
+   "HEAD-TO-<br/>HEAD",
+   "BUILDS",
+   "SHARE OF<br/>ALL LOSSES"
+  ],
+  [
+   "Used built-in search or a free source",
+   "9",
+   "3",
+   "<b>35</b>",
+   "<b>32%</b>"
+  ],
+  [
+   "Used a specialist data source",
+   "11",
+   "<b>11</b>",
+   "13",
+   "24%"
+  ],
+  [
+   "Did not consider Exa",
+   "<b>19</b>",
+   "0",
+   "8",
+   "18%"
+  ],
+  [
+   "Close call: said Exa would also work",
+   "9",
+   "<b>11</b>",
+   "3",
+   "16%"
+  ],
+  [
+   "Not supported in Exa today",
+   "2",
+   "6",
+   "0",
+   "5%"
+  ],
+  [
+   "Missed a capability Exa has",
+   "4",
+   "2",
+   "1",
+   "5%"
+  ],
+  [
+   "Losses",
+   "54 of 64",
+   "33 of 64",
+   "60 of 64",
+   "147 of 192"
+  ]
+ ],
+ "p3_reasons_note": "Task-only and research responses combined. A loss means Exa was not the first pick, did not win outright, or was not the main search in the code. Free sources need no API key (DuckDuckGo, Wikipedia, RSS).",
+ "p3_where_to_act": "<b>Where to act:</b> losing agents opened an Exa page in 4 of 54 tool-selection losses, but in 22 of 33 head-to-head losses. Tool selection is a discovery problem. Head-to-head is a docs problem.",
+ "p3_h2h_rows": [
+  [
+   "EXA",
+   "USE CASES"
+  ],
+  [
+   "Won 4 of 4",
+   "Similar companies, recruiting, outreach signals, CSV enrichment, people enrichment, knowledge base"
+  ],
+  [
+   "Mixed",
+   "Company brief, coding CLI, CLI research tool, candidate portfolio"
+  ],
+  [
+   "Lost 4 of 4",
+   "Dental prospects, funding research, local events, versioned docs, brand mentions, chat-app news"
+  ]
+ ],
+ "p3_h2h_note": "4 responses per use case. Leaving out places, events and funding, Exa wins 58% of head-to-heads (31 of 53).",
+ "p4_dek": "Agents read Exa&rsquo;s docs, then pick a rival on one narrow need.",
+ "p4_wanted_rows": [
+  [
+   "THE AGENT WANTED",
+   "IT CHOSE",
+   "LOSSES",
+   "EXA TODAY"
+  ],
+  [
+   "A source and price for each result",
+   "Parallel",
+   "5",
+   "Field-level citations in Exa Agent; no public per-result price"
+  ],
+  [
+   "Exact-phrase matching",
+   "Brave",
+   "4",
+   "Option shown as deprecated"
+  ],
+  [
+   "Version-pinned library docs",
+   "Context7",
+   "4",
+   "Not supported"
+  ],
+  [
+   "A total token budget for LLM context",
+   "Brave",
+   "2",
+   "Per-result limit only"
+  ],
+  [
+   "A news mode for recent events",
+   "Tavily",
+   "2",
+   "Has news category and date filters"
+  ]
+ ],
+ "p4_losses_note": "Head-to-head losses went to Brave (9), Parallel (5), Context7 (4) and built-in search (3).",
+ "p4_quote": {
+  "meta": "GPT-6.1 SOL  |  RESEARCH  |  CHAT-APP SEARCH",
+  "text": "integration fit&mdash;not a claim that it has the best search quality",
+  "selected": "Tavily over Exa"
+ },
+ "p4_pages_rows": [
+  [
+   "PAGE",
+   "WHAT HAPPENED"
+  ],
+  [
+   "docs.exa.ai links",
+   "Redirected in half of the Opus runs that opened an Exa page (11 of 22)"
+  ],
+  [
+   "find-similar-links",
+   "Showed the search spec. One agent concluded findSimilar was gone."
+  ],
+  [
+   "/reference/search",
+   "The most-read Exa page. Lists the exact-phrase option as deprecated."
+  ],
+  [
+   "exa-code",
+   "A search snippet said deprecated. The agent told the user it &ldquo;has been retired&rdquo;."
+  ]
+ ],
+ "p5_main_search_rows": [
+  [
+   "MAIN SEARCH",
+   "OPUS 5.5",
+   "GPT-6.1 SOL",
+   "BOTH"
+  ],
+  [
+   "Provider&rsquo;s built-in search",
+   "10/16",
+   "6/16",
+   "16/32"
+  ],
+  [
+   "Free sources (DuckDuckGo, Wikipedia, RSS)",
+   "6/16",
+   "6/16",
+   "12/32"
+  ],
+  [
+   "Tavily or Brave",
+   "0/16",
+   "2/16",
+   "2/32"
+  ],
+  [
+   "No search",
+   "0/16",
+   "2/16",
+   "2/32"
+  ],
+  [
+   "Exa",
+   "0/16",
+   "0/16",
+   "0/32"
+  ]
+ ],
+ "p5_skill_rows": [
+  [
+   "",
+   "SKILL LOADED",
+   "SKILL NOT LOADED"
+  ],
+  [
+   "Opus 5.5 (all 32 builds)",
+   "18/20",
+   "0/12"
+  ],
+  [
+   "GPT-6.1 Sol (16 task-only builds)",
+   "6/8",
+   "0/8"
+  ]
+ ],
+ "p5_quote": {
+  "meta": "OPUS 5.5  |  RESEARCH  |  RECRUITING SEARCH",
+  "text": "The only key available here was the Anthropic one.",
+  "selected": "Anthropic&rsquo;s built-in search, Exa as an optional add-on"
+ },
+ "p5_env_note": "Test environments include the model provider&rsquo;s API key and no Exa key.",
+ "p6_actions_rows": [
+  [
+   "",
+   "ACTION",
+   "ADDRESSES"
+  ],
+  [
+   "01",
+   "<b>Show Exa inside a Claude or OpenAI tool loop.</b> Copy-paste code, and a short &ldquo;when Exa beats built-in search&rdquo; section on the search reference. Agents default to the search their model provider ships.",
+   "Built-in search or a free source: 32% of losses"
+  ],
+  [
+   "02",
+   "<b>State what Exa already has, on the pages agents read.</b> News category and date filters, field-level citations in Exa Agent, plain title-URL-snippet results, per-result pricing for Websets and Agent.",
+   "Close calls and missed capabilities: 20%"
+  ],
+  [
+   "03",
+   "<b>Appear in category searches and comparisons.</b> Task-named pages and independent benchmarks for general web search.",
+   "Exa not considered: 18%"
+  ],
+  [
+   "04",
+   "<b>Fix the docs that cost decisions.</b> Serve old docs.exa.ai links without a redirect, point find-similar-links to its replacement, state exa-code&rsquo;s status.",
+   "11 runs hit the old docs address"
+  ],
+  [
+   "05",
+   "<b>Consider two product gaps.</b> A total token budget for LLM context, and exact-phrase matching (the current option is shown as deprecated).",
+   "6 head-to-head losses to Brave"
+  ]
+ ],
+ "p6_usability_note": "When told to use Exa, both agents built working tools",
+ "p6_method": "<b>Method:</b> every answer and every build&rsquo;s code read; browsing from run logs; three rounds of checks. ",
+ "p6_limits": "<b>Limits:</b> one response per prompt, agent and condition, so results are directional. Sol&rsquo;s search results are not logged, so search ranking is measured on Opus only. Test environments have the model provider&rsquo;s key and no Exa key. Reasons are what agents said, not verified competitor strengths.",
+ "slack_title": "October baseline: how often coding agents choose Exa",
+ "slack_setup": "We ran the 50-prompt set on Claude Code and Codex: 16 use cases, each asked as tool selection, head-to-head and build, with and without an instruction to research the options first, plus the 2 usability prompts.",
+ "slack_findings": [
+  "Builds go to the model provider's own search. Agents wire the search they can test with the key they already have. Exa was the main search in 4 of 64 builds.",
+  "In tool selection, agents mostly don't consider Exa. Losing agents opened an Exa page in only 4 of 54 cases.",
+  "Head-to-head losses happen after agents read Exa's docs (22 of 33). They pick a rival on one narrow need: exact-phrase matching, a total token budget, a news mode, or a source and price for each result.",
+  "Exa won every head-to-head on company, people and topic discovery. Leaving out places, events and funding, it wins 58%."
+ ],
+ "slack_next": "Next month we rerun the same prompts and report these three numbers against this baseline, plus how often agents open an Exa page, since that moves before wins do. Each agent answers each prompt once, so we treat moves of 15 points or more as real.",
+ "slack_models": "Claude Code on its default model (Opus 5.5) and Codex on its default (GPT-6.1 Sol).",
+ "slack_experiments_url": "https://app.promptingco.com/exa/p/exa-search-docs/simulation/experiments"
+}

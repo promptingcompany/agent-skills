@@ -1,0 +1,89 @@
+# Exa coding-agent tracker config. Copy next to your work, edit the experiment IDs, and run the skill.
+scope: exa/exa-search-docs                 # <org-slug>/<product-slug>
+workdir: exa-cao-tracker                   # EDIT: where runs, logs and history are kept. Use one absolute path and keep it between months.
+baseline_label: null                       # set to the label of the October lock-in run once it exists, e.g. 2026-W41
+real_move_points: 15                       # flag moves this big as real (monthly noise is about ±12 points)
+min_page_runs: 3                           # only list individual pages opened in at least this many runs
+ignore_domains_for_actions: [pypi.org, npmjs.com, github.com]   # task plumbing, not pages anyone can steer
+
+# One entry per experiment. prompt_type: build | tool-seeking | head-to-head | usability.  mode: research | default
+# October 2026 baseline: the 2026-10-06 research-nudge experiments (Opus 5.5 + GPT-6.1 Sol), 16 use cases, build prompts reworded 2026-10-07.
+experiments:
+  - {id: 904a2cf3-8e5f-40a9-af70-c83c3333fc11, prompt_type: build, mode: research}
+  - {id: 8281369c-6c43-4553-9ad0-d45f63d4bec2, prompt_type: tool-seeking, mode: research}
+  - {id: 9835af1b-e514-4213-a018-16b421375df8, prompt_type: head-to-head, mode: research}
+  - {id: 1a326da8-9c69-40ce-ba86-3abb3c1d4f92, prompt_type: usability, mode: research}
+
+agents:                                     # matched against the environment's harness / name / model
+  - {name: Claude Code, match: "claude|opus"}
+  - {name: Codex, match: "codex|astra|gpt"}
+
+# Grader goal names on the tasks (from `tpc sim run get`). Used for advice outcomes; ambiguous runs go to review.
+grader_goals:
+  tool-seeking: "Exa recommended or considered"
+  head-to-head: "Exa wins the head-to-head"
+  usability: "Executable returns JSON URLs"
+
+target:
+  label: Exa
+  name_regex: '\bexa\b(?![-_]?(?:byte|flop|scale|mple|ct))|exa\.ai|exa-py|exa-js|websets'
+  domains: [exa.ai]
+  code_markers: 'api\.exa\.ai|EXA_API_KEY|exa_py|exa-js|from exa_py|new Exa\(|Exa\(api_key'
+  page_types:                               # first match wins, checked against the URL
+    pricing: '/pricing'
+    versus/alternatives: '/versus|/alternatives|/vs/'
+    websets docs: 'websets'
+    docs/API reference: 'docs|/reference|llms'
+    blog: '/blog'
+
+rivals:
+  tavily: {label: Tavily, name_regex: '\btavily\b', domains: [tavily.com], code_markers: 'api\.tavily\.com|TAVILY_API_KEY|TavilyClient'}
+  brave: {label: Brave, name_regex: '\bbrave(?: search)?(?: api)?\b', domains: [brave.com], code_markers: 'api\.search\.brave\.com|BRAVE_(SEARCH_)?API_KEY'}
+  parallel: {label: Parallel, name_regex: '\bparallel(?:\.ai|''s|’s| web| search| task| findall| turbo)\b', domains: [parallel.ai], code_markers: 'api\.parallel\.ai|PARALLEL_API_KEY'}
+  firecrawl: {label: Firecrawl, name_regex: '\bfirecrawl\b', domains: [firecrawl.dev], code_markers: 'api\.firecrawl\.dev|FIRECRAWL_API_KEY'}
+  serp: {label: Serper/SerpApi, name_regex: '\bserper\b|\bserpapi\b', domains: [serper.dev, serpapi.com], code_markers: 'google\.serper\.dev|SERPER_API_KEY|serpapi\.com|SERPAPI_(API_)?KEY'}
+  perplexity: {label: Perplexity, name_regex: '\bperplexity\b|\bsonar\b', domains: [perplexity.ai], code_markers: 'api\.perplexity\.ai|PERPLEXITY_API_KEY'}
+  linkup: {label: Linkup, name_regex: '\blinkup\b', domains: [linkup.so], code_markers: 'api\.linkup\.so|LINKUP_API_KEY'}
+  context7: {label: Context7, name_regex: '\bcontext7\b', domains: [context7.com], code_markers: 'context7'}
+  native-anthropic: {label: "Claude built-in search", name_regex: 'web_search_20\d{6}|claude.{0,20}(built-in|native|server-side) web search', code_markers: 'web_search_20\d{6}|web_fetch_20\d{6}'}
+  native-openai: {label: "OpenAI built-in search", name_regex: 'responses api[^.\n]{0,40}web_search|openai.{0,20}(hosted|built-in) (web )?search', code_markers: '"type":\s*"web_search"|type:\s*[''"]web_search[''"]'}
+  diy: {label: "DIY / free scraper", code_markers: 'duckduckgo_search|ddgs|html\.duckduckgo|searx'}
+
+model_docs:                                 # pages about the model's own search tool
+  Anthropic: 'docs\.anthropic\.com|docs\.claude\.com|platform\.claude\.com|anthropic\.com/.*web-search'
+  OpenAI: 'platform\.openai\.com|developers\.openai\.com'
+
+own_subdomains_regex: 'tpc-[a-z]+\.exa\.ai'  # TPC-built subdomain pages
+
+# Pages we (TPC or Exa) publish or change. Add one line per page with the date it went live.
+published_pages:
+  - {label: "All TPC-published Exa pages (tpc-*.exa.ai)", url_regex: 'tpc-[a-z]+\.exa\.ai', published: 2026-09-01}
+#  - {label: "Exa vs Parallel for lists", url_regex: 'exa\.ai/versus/parallel', published: 2026-10-20}
+
+# Facts planted on one page. `page_regex` = the page it lives on (for conversion). Natural example below.
+planted_facts:
+  - {label: "$10 monthly free credits", regex: '\$10[^.\n]{0,40}(free|credit)|(free|credit)[^.\n]{0,40}\$10\b', page_regex: 'exa\.ai/pricing'}
+
+negative_claims:
+  - {label: "findSimilar deprecated", regex: 'find_?similar[^.\n]{0,60}(deprecat|legacy|removed|no longer)|(deprecat|legacy)[^.\n]{0,60}find_?similar'}
+  - {label: "not benchmarked / unproven", regex: '(not|isn.t|un)[ -]?(independently )?(benchmarked|proven)'}
+  - {label: "pricier than Brave", regex: '(pricier|more expensive|costs? more)[^.\n]{0,60}brave|brave[^.\n]{0,60}(cheaper|less expensive)'}
+  - {label: "weak on keyword / fresh queries", regex: '(weak|worse|struggl)[^.\n]{0,40}(keyword|exact[- ]match|fresh|news)'}
+
+use_cases:
+  - {key: similar-companies, match: '^UC01-'}
+  - {key: recruiting, match: '^UC02-'}
+  - {key: candidate-portfolio, match: '^UC03-'}
+  - {key: outreach-signals, match: '^UC04-'}
+  - {key: csv-enrichment, match: '^UC05-'}
+  - {key: account-research, match: '^UC06-'}
+  - {key: people-enrichment, match: '^UC07-'}
+  - {key: gtm-tam, match: '^UC08-'}
+  - {key: deep-research, match: '^UC09-'}
+  - {key: voice-agent, match: '^UC10-'}
+  - {key: coding-cli, match: '^UC11-'}
+  - {key: docs-retrieval, match: '^UC12-'}
+  - {key: knowledge-base, match: '^UC13-'}
+  - {key: free-library, match: '^UC14-'}
+  - {key: scraper-blocked, match: '^UC15-'}
+  - {key: ts-stub, match: '^UC16-'}

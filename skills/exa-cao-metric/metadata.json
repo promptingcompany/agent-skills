@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.2.0",
   "organization": "Prompting Company",
-  "abstract": "Recurring tracker for Exa's coding-agent prompt set: pulls the latest iterations via tpc, parses every run (searches, pages opened, citations, code written), scores build / tool-seeking / head-to-head / usability outcomes with a review queue for grader errors, and writes a weekly report with deltas, deciding pages, citations, planted-fact pull-through and action candidates."
+  "abstract": "Recurring tracker for Exa's coding-agent prompt set: pulls the latest iterations via tpc, parses every run (searches, pages opened, citations, code written), scores build / tool-seeking / head-to-head / usability outcomes with a review queue for grader errors, and writes a weekly report with deltas, deciding pages, citations, planted-fact pull-through and action candidates. v0.2: ships the October 2026 configs, a RUNBOOK for the monthly rerun, and build_pdf.py, which turns the tracker output into the one-PDF readout (findings + action list) and the Slack message."
 }
