@@ -59,7 +59,8 @@ differs from the triaged one, that difference lives in the dev note and the resu
 Each finding in blocks 1 and 2 opens with the one sentence a reader should remember, then **Evidence.** (counts),
 **Change.** (owner) and **Test.** (what would show the change worked). When two causes are not yet separated, name
 both and the test that separates them; never call a fix obvious. Correctness totals that are at ceiling go in a small
-stat row, not the lead. Per-configuration tables go to the evidence section at the end, as one compact matrix.
+stat row, not the lead. Every tile says what it counts ("runs correct"), and a behaviour count never sits beside pass
+rates in the same style: mark it as a behaviour so "1/50" cannot read as a failure rate. Per-configuration tables go to the evidence section at the end, as one compact matrix.
 
 Before publishing, hand the findings and evidence to a second strong model for an independent insight and
 actionability ranking and a list of overstated claims, then reconcile.
