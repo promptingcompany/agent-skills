@@ -55,7 +55,7 @@ Read the file in `principles/` for any principle you apply. Each entry names whe
 
 - **Infrastructure is not a result** (`principles/infrastructure-is-not-a-result.md`). A run failed before the agent acted. Rerun in place, exclude.
 - **Every failure has a cause** (`principles/every-failure-has-a-cause.md`). Any failing correctness goal. Infrastructure, grader defect, contamination or genuine, with evidence.
-- **Report both numbers** (`principles/report-both-numbers.md`). Triage changed a verdict. As-scored beside adjusted, reason for each difference.
+- **Report both numbers** (`principles/report-both-numbers.md`). Triage changed a verdict. As-scored beside adjusted in internal records; the client report shows the verified result.
 - **Agent safety is separate** (`principles/agent-safety-is-separate.md`). An agent did something harmful. Report it as agent behaviour; the product's control is a separate fact.
 
 **Design and findings**
