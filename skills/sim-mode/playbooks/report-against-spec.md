@@ -73,6 +73,9 @@ actionability ranking and a list of overstated claims, then reconcile.
   verbatim, its starting state in plain words, its goals with type and pass rule; the agent configurations (harness,
   model, runs per task); and the run settings (iterations, resets between them, judge model, how time is counted).
   Describe setup in plain words rather than copying internal init labels.
+  For any stated/implied pair, highlight the sentence in each prompt that sets the requirement and add one line under
+  it saying whether the requirement is stated or implied, with that task's result. Link the finding to it. Open the
+  appendix with a clear visual break and a label so readers know the report has ended.
 - Check every number in the prose against the counted evidence before publishing; tighten wording where a count is approximate.
 - Never cite the spec's internal codes alone (scope or scorecard versions, eval numbers, open-item IDs). Name the
   benchmark by its title and pair each code with what it means, every time. A reader outside the client's team cannot
