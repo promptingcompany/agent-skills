@@ -6,7 +6,11 @@ When the client already has a benchmark specification (a scorecard, an eval prot
 
 ## Step 1: Map tasks to the spec's evals
 
-One table: task, the spec's eval and test it corresponds to, what is the same, what is deliberately different. Typical differences worth stating:
+One table: task, the spec's eval and test it corresponds to, what is the same, what is deliberately different.
+
+In the published report, also list every eval in the spec, each deep-linked to its section of the spec (heading anchors
+where the spec's host supports them), with the task that covers it, the tests within it that are covered, or plainly
+"not covered" and when it will be. Link each task's appendix entry to the same section. Check every link resolves. Typical differences worth stating:
 
 - Guided (spec supplies references, fixed text, a mandated route) versus unguided (a real job, the agent picks its route).
 - Corpus size and shape.
