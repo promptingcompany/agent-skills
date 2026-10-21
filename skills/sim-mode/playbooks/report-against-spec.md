@@ -68,6 +68,10 @@ actionability ranking and a list of overstated claims, then reconcile.
 
 - Lead with the finding in two to four sentences. Then the blocks from Step 6. Tables last.
 - Generate tables from the summary data, never by hand.
+- End with an appendix generated from the specs actually created on the platform, never retyped: each task's prompt
+  verbatim, its starting state in plain words, its goals with type and pass rule; the agent configurations (harness,
+  model, runs per task); and the run settings (iterations, resets between them, judge model, how time is counted).
+  Describe setup in plain words rather than copying internal init labels.
 - Check every number in the prose against the counted evidence before publishing; tighten wording where a count is approximate.
 - Never cite the spec's internal codes alone (scope or scorecard versions, eval numbers, open-item IDs). Name the
   benchmark by its title and pair each code with what it means, every time. A reader outside the client's team cannot
