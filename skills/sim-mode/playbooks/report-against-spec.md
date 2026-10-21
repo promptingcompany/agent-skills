@@ -39,9 +39,28 @@ One row per capability, one column per provider. Label support as native, custom
 
 Name the limits that affect interpretation: single provider (no head-to-head claim), shared fixtures, a recorded-goal definition that is stricter than it looks, run counts. Then the concrete next runs that remove each limit.
 
-## Step 6: Publish
+## Step 6: Order findings by who acts
 
-- Lead with the finding in two sentences, then four headline numbers, then the tables.
+Sort every finding into blocks by owner, and by insight within each block. Score each candidate finding 1 to 5 on
+insight (does it tell the reader something they could not guess) and actionability (a concrete change, an owner, a
+test) before writing.
+
+1. What the client should change. Insightful findings with a clear owner and a test.
+2. What the client can now claim. Verified capabilities, each with its bounds.
+3. What we fix before the next run. Instrument and fixture problems that would distort a comparison.
+4. Notes. One line each for findings that are neither insightful nor actionable. Cut the rest.
+
+Each finding in blocks 1 and 2 opens with the one sentence a reader should remember, then **Evidence.** (counts),
+**Change.** (owner) and **Test.** (what would show the change worked). When two causes are not yet separated, name
+both and the test that separates them; never call a fix obvious. Correctness totals that are at ceiling go in a small
+stat row, not the lead. Per-configuration tables go to the evidence section at the end, as one compact matrix.
+
+Before publishing, hand the findings and evidence to a second strong model for an independent insight and
+actionability ranking and a list of overstated claims, then reconcile.
+
+## Step 7: Publish
+
+- Lead with the finding in two to four sentences. Then the blocks from Step 6. Tables last.
 - Generate tables from the summary data, never by hand.
 - Check every number in the prose against the counted evidence before publishing; tighten wording where a count is approximate.
 - Keep client names and data out of anything public; the report itself is shared privately with the client.
