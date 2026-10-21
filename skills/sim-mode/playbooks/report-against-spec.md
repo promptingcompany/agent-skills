@@ -52,7 +52,8 @@ test) before writing.
 Keep your own side out of the client report entirely: platform failures and limits (sandbox provisioning, metrics the
 platform does not capture), grader and fixture bugs, verdict adjustments, and benchmark-design fixes. Write those to a
 separate internal dev-feedback note, one item each with what happened, how often, impact and proposed fix, split into
-platform work and benchmark-design work. The client report then states only verified results. If a platform verdict
+platform work and benchmark-design work. Platform items also go onto the team's single living tracker issue for agent-simulation
+platform feedback, one checklist item each, rather than one ticket per gap. The client report then states only verified results. If a platform verdict
 differs from the triaged one, that difference lives in the dev note and the results file, not the client page.
 
 Each finding in blocks 1 and 2 opens with the one sentence a reader should remember, then **Evidence.** (counts),
@@ -69,3 +70,5 @@ actionability ranking and a list of overstated claims, then reconcile.
 - Generate tables from the summary data, never by hand.
 - Check every number in the prose against the counted evidence before publishing; tighten wording where a count is approximate.
 - Keep client names and data out of anything public; the report itself is shared privately with the client.
+- For a shareable copy, wrap the page into a full HTML document (doctype, charset, viewport, `noindex`), upload it to your
+  static asset host under an unguessable path, then fetch it and compare bytes before sending the link.
