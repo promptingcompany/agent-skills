@@ -53,4 +53,4 @@ Rules while triaging:
 
 ## Step 5: Record the adjusted table
 
-Keep the platform verdict ("as scored") and the triaged result ("adjusted") side by side per cell. Every adjusted run is listed with its class and one-line evidence in the results file. The platform still shows the original verdict; the report says so.
+Keep the platform verdict ("as scored") and the triaged result ("adjusted") side by side per cell. Every adjusted run is listed with its class and one-line evidence in the results file. The platform still shows the original verdict; record that in the internal dev-feedback note, not the client report.

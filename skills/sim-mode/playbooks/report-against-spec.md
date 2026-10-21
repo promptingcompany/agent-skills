@@ -37,7 +37,7 @@ One row per capability, one column per provider. Label support as native, custom
 
 ## Step 5: Limits and next steps
 
-Name the limits that affect interpretation: single provider (no head-to-head claim), shared fixtures, a recorded-goal definition that is stricter than it looks, run counts. Then the concrete next runs that remove each limit.
+In the client report, name only limits of scope that affect interpretation: single provider (no head-to-head claim), run counts, what was not tested. Instrument and fixture problems go in the internal dev-feedback note (Step 6).
 
 ## Step 6: Order findings by who acts
 
@@ -47,8 +47,13 @@ test) before writing.
 
 1. What the client should change. Insightful findings with a clear owner and a test.
 2. What the client can now claim. Verified capabilities, each with its bounds.
-3. What we fix before the next run. Instrument and fixture problems that would distort a comparison.
-4. Notes. One line each for findings that are neither insightful nor actionable. Cut the rest.
+3. Notes. One line each for findings that are neither insightful nor actionable. Cut the rest.
+
+Keep your own side out of the client report entirely: platform failures and limits (sandbox provisioning, metrics the
+platform does not capture), grader and fixture bugs, verdict adjustments, and benchmark-design fixes. Write those to a
+separate internal dev-feedback note, one item each with what happened, how often, impact and proposed fix, split into
+platform work and benchmark-design work. The client report then states only verified results. If a platform verdict
+differs from the triaged one, that difference lives in the dev note and the results file, not the client page.
 
 Each finding in blocks 1 and 2 opens with the one sentence a reader should remember, then **Evidence.** (counts),
 **Change.** (owner) and **Test.** (what would show the change worked). When two causes are not yet separated, name
