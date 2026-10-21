@@ -36,6 +36,17 @@ For each task, write at least three solutions and run each grader goal locally a
 
 Fix every mismatch. The empty case catches graders that pass because nothing violated a negative check.
 
+Keep every script grader inside the platform's script time limit (120 seconds today, and not documented). A grader
+that waits for an asynchronous effect, such as an email arriving, must poll within that budget; a timeout scores as a
+failure, not as unknown.
+
+Do not depend on field names the prompt did not fix. Agents write `inbox_address`, `inboxId` or a nested
+`steps.create.email` for the same value; find values by content (an address pattern, a token pattern) and verify them
+against ground truth.
+
+An LLM judge for "did it only through X" must also fail when the operation never happened. Otherwise a run that gave
+up immediately passes the compliance goal.
+
 Make graders tolerant of output shape and strict about substance: accept any JSON shape that contains the IDs, never a single expected key. A grader that only reads `[...]` or `{"drafts": [...]}` will fail an agent that wrote `{"draft_ids": [...]}` and did the job.
 
 Clean up everything the reference solutions created (keys, drafts, objects) with the fixture-reset script before moving on.
@@ -45,7 +56,10 @@ Clean up everything the reference solutions created (keys, drafts, objects) with
 1. Create the tasks and attach init commands. Init command `cwd` must start with the sandbox home path including the trailing slash (for example `/home/agent-user/`); the API rejects it otherwise with a generic "Invalid init commands payload".
 2. Queue one standalone run per task per environment (`tpc sim run <task-id> --scope ...`). Standalone runs sit outside experiment iterations and do not count.
 3. When they finish, pull every run with goal verdicts and read each verdict against its transcript. For each failure ask: did the agent fail, or did the grader misread what it did? Check the agent's saved artifacts and the provider state, not just the grader message.
-4. Read LLM-judge verdicts critically. If the judge failed something a reasonable reader would pass (a date filter counted as "not searching"), tighten the rubric so the boundary is explicit.
+4. Check that the tool under test was actually available in every environment. The platform writes some harness
+   configs after task setup runs, which can silently drop what setup added; an agent reporting "the tools are not
+   available" is an instrument failure, not an agent result.
+5. Read LLM-judge verdicts critically. If the judge failed something a reasonable reader would pass (a date filter counted as "not searching"), tighten the rubric so the boundary is explicit.
 
 ## Step 5: Push fixes and re-verify on the platform
 
