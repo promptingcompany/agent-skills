@@ -1,5 +1,5 @@
 {
-  "version": "0.1.4",
+  "version": "0.1.5",
   "organization": "Prompting Company",
   "abstract": "Rigor mode for agent-simulation experiments: real-job tasks, graders proven before scoring, every failure explained with transcript and ground-truth evidence, and reports in the client's own benchmark language."
 }

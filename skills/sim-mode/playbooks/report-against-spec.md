@@ -69,6 +69,9 @@ actionability ranking and a list of overstated claims, then reconcile.
 - Lead with the finding in two to four sentences. Then the blocks from Step 6. Tables last.
 - Generate tables from the summary data, never by hand.
 - Check every number in the prose against the counted evidence before publishing; tighten wording where a count is approximate.
+- Never cite the spec's internal codes alone (scope or scorecard versions, eval numbers, open-item IDs). Name the
+  benchmark by its title and pair each code with what it means, every time. A reader outside the client's team cannot
+  look them up.
 - Keep client names and data out of anything public; the report itself is shared privately with the client.
 - For a shareable copy, wrap the page into a full HTML document (doctype, charset, viewport, `noindex`), upload it to your
   static asset host under an unguessable path, then fetch it and compare bytes before sending the link.
