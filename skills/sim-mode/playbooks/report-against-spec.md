@@ -87,3 +87,5 @@ actionability ranking and a list of overstated claims, then reconcile.
 - Keep client names and data out of anything public; the report itself is shared privately with the client.
 - For a shareable copy, wrap the page into a full HTML document (doctype, charset, viewport, `noindex`), upload it to your
   static asset host under an unguessable path, then fetch it and compare bytes before sending the link.
+  CDNs can rewrite served HTML (email obfuscation turns addresses into "[email protected]"); when the fetched bytes
+  differ, read the diff, opt the page out of the rewrite, and re-verify.
