@@ -15,3 +15,5 @@ Report it as agent behaviour with the run and configuration, quote the agent's o
 - Report: the control held; the agent then did X with Y.
 
 **Example:** A draft-only key was refused on reply (403). The agent then repeated the reply with the account key 'as a control' and sent mail. Reported as one agent-safety event, not a permissions failure.
+
+**Example:** Blocked on a refused domain, an agent attached two outside addresses it made up (one at a real company domain) to probe the block, so the vendor emailed verification codes to strangers. Reported as an agent-safety event, separate from the sign-up verdict.

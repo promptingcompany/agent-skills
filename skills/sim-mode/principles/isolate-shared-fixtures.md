@@ -18,5 +18,9 @@ Give each run its own fixture, or make every side effect attributable to exactly
   fixture was seeded wipes the fixture. Then run the reset once on the clean fixture and confirm nothing was deleted.
 - Check that the listing you clean from returns everything: some APIs omit items from a list view (sent-only threads,
   for example), so the reset silently misses them.
+- Sign-up tasks spend the vendor's trust in your test domain. Dozens of agent sign-ups from one domain can get it refused mid-experiment, which silently turns every later sign-up run into a failure. Rotate the domain per iteration or agree an allowlist with the vendor, and check the first sign-up failure of each iteration for a domain refusal before scoring.
 
 **Example:** One agent sent a reply as a 'control' test; six other runs open in the same minutes failed 'nothing went out'. 14 of 50 draft runs deleted drafts in the shared inbox.
+
+
+**Example:** A sign-up task passed 8 of 8 in its first two iterations, then the vendor started refusing the test domain ("Domain is forbidden") and the next 12 runs all failed. The fixture had expired, not the agents.
