@@ -54,3 +54,7 @@ Rules while triaging:
 ## Step 5: Record the adjusted table
 
 Keep the platform verdict ("as scored") and the triaged result ("adjusted") side by side per cell. Every adjusted run is listed with its class and one-line evidence in the results file. The platform still shows the original verdict; record that in the internal dev-feedback note, not the client report.
+
+## Step 6: Report platform bugs with repro steps
+
+Every platform bug found while running goes to the team's platform-feedback tracker with: what happens and how often (n of N runs), **Repro** (the exact commands with org, IDs and flags), **Expected** versus **Actual** (paste the real output), and a suggested **Fix**. A symptom without repro steps is not reported yet. Keep missing capabilities in a separate list from bugs.
