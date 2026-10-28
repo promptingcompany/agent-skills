@@ -15,3 +15,5 @@ Every grader passes a correct reference solution, fails a realistic broken one, 
 - Then run one unscored validation run per task per environment and read every verdict against its transcript before the first scored iteration.
 
 **Example:** A negative check ("no decoy cited") passed on an empty output. The empty reference caught it before any agent run did.
+
+**Example:** A discovery grader looked for a product's package name in the agent's code. Three versions in a row were wrong: the bare word matched files the agent named after the product; a quote-tolerant pattern matched a script called `create-<package>`; a pattern with literal quotes broke the shell line the grader was injected with. Prove a code-marker check against the agent's own naming (a file and a script named after the product, with no import) as well as against a real import and dependency, before any run counts.
